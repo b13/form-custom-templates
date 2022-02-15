@@ -1,0 +1,16 @@
+{
+  "name": "b13/form-email-template",
+  "type": "typo3-cms-extension",
+  "description" : "Selectable Email Template in Finisher",
+  "license": "GPL-2.0-or-later",
+  "autoload": {
+    "psr-4": {
+      "B13\\FormEmailTemplate\\": "Classes/"
+    }
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "form_email_template"
+    }
+  }
+}

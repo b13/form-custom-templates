@@ -1,0 +1,38 @@
+module {
+    tx_form {
+        settings {
+            yamlConfigurations {
+                10 = EXT:form/Configuration/Yaml/FormSetup.yaml
+                500 = EXT:form_email_template/Configuration/Yaml/FormSetup.yaml
+            }
+        }
+    }
+}
+
+# frontend configuration
+plugin.tx_form.settings.yamlConfigurations {
+    500 = EXT:form_email_template/Configuration/Yaml/FormSetup.yaml
+}
+# backend configuration
+module.tx_form.settings.yamlConfigurations {
+    500 = EXT:form_email_template/Configuration/Yaml/FormSetup.yaml
+}
+
+
+plugin.tx_form {
+    view {
+        templateRootPaths {
+            0 = EXT:form/Resources/Private/Frontend/Templates/
+            500 = EXT:form_email_template/Resources/Private/Templates/Form/
+        }
+        partialRootPaths {
+            0 = EXT:form/Resources/Private/Frontend/Partials/
+            500 = EXT:form_email_template/Resources/Private/Partials/Form/
+        }
+        layoutRootPaths {
+            0 = EXT:form/Resources/Private/Frontend/Layouts/
+            500 = EXT:form_email_template/Resources/Private/Layouts/Form/
+        }
+    }
+    settings < module.tx_form.settings
+}
