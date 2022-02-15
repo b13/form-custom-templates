@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    autowire: false
+    autoconfigure: true
+    public: true
+  B13\FormEmailTemplate\:
+    resource: '../Classes/*'
+    exclude: '../Classes/{Domain/Model}'

@@ -1,0 +1,72 @@
+# Definition of the additional dropdown for template selection
+.email_template_field: &email_template_field
+  identifier: emailTemplate
+  templateName: Inspector-SingleSelectEditor
+  label: 'Select a email template'
+  propertyPath: options.emailTemplate
+  selectOptions:
+    10:
+      value: Template1
+      label: "Template 1"
+    20:
+      value: Template2
+      label: "Template 2"
+
+# Definition of the additional dropdown for template selection
+.email_template_options: &email_template_options
+  implementationClassName: B13\FormEmailTemplate\Domain\Finisher\EmailTemplateFinisher
+  options:
+    templateName: '{@format}.html'
+    templateRootPaths:
+      99: 'EXT:form_email_template/Resources/Private/Frontend/Templates/Finishers/Email/'
+  formEditor:
+    predefinedDefaults:
+      options:
+        emailTemplate: ''
+  # displayed when overriding finisher settings
+  FormEngine:
+    elements:
+      emailTemplate:
+        label: 'Select a template'
+        config:
+          type: select
+          renderType: selectSingle
+          minitems: 1
+          maxitems: 1
+          size: 1
+          # Yes! We have to define the available list of selectable
+          # items again, because it is a different format! Partey!
+          items:
+            10:
+              - "Template 1"
+              - Template1
+            20:
+              - "Template 2"
+              - Template2
+
+TYPO3:
+  CMS:
+    Form:
+      prototypes:
+        standard:
+          formElementsDefinition:
+            Form:
+              formEditor:
+                propertyCollections:
+                  finishers:
+                    # add finisher fields
+                    10:
+                      identifier: EmailToSender
+                      editors:
+                        5000: # Position in the inspector, might override existing fields!
+                          <<: *email_template_field
+                    20:
+                      identifier: EmailToReceiver
+                      editors:
+                        5000: # Position in the inspector, might override existing fields!
+                          <<: *email_template_field
+          finishersDefinition:
+            EmailToSender:
+              <<: *email_template_options
+            EmailToReceiver:
+              <<: *email_template_options
