@@ -10,7 +10,9 @@ class EmailTemplateFinisher extends EmailFinisher
 {
     protected function executeInternal(): void
     {
-        $this->setOption('templateName', $this->options['emailTemplate']);
+        if (isset($this->options['emailTemplate'])) {
+            $this->setOption('templateName', $this->options['emailTemplate']);
+        }
         parent::executeInternal();
     }
 }
