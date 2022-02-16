@@ -1,15 +1,15 @@
 <?php
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'B13 Form Email Template',
-    'description' => 'Selectable Email Template in Finisher',
+    'title' => 'Form Custom Templates',
+    'description' => 'Enable custom templates for emails sent using TYPO3\'s form framework email finishers',
     'category' => 'be',
     'state' => 'stable',
     'clearCacheOnLoad' => 0,
-    'author' => 'TEST',
-    'author_email' => 'info@b13.com',
-    'author_company' => '',
-    'version' => '11.5.4',
+    'author' => 'Jochen Roth',
+    'author_email' => 'typo3@b13.com',
+    'author_company' => 'b13 GmbH',
+    'version' => '0.0.1',
     'constraints' => [
         'depends' => [],
         'conflicts' => [],

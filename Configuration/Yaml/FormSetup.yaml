@@ -2,7 +2,7 @@
 .email_template_field: &email_template_field
   identifier: emailTemplate
   templateName: Inspector-SingleSelectEditor
-  label: 'Select a email template'
+  label: 'Select email template'
   propertyPath: options.emailTemplate
   selectOptions:
     10:
@@ -27,7 +27,7 @@
   FormEngine:
     elements:
       emailTemplate:
-        label: 'Select a template'
+        label: 'Select email template'
         config:
           type: select
           renderType: selectSingle
