@@ -9,5 +9,9 @@ module {
 }
 
 plugin.tx_form {
-    settings < module.tx_form.settings
+    settings {
+        yamlConfigurations {
+            500 = EXT:form_custom_templates/Configuration/Yaml/FormSetup.yaml
+        }
+    }
 }
