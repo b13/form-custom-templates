@@ -9,16 +9,6 @@ module {
     }
 }
 
-# frontend configuration
-plugin.tx_form.settings.yamlConfigurations {
-    500 = EXT:form_custom_templates/Configuration/Yaml/FormSetup.yaml
-}
-# backend configuration
-module.tx_form.settings.yamlConfigurations {
-    500 = EXT:form_custom_templates/Configuration/Yaml/FormSetup.yaml
-}
-
-
 plugin.tx_form {
     view {
         templateRootPaths {
