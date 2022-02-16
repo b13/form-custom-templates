@@ -3,6 +3,6 @@ services:
     autowire: false
     autoconfigure: true
     public: true
-  B13\FormEmailTemplate\:
+  B13\FormCustomTemplates\:
     resource: '../Classes/*'
     exclude: '../Classes/{Domain/Model}'

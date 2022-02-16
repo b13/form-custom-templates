@@ -1,16 +1,16 @@
 {
-  "name": "b13/form-email-template",
+  "name": "b13/form-custom-templates",
   "type": "typo3-cms-extension",
-  "description" : "Selectable Email Template in Finisher",
+  "description" : "Enable custom templates for emails sent using TYPO3\\'s form framework email finishers",
   "license": "GPL-2.0-or-later",
   "autoload": {
     "psr-4": {
-      "B13\\FormEmailTemplate\\": "Classes/"
+      "B13\\FormCustomTemplates\\": "Classes/"
     }
   },
   "extra": {
     "typo3/cms": {
-      "extension-key": "form_email_template"
+      "extension-key": "form_custom_templates"
     }
   }
 }
