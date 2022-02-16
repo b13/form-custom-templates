@@ -2,7 +2,6 @@ module {
     tx_form {
         settings {
             yamlConfigurations {
-                10 = EXT:form/Configuration/Yaml/FormSetup.yaml
                 500 = EXT:form_custom_templates/Configuration/Yaml/FormSetup.yaml
             }
         }
@@ -12,15 +11,12 @@ module {
 plugin.tx_form {
     view {
         templateRootPaths {
-            0 = EXT:form/Resources/Private/Frontend/Templates/
             500 = EXT:form_custom_templates/Resources/Private/Templates/Form/
         }
         partialRootPaths {
-            0 = EXT:form/Resources/Private/Frontend/Partials/
             500 = EXT:form_custom_templates/Resources/Private/Partials/Form/
         }
         layoutRootPaths {
-            0 = EXT:form/Resources/Private/Frontend/Layouts/
             500 = EXT:form_custom_templates/Resources/Private/Layouts/Form/
         }
     }
