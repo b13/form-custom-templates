@@ -9,16 +9,5 @@ module {
 }
 
 plugin.tx_form {
-    view {
-        templateRootPaths {
-            500 = EXT:form_custom_templates/Resources/Private/Templates/Form/
-        }
-        partialRootPaths {
-            500 = EXT:form_custom_templates/Resources/Private/Partials/Form/
-        }
-        layoutRootPaths {
-            500 = EXT:form_custom_templates/Resources/Private/Layouts/Form/
-        }
-    }
     settings < module.tx_form.settings
 }
