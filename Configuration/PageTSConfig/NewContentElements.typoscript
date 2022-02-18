@@ -1,0 +1,13 @@
+mod.wizards.newContentElement.wizardItems.forms {
+    elements {
+        form_result_list {
+            iconIdentifier = page-email
+            title = Form Result List
+            description = Includes the form results in a email template page
+            tt_content_defValues {
+                CType = form_result_list
+            }
+        }
+    }
+    show = *
+}

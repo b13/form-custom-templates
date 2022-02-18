@@ -9,6 +9,12 @@
             <trans-unit id="form_custom_templates.select.default" resname="form_custom_templates.select.default">
                 <source>Default</source>
             </trans-unit>
+            <trans-unit id="form_custom_templates.pageType" resname="form_custom_templates.pageType">
+                <source>Email</source>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.cType" resname="form_custom_templates.cType">
+                <source>Form Result List</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

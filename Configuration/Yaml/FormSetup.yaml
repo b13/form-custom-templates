@@ -1,7 +1,7 @@
 # Definition of the additional dropdown for template selection
 .email_template_field: &email_template_field
   identifier: emailTemplate
-  templateName: Inspector-SingleSelectEditor
+  templateName: Inspector-SingleSelectTemplateEditor
   label: 'form_custom_templates.select.label'
   propertyPath: options.emailTemplate
   selectOptions:

@@ -1,0 +1,9 @@
+tt_content {
+    form_result_list =< lib.contentElement
+    form_result_list {
+        templateName = FormResultList
+        variables {
+            placeholder = {{formResult}}
+        }
+    }
+}
