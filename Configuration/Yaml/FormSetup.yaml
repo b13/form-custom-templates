@@ -36,7 +36,9 @@
           items:
             0:
               - "Default"
-              - ""
+              # The default value is required for v10, otherwise this will show up as "INVALID VALUE"
+              # can be set to "" (empty string) once we support v11 and up only.
+              - "[Empty]"
 TYPO3:
   CMS:
     Form:
