@@ -11,7 +11,9 @@ $EM_CONF[$_EXTKEY] = [
     'author_company' => 'b13 GmbH',
     'version' => '0.0.1',
     'constraints' => [
-        'depends' => [],
+        'depends' => [
+            'form' => '10.4.20-11.9.99',
+        ],
         'conflicts' => [],
         'suggests' => [],
     ],
