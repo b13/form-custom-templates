@@ -2,12 +2,12 @@
 .email_template_field: &email_template_field
   identifier: emailTemplate
   templateName: Inspector-SingleSelectEditor
-  label: 'Select email template'
+  label: 'form_custom_templates.select.label'
   propertyPath: options.emailTemplate
   selectOptions:
     0:
-      value: ""
-      label: "Default"
+      value: ''
+      label: 'form_custom_templates.select.default'
 
 # Definition of the additional dropdown for template selection
 .email_template_options: &email_template_options
@@ -24,7 +24,7 @@
   FormEngine:
     elements:
       emailTemplate:
-        label: 'Select email template'
+        label: 'form_custom_templates.select.label'
         config:
           type: select
           renderType: selectSingle
@@ -35,7 +35,7 @@
           # items again, because it is a different format! Partey!
           items:
             0:
-              - "Default"
+              - 'form_custom_templates.select.default'
               # The default value is required for v10, otherwise this will show up as "INVALID VALUE"
               # can be set to "" (empty string) once we support v11 and up only.
               - "[Empty]"
@@ -44,12 +44,18 @@ TYPO3:
     Form:
       prototypes:
         standard:
+          formEngine:
+            translationFiles:
+              97: 'EXT:form_custom_templates/Resources/Private/Language/Database.xlf'
+          formEditor:
+            translationFiles:
+              97: 'EXT:form_custom_templates/Resources/Private/Language/Database.xlf'
           formElementsDefinition:
             Form:
               formEditor:
                 propertyCollections:
                   finishers:
-                    # add finisher fields
+                    # Add finisher field
                     10:
                       identifier: EmailToSender
                       editors:
