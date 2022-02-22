@@ -13,7 +13,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class EmailTemplateViewHelper extends AbstractViewHelper
 {
-    public function render(): array
+    public function render()
     {
         $queryBuilder = $this->getQueryBuilderForTable('pages');
         $queryBuilder->select('*')
@@ -24,12 +24,15 @@ class EmailTemplateViewHelper extends AbstractViewHelper
 
         $emailTemplatePages = $queryBuilder->execute()->fetchAllAssociative();
 
-        return array_reduce($emailTemplatePages, static function($options, $item){
+        $options = array_reduce($emailTemplatePages, static function($options, $item){
             $index = $item['uid'];
             $options[$index] = $item['title'];
 
             return $options;
         }, []);
+
+        //return json_encode($options);
+        return $options;
     }
 
     protected function getQueryBuilderForTable(string $table): QueryBuilder

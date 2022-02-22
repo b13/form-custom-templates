@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" datatype="plaintext" original="EXT:form_custom_templates/Resources/Private/Language/locallang.xlf" date="2022-02-16T17:00:00Z" product-name="form_custom_templates">
+    <file source-language="en" datatype="plaintext" original="EXT:form_custom_templates/Resources/Private/Language/Database.xlf" date="2022-02-16T17:00:00Z" product-name="form_custom_templates">
         <header/>
         <body>
             <trans-unit id="form_custom_templates.select.label" resname="form_custom_templates.select.label">
@@ -14,6 +14,9 @@
             </trans-unit>
             <trans-unit id="form_custom_templates.cType" resname="form_custom_templates.cType">
                 <source>Form Result List</source>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.select.fieldExplanationText" resname="form_custom_templates.select.fieldExplanationText">
+                <source>Default will be SystemEmail configured by EXT:form</source>
             </trans-unit>
         </body>
     </file>

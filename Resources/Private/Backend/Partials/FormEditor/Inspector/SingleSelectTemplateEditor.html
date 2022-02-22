@@ -1,22 +1,15 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:formvh="http://typo3.org/ns/TYPO3/CMS/Form/ViewHelpers"  xmlns:b13="http://typo3.org/ns/B13/FormCustomTemplates/ViewHelpers" data-namespace-typo3-fluid="true">
 <div class="t3-form-control-group form-group">
-    <label data-random-id data-random-id-attribute="for" data-random-id-number="1"><span data-template-property="label"></span>Select Template</label>
+    <label data-random-id data-random-id-attribute="for" data-random-id-number="1">
+        <span data-template-property="label"></span>
+    </label>
     <div class="t3-form-controls" data-identifier="inspectorEditorControlsWrapper">
+        <div class="t3-form-controls" data-identifier="inspectorEditorControlsWrapper">
+            <select data-additional-options="{b13:emailTemplate()}" data-random-id data-random-id-attribute="id" data-random-id-number="1" data-template-property="selectOptions" class="form-select"></select>
+        </div>
 
-        <f:form.select
-                id="contactFormAddress"
-                name="{model.additionalArguments.prefix}[{model.additionalArguments.name}]"
-                options="{b13:emailTemplate()}"
-                optionValueField="value"
-                optionLabelField="label"
-                prependOptionLabel="Select Country"
-                prependOptionValue=""
-        />
-
-        <f:form.select
-                data="{'random-id': '', 'random-id-attribute': 'id', 'random-id-number': 1, 'template-property': 'selectOptions'}"
-                options="{b13:emailTemplate()}" class="form-select">
-        </f:form.select>
+        <span class="inspector-editor-hint" data-template-property="fieldExplanationText"></span>
+        <span data-template-property="validationErrors"></span>
     </div>
 </div>
 </html>

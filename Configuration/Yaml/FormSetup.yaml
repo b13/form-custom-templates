@@ -1,13 +1,10 @@
-# Definition of the additional dropdown for template selection
+# Field definition
 .email_template_field: &email_template_field
-  identifier: emailTemplate
-  templateName: Inspector-SingleSelectTemplateEditor
-  label: 'form_custom_templates.select.label'
-  propertyPath: options.emailTemplate
-  selectOptions:
-    0:
-      value: ''
-      label: 'form_custom_templates.select.default'
+  identifier: emailTemplateText
+  templateName: Inspector-TextTemplateEditor
+  fieldExplanationText: form_custom_templates.select.fieldExplanationText
+  label: form_custom_templates.select.label
+  propertyPath: options.emailTemplateUid
 
 # Definition of the additional dropdown for template selection
 .email_template_options: &email_template_options
@@ -19,15 +16,15 @@
   formEditor:
     predefinedDefaults:
       options:
-        emailTemplate: ''
+        emailTemplateUid: ''
   # displayed when overriding finisher settings
   FormEngine:
     elements:
-      emailTemplate:
+      emailTemplateText:
         label: 'form_custom_templates.select.label'
         config:
-          type: select
-          renderType: selectSingle
+          type: text
+          #renderType: selectSingle
           minitems: 1
           maxitems: 1
           size: 1
@@ -50,6 +47,15 @@ TYPO3:
           formEditor:
             translationFiles:
               97: 'EXT:form_custom_templates/Resources/Private/Language/Database.xlf'
+            formEditorFluidConfiguration:
+              partialRootPaths:
+                97: 'EXT:form_custom_templates/Resources/Private/Backend/Partials/FormEditor/'
+            formEditorPartials:
+              Inspector-SingleSelectTemplateEditor: Inspector/SingleSelectTemplateEditor
+              Inspector-TextTemplateEditor: Inspector/TextTemplateEditor
+            dynamicRequireJsModules:
+              additionalViewModelModules:
+                97: 'TYPO3/CMS/FormCustomTemplates/Backend/FormEditor/ViewModel'
           formElementsDefinition:
             Form:
               formEditor:
