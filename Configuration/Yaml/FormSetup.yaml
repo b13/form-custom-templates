@@ -1,7 +1,7 @@
 # Field definition
 .email_template_field: &email_template_field
   identifier: emailTemplateText
-  templateName: Inspector-TextTemplateEditor
+  templateName: Inspector-SingleSelectTemplateEditor
   fieldExplanationText: form_custom_templates.select.fieldExplanationText
   label: form_custom_templates.select.label
   propertyPath: options.emailTemplateUid
@@ -52,10 +52,9 @@ TYPO3:
                 97: 'EXT:form_custom_templates/Resources/Private/Backend/Partials/FormEditor/'
             formEditorPartials:
               Inspector-SingleSelectTemplateEditor: Inspector/SingleSelectTemplateEditor
-              Inspector-TextTemplateEditor: Inspector/TextTemplateEditor
             dynamicRequireJsModules:
               additionalViewModelModules:
-                97: 'TYPO3/CMS/FormCustomTemplates/Backend/FormEditor/ViewModel'
+                97: 'TYPO3/CMS/FormCustomTemplates/Backend/FormEditor/SelectTemplateViewModel'
           formElementsDefinition:
             Form:
               formEditor:

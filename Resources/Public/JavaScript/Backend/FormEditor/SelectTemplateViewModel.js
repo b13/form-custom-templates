@@ -1,10 +1,9 @@
 /**
- * Module: TYPO3/CMS/FormCustomTemplates/Backend/FormEditor/ViewModel
+ * Module: TYPO3/CMS/FormCustomTemplates/Backend/FormEditor/SelectTemplateViewModel
  */
 define(['jquery',
     'TYPO3/CMS/Form/Backend/FormEditor/Helper',
-    'TYPO3/CMS/Form/Backend/FormEditor/InspectorComponent',
-], function($, Helper, InspectorComponent) {
+], function($, Helper) {
     'use strict';
 
     return (function($, Helper) {
@@ -14,7 +13,7 @@ define(['jquery',
          *
          * @var object
          */
-        var _formEditorApp = null;
+        let _formEditorApp = null;
 
         /**
          * @private
@@ -23,7 +22,7 @@ define(['jquery',
          */
         function getFormEditorApp() {
             return _formEditorApp;
-        };
+        }
 
         /**
          * @private
@@ -32,7 +31,7 @@ define(['jquery',
          */
         function getPublisherSubscriber() {
             return getFormEditorApp().getPublisherSubscriber();
-        };
+        }
 
         /**
          * @private
@@ -42,7 +41,7 @@ define(['jquery',
          */
         function getHelper() {
             return Helper;
-        };
+        }
 
         /**
          * @private
@@ -51,7 +50,7 @@ define(['jquery',
          */
         function getUtility() {
             return getFormEditorApp().getUtility();
-        };
+        }
 
         /**
          * @private
@@ -60,19 +59,19 @@ define(['jquery',
          */
         function getCurrentlySelectedFormElement() {
             return getFormEditorApp().getCurrentlySelectedFormElement();
-        };
+        }
 
         /**
          * @private
          *
-         * @param mixed test
-         * @param string message
-         * @param int messageCode
          * @return void
+         * @param test
+         * @param message
+         * @param messageCode
          */
         function assert(test, message, messageCode) {
             return getFormEditorApp().assert(test, message, messageCode);
-        };
+        }
 
         /**
          * @private
@@ -86,11 +85,11 @@ define(['jquery',
                 1491643380
             );
             Helper.bootstrap(getFormEditorApp());
-        };
+        }
 
         function _subscribeEvents() {
             getPublisherSubscriber().subscribe('view/inspector/editor/insert/perform', function (topic, args) {
-                if (args[0].templateName === 'Inspector-TextTemplateEditor') {
+                if (args[0].templateName === 'Inspector-SingleSelectTemplateEditor') {
                     renderSingleSelectTemplateEditor(
                         args[0],
                         args[1],
@@ -103,16 +102,16 @@ define(['jquery',
             /**
              * @public
              *
-             * @param object editorConfiguration
-             * @param object editorHtml
-             * @param string collectionElementIdentifier
-             * @param string collectionName
              * @return void
              * @throws 1475421048
              * @throws 1475421049
              * @throws 1475421050
              * @throws 1475421051
              * @throws 1475421052
+             * @param editorConfiguration
+             * @param editorHtml
+             * @param collectionElementIdentifier
+             * @param collectionName
              */
             function renderSingleSelectTemplateEditor(editorConfiguration, editorHtml, collectionElementIdentifier, collectionName) {
                 let propertyData, propertyPath, selectElement;
@@ -122,8 +121,6 @@ define(['jquery',
                     collectionElementIdentifier,
                     collectionName
                 );
-                propertyData = getCurrentlySelectedFormElement().get(propertyPath);
-                console.log(propertyData);
 
                 getHelper()
                     .getTemplatePropertyDomElement('label', editorHtml)
@@ -150,8 +147,8 @@ define(['jquery',
                         .getTemplatePropertyDomElement('fieldExplanationText', editorHtml)
                         .remove();
                 }
-            };
-        };
+            }
+        }
 
         /**
          * @public
@@ -163,7 +160,7 @@ define(['jquery',
             _formEditorApp = formEditorApp;
             _helperSetup();
             _subscribeEvents();
-        };
+        }
 
         /**
          * Publish the public methods.

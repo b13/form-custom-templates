@@ -6,11 +6,12 @@ namespace B13\FormCustomTemplates\ViewHelpers;
 
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
+/**
+ * Retrieve all pages of 'doktype' 125 (Email)
+ */
 class EmailTemplateViewHelper extends AbstractViewHelper
 {
     public function render()
@@ -31,7 +32,6 @@ class EmailTemplateViewHelper extends AbstractViewHelper
             return $options;
         }, []);
 
-        //return json_encode($options);
         return $options;
     }
 
