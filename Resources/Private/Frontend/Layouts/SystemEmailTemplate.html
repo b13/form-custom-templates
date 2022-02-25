@@ -352,16 +352,18 @@
                                 <td valign="top" class="image" align="center" style="padding: 0px 36px; padding-bottom: 20px; color: #222222;text-align: center;">
                                     <f:if condition="{typo3.systemConfiguration.backend.loginLogo}">
                                         <f:then>
-                                            <img src="{typo3.systemConfiguration.backend.loginLogo -> core:normalizedUrl()}" alt="TYPO3 Logo" height="41" width="150" />
+                                            <img src="{typo3.systemConfiguration.backend.loginLogo}" alt="TYPO3 Logo" height="41" width="150" />
                                         </f:then>
                                         <f:else if="{typo3.systemConfiguration.backend.loginHighlightColor}">
                                             <img src="{siteUrl}{f:uri.resource(extensionName: 'core', path: 'Images/typo3_black.svg', absolute: 1)}" alt="TYPO3 Logo" height="41" width="150" />
+                                        </f:else>
+                                        <f:else if="{f:uri.resource(extensionName: 'backend', path: 'Images/typo3_orange.svg', absolute: 1)}">
+                                            <img src="{f:uri.resource(extensionName: 'backend', path: 'Images/typo3_orange.svg', absolute: 1)}" alt="TYPO3 Logo" height="41" width="150" />
                                         </f:else>
                                         <f:else>
                                             <img src="{f:uri.resource(extensionName: 'core', path: 'Images/typo3_orange.svg', absolute: 1)}" alt="TYPO3 Logo" height="41" width="150" />
                                         </f:else>
                                     </f:if>
-                                    <div>{f:format.date(date: 'now', format: 'Y-m-d H:m:s')}</div>
                                 </td>
                             </tr>
                             <tr>

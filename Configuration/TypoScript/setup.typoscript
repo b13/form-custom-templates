@@ -17,3 +17,37 @@ plugin.tx_form {
         }
     }
 }
+
+[page["doktype"] == 125]
+    page = PAGE
+    page {
+        typeNum = 0
+        10 = FLUIDTEMPLATE
+        10 {
+            templateName = SystemEmailTemplate
+            variables {
+                content < styles.content.get
+                content.select.where = colPos=0
+
+                siteUrl = TEXT
+                siteUrl.data = site:base
+                websiteTitle = TEXT
+                websiteTitle.data = site:websiteTitle
+            }
+
+            templateRootPaths {
+                10 = EXT:form_custom_templates/Resources/Private/Frontend/Templates/
+            }
+            partialRootPaths {
+                10 = EXT:form_custom_templates/Resources/Private/Frontend/Partials/
+            }
+            layoutRootPaths {
+                10 = EXT:form_custom_templates/Resources/Private/Frontend/Layouts/
+            }
+        }
+    }
+
+    lib.parseFunc_RTE.tags.a.typolink {
+        forceAbsoluteUrl = 1
+    }
+[END]
