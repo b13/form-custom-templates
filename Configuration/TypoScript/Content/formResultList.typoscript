@@ -2,6 +2,9 @@ tt_content {
     form_result_list =< lib.contentElement
     form_result_list {
         templateName = FormResultList
+        templateRootPaths {
+            10 = EXT:form_custom_templates/Resources/Private/Frontend/Templates/
+        }
         variables {
             placeholder = {{formResult}}
         }

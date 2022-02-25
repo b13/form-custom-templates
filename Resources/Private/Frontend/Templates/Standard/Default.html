@@ -1,0 +1,10 @@
+<f:layout name="SystemEmailTemplate" />
+<f:section name="Title">{headline}</f:section>
+<f:section name="Main">
+    <f:if condition="{introduction}">
+        <h4>{introduction}</h4>
+    </f:if>
+    <p>
+        <f:format.raw>{content}</f:format.raw>
+    </p>
+</f:section>

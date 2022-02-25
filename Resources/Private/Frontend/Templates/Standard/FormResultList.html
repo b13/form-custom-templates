@@ -1,0 +1,16 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:tsd="http://typo3.org/ns/Ochorocho/TsdCore/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:layout name="Default"/>
+<f:section name="Header">
+    <f:render partial="Header/All" arguments="{_all}"/>
+</f:section>
+
+<f:section name="Main">
+    <div class="form-list-result">
+        <f:comment>Sorry, could not find a more shiny approach</f:comment>
+        {<f:format.raw>formCustomTemplate.results</f:format.raw>}
+    </div>
+</f:section>
+</html>

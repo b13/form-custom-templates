@@ -20,11 +20,11 @@
   # displayed when overriding finisher settings
   FormEngine:
     elements:
-      emailTemplateText:
+      emailTemplateUid:
         label: 'form_custom_templates.select.label'
         config:
           type: text
-          #renderType: selectSingle
+          renderType: selectSingle
           minitems: 1
           maxitems: 1
           size: 1
@@ -64,11 +64,13 @@ TYPO3:
                     10:
                       identifier: EmailToSender
                       editors:
+                        1300: null
                         5000: # Position in the inspector, might override existing fields!
                           <<: *email_template_field
                     20:
                       identifier: EmailToReceiver
                       editors:
+                        1300: null
                         5000: # Position in the inspector, might override existing fields!
                           <<: *email_template_field
           finishersDefinition:

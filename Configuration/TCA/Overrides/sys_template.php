@@ -13,4 +13,11 @@ call_user_func(function()
         'Configuration/TypoScript',
         'Form Custom Template'
     );
+
+    // Provide basic configuration to get easily started
+    ExtensionManagementUtility::addStaticFile(
+        $extensionKey,
+        'Configuration/TypoScript/Email',
+        'Form Custom Template Email Frontend'
+    );
 });
