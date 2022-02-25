@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use B13\FormCustomTemplates\Hooks\DataStructureIdentifierHook;
