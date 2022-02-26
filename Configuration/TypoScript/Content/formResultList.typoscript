@@ -6,7 +6,8 @@ tt_content {
             10 = EXT:form_custom_templates/Resources/Private/Frontend/Templates/
         }
         variables {
-            placeholder = {{formResult}}
+            placeholder = TEXT
+            placeholder.value = {formCustomTemplate.results}
         }
     }
 }

@@ -68,10 +68,7 @@ class EmailTemplateService
         return $options;
     }
 
-    /**
-     * @return TypoScriptFrontendController
-     */
-    protected static function getTypoScriptFrontendController()
+    protected static function getTypoScriptFrontendController(): TypoScriptFrontendController
     {
         return $GLOBALS['TSFE'];
     }

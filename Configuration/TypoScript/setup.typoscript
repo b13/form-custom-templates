@@ -22,19 +22,19 @@ plugin.tx_form {
     page = PAGE
     page {
         typeNum = 0
+        config {
+            disableAllHeaderCode = 1
+        }
         10 = FLUIDTEMPLATE
         10 {
-            templateName = SystemEmailTemplate
+            templateName = SystemEmail
             variables {
                 content < styles.content.get
                 content.select.where = colPos=0
-
-                siteUrl = TEXT
-                siteUrl.data = site:base
-                websiteTitle = TEXT
-                websiteTitle.data = site:websiteTitle
             }
-
+            dataProcessing {
+                10 = B13\FormCustomTemplates\DataProcessing\EmailVariablesProcessor
+            }
             templateRootPaths {
                 10 = EXT:form_custom_templates/Resources/Private/Frontend/Templates/
             }
@@ -42,7 +42,7 @@ plugin.tx_form {
                 10 = EXT:form_custom_templates/Resources/Private/Frontend/Partials/
             }
             layoutRootPaths {
-                10 = EXT:form_custom_templates/Resources/Private/Frontend/Layouts/
+                10 = EXT:core/Resources/Private/Layouts/
             }
         }
     }

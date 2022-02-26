@@ -4,7 +4,7 @@ use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use B13\FormCustomTemplates\Hooks\DataStructureIdentifierHook;
+use B13\FormCustomTemplates\Hooks\DataStructureEmailOptionsHook;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 defined('TYPO3') or die();
@@ -21,7 +21,7 @@ call_user_func(function () {
     );
 
     // Add selectable templates to plugin settings override
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][FlexFormTools::class]['flexParsing'][DataStructureIdentifierHook::class] = DataStructureIdentifierHook::class;
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][FlexFormTools::class]['flexParsing'][DataStructureEmailOptionsHook::class] = DataStructureEmailOptionsHook::class;
 
     // Register icon
     $iconRegistry = GeneralUtility::makeInstance(

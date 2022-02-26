@@ -6,7 +6,7 @@ namespace B13\FormCustomTemplates\Hooks;
 
 use B13\FormCustomTemplates\Service\EmailTemplateService;
 
-class DataStructureIdentifierHook
+class DataStructureEmailOptionsHook
 {
     /**
      * Add emailTemplateUid options
