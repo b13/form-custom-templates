@@ -10,8 +10,8 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class EmailTemplateService
 {
@@ -38,12 +38,11 @@ class EmailTemplateService
 
     protected static function getPageHtml(int $pageId): StreamInterface
     {
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $uri = $uriBuilder
-            ->setTargetPageUid($pageId)
-            ->setCreateAbsoluteUri(TRUE)
-            ->build();
-
+        $typolinkConfiguration = [
+            'parameter' => $pageId,
+            'forceAbsoluteUrl' => 1,
+        ];
+        $uri = self::getTypoScriptFrontendController()->cObj->typoLink_URL($typolinkConfiguration);
         $factory = GuzzleClientFactory::getClient();
 
         return $factory->request('GET', $uri)->getBody();
@@ -67,5 +66,13 @@ class EmailTemplateService
         }, []);
 
         return $options;
+    }
+
+    /**
+     * @return TypoScriptFrontendController
+     */
+    protected static function getTypoScriptFrontendController()
+    {
+        return $GLOBALS['TSFE'];
     }
 }
