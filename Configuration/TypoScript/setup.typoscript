@@ -18,6 +18,21 @@ plugin.tx_form {
     }
 }
 
+[request.getQueryParams()['type'] == 99]
+    lib.contentElement {
+        format = txt
+        templateRootPaths {
+            100 = EXT:form_custom_templates/Resources/Private/Frontend/Templates/
+        }
+        partialRootPaths {
+            100 = EXT:form_custom_templates/Resources/Private/Frontend/Partials/
+        }
+        layoutRootPaths {
+            100 = EXT:form_custom_templates/Resources/Private/Frontend/Layouts/
+        }
+    }
+[END]
+
 [page["doktype"] == 125]
     page = PAGE
     page {
@@ -43,11 +58,18 @@ plugin.tx_form {
             }
             layoutRootPaths {
                 10 = EXT:core/Resources/Private/Layouts/
+                20 = EXT:form_custom_templates/Resources/Private/Frontend/Layouts/
             }
         }
     }
 
+    plaintext < page
+    plaintext.typeNum = 99
+    plaintext.config.additionalHeaders.10.header = Content-type:text/plain
+    plaintext.10.format = txt
+
     lib.parseFunc_RTE.tags.a.typolink {
         forceAbsoluteUrl = 1
     }
+
 [END]

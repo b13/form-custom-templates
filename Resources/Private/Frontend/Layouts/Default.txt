@@ -1,0 +1,6 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:b13="http://typo3.org/ns/B13/FormCustomTemplates/ViewHelpers" data-namespace-typo3-fluid="true">
+        <b13:plaintext>
+            {data.header}
+            <f:render section="Main" optional="true" />
+        </b13:plaintext>
+</html>

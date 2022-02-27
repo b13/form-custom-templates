@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace B13\FormCustomTemplates\Service;
 
-use Html2Text\Html2Text;
 use Psr\Http\Message\StreamInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
@@ -17,32 +16,38 @@ class EmailTemplateService
 {
     public static function create(int $uid, FormRuntime $formRuntime, string $resultTable = ''): array
     {
-        $htmlTemplate = self::getPageHtml($uid);
         $markerService = GeneralUtility::makeInstance(MarkerBasedTemplateService::class);
-        $modContent = $markerService->substituteMarker($htmlTemplate->getContents(), '{formCustomTemplate.results}', $resultTable);
+
+        $htmlTemplate = self::getHtml($uid);
+        $htmlContent = $markerService->substituteMarker($htmlTemplate->getContents(), '{formCustomTemplate.results}', $resultTable);
+
+        $plaintextTemplate = self::getPlaintext($uid);
+        $plaintextContent = $markerService->substituteMarker($plaintextTemplate->getContents(), '{formCustomTemplate.results}', $resultTable);
 
         // Replace fluid markers with given form values
         foreach ($formRuntime->getFormDefinition()->getElements() as $identifier => $element) {
             $value = $formRuntime->getElementValue($identifier);
-            $modContent = $markerService->substituteMarker($modContent, '{' . $identifier . '}', $value);
+            $htmlContent = $markerService->substituteMarker($htmlContent, '{' . $identifier . '}', $value);
+            $plaintextContent = $markerService->substituteMarker($plaintextContent, '{' . $identifier . '}', $value);
         }
 
-        $toText = GeneralUtility::makeInstance(Html2Text::class, $modContent);
-        $plainText = $toText->getText();
-
         return [
-            'html' => $modContent,
-            'plaintext' => $plainText,
+            'html' => $htmlContent,
+            'plaintext' => $plaintextContent,
         ];
     }
 
-    protected static function getPageHtml(int $pageId): StreamInterface
+    protected static function getHtml(int $pageId): StreamInterface
     {
-        $typolinkConfiguration = [
-            'parameter' => $pageId,
-            'forceAbsoluteUrl' => 1,
-        ];
-        $uri = self::getTypoScriptFrontendController()->cObj->typoLink_URL($typolinkConfiguration);
+        $uri = self::getUri($pageId, 0);
+        $factory = GuzzleClientFactory::getClient();
+
+        return $factory->request('GET', $uri)->getBody();
+    }
+
+    protected static function getPlaintext(int $pageId): StreamInterface
+    {
+        $uri = self::getUri($pageId, 99);
         $factory = GuzzleClientFactory::getClient();
 
         return $factory->request('GET', $uri)->getBody();
@@ -68,8 +73,13 @@ class EmailTemplateService
         return $options;
     }
 
-    protected static function getTypoScriptFrontendController(): TypoScriptFrontendController
+    protected static function getUri(int $pageId, int $type = 0): string
     {
-        return $GLOBALS['TSFE'];
+        $typolinkConfiguration = [
+            'parameter' => $pageId . ',' . $type,
+            'forceAbsoluteUrl' => 1,
+        ];
+
+        return $GLOBALS['TSFE']->cObj->typoLink_URL($typolinkConfiguration);
     }
 }

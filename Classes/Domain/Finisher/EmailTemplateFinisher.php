@@ -140,7 +140,7 @@ class EmailTemplateFinisher extends EmailFinisher
     protected function getStandaloneView(string $title, FormRuntime $formRuntime): StandaloneView
     {
         $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-        $standaloneView->setTemplatePathAndFilename('EXT:form_custom_templates/Resources/Private/Frontend/Partials/ResultTable.html');
+        $standaloneView->setTemplatePathAndFilename('EXT:form_custom_templates/Resources/Private/Frontend/Partials/ResultTable.txt');
         $standaloneView->assign('title', $title);
         $standaloneView->assign('finisherVariableProvider', $this->finisherContext->getFinisherVariableProvider());
 
