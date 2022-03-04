@@ -11,6 +11,32 @@
                 <source>Default</source>
                 <target>Standard</target>
             </trans-unit>
+            <trans-unit id="form_custom_templates.pageType" resname="form_custom_templates.pageType">
+                <source>Email template</source>
+                <target>E-Mail Template</target>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.cType" resname="form_custom_templates.cType">
+                <source>Form Result List</source>
+                <target>Formular Angaben</target>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.cType.description" resname="form_custom_templates.cType.description">
+                <source>This will display a a table/list of all form filled form fields.</source>
+                <target>Dieses Inhaltselement zeug eine Liste aller ausgefüllten Felder an.</target>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.select.fieldExplanationText" resname="form_custom_templates.select.fieldExplanationText">
+                <source>Default will be SystemEmail configured by EXT:form</source>
+                <target>Wenn nicht konfiguriert wird SystemEmail von EXT:form verwendet.</target>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.identifier.fieldExplanationText" resname="form_custom_templates.identifier.fieldExplanationText">
+                <source>Set a unique identifier for later use as template marker. The marker will be substituted with the given form field value.</source>
+                <target>Setze einen "Identifier". Dieser kann im Template verwendet werden und wird dann ersetzt durch den Wert des Fomular-Felds.</target>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.validator.formElementIdentifierWithOutCurlyBraces" resname="form_custom_templates.validator.formElementIdentifierWithOutCurlyBraces">
+                <source>Not a valid identifier. A valid identifier may contain only a-Z and 0-9 and must not be empty.</source>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.validator.FormElementIdentifierIsInUse" resname="form_custom_templates.validator.FormElementIdentifierIsInUse">
+                <source>Reset to "{previousValue}" because this identifier is already in use.</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

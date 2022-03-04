@@ -52,10 +52,34 @@ TYPO3:
                 97: 'EXT:form_custom_templates/Resources/Private/Backend/Partials/FormEditor/'
             formEditorPartials:
               Inspector-SingleSelectTemplateEditor: Inspector/SingleSelectTemplateEditor
+              Inspector-IdentifierEditor: Inspector/TextEditor
             dynamicRequireJsModules:
               additionalViewModelModules:
                 97: 'TYPO3/CMS/FormCustomTemplates/Backend/FormEditor/SelectTemplateViewModel'
+                997: 'TYPO3/CMS/FormCustomTemplates/Backend/FormEditor/IdentifierViewModel'
+            formElementPropertyValidatorsDefinition:
+              FormElementIdentifierWithOutCurlyBraces:
+                errorMessage: form_custom_templates.validator.formElementIdentifierWithOutCurlyBraces
+              FormElementIdentifierIsInUse:
+                errorMessage: form_custom_templates.validator.FormElementIdentifierIsInUse
+
           formElementsDefinition:
+            Text:
+              formEditor:
+                editors:
+                  205:
+                    identifier: identifier
+                    templateName: Inspector-IdentifierEditor
+                    label: Change Identifier
+                    propertyPath: identifier
+                    fieldExplanationText: form_custom_templates.identifier.fieldExplanationText
+                    enableFormelementSelectionButton: false
+                    propertyValidatorsMode: AND
+                    propertyValidators:
+                      10: NotEmpty
+                      20: FormElementIdentifierWithOutCurlyBraces
+                      # This validator is special because it's only executed when the input field was changed!
+                      30: FormElementIdentifierIsInUse
             Form:
               formEditor:
                 propertyCollections:
