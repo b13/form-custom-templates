@@ -6,6 +6,24 @@
   label: form_custom_templates.select.label
   propertyPath: options.emailTemplateUid
 
+# Identifier field definition
+.identifier_field: &identifier_field
+  formEditor:
+    editors:
+      205:
+        identifier: identifier
+        templateName: Inspector-IdentifierEditor
+        label: Change Identifier
+        propertyPath: identifier
+        fieldExplanationText: form_custom_templates.identifier.fieldExplanationText
+        enableFormelementSelectionButton: false
+        propertyValidatorsMode: AND
+        propertyValidators:
+          10: NotEmpty
+          20: FormElementIdentifierWithOutCurlyBraces
+          # This validator is special because it's only executed when the input field was changed!
+          30: FormElementIdentifierIsInUse
+
 # Definition of the additional dropdown for template selection
 .email_template_options: &email_template_options
   implementationClassName: B13\FormCustomTemplates\Domain\Finisher\EmailTemplateFinisher
@@ -65,21 +83,33 @@ TYPO3:
 
           formElementsDefinition:
             Text:
-              formEditor:
-                editors:
-                  205:
-                    identifier: identifier
-                    templateName: Inspector-IdentifierEditor
-                    label: Change Identifier
-                    propertyPath: identifier
-                    fieldExplanationText: form_custom_templates.identifier.fieldExplanationText
-                    enableFormelementSelectionButton: false
-                    propertyValidatorsMode: AND
-                    propertyValidators:
-                      10: NotEmpty
-                      20: FormElementIdentifierWithOutCurlyBraces
-                      # This validator is special because it's only executed when the input field was changed!
-                      30: FormElementIdentifierIsInUse
+              <<: *identifier_field
+            Textarea:
+              <<: *identifier_field
+            Email:
+              <<: *identifier_field
+            Telephone:
+              <<: *identifier_field
+            Url:
+              <<: *identifier_field
+            Number:
+              <<: *identifier_field
+            Date:
+              <<: *identifier_field
+            Checkbox:
+              <<: *identifier_field
+            SingleSelect:
+              <<: *identifier_field
+            RadioButton:
+              <<: *identifier_field
+            MultiCheckbox:
+              <<: *identifier_field
+            MultiSelect:
+              <<: *identifier_field
+            DatePicker:
+              <<: *identifier_field
+            Hidden:
+              <<: *identifier_field
             Form:
               formEditor:
                 propertyCollections:
