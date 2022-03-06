@@ -28,7 +28,7 @@
                 <source>Not a valid identifier. A valid identifier may contain only a-Z and 0-9 and must not be empty.</source>
             </trans-unit>
             <trans-unit id="form_custom_templates.validator.FormElementIdentifierIsInUse" resname="form_custom_templates.validator.FormElementIdentifierIsInUse">
-                <source>Reset to "{previousValue}" because this identifier is already in use.</source>
+                <source>Reset to '{previousValue}' because this identifier is already in use.</source>
             </trans-unit>
         </body>
     </file>

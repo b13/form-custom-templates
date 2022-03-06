@@ -132,7 +132,8 @@ define(['jquery',
             getTemplatePropertyDomElement('propertyPath', editorHtml).val(propertyData)
 
             getFormEditorApp().validateCurrentlySelectedFormElementProperty(propertyPath)
-            maintainIdentifierValidator(formElement.get(propertyPath), formElement.get(propertyPath), editorHtml)
+            let message = getFormEditorApp().getFormElementPropertyValidatorDefinition('FormElementIdentifierWithOutCurlyBraces')['errorMessage'] || 'Not a valid identifier'
+            maintainValidator(formElement.get(propertyPath), message, editorHtml)
 
             let debounce;
             let previousValue = getCurrentlySelectedFormElement().get(propertyPath);
@@ -140,33 +141,31 @@ define(['jquery',
             // Validate and update identifier on "keyup"
             getTemplatePropertyDomElement('propertyPath', editorHtml).on('keyup', function(e) {
                 let identifierUsed = getFormEditorApp().isFormElementIdentifierUsed(e.currentTarget.value);
+                clearTimeout(debounce);
 
-                // Do not update stage if identifier is already in use
-                // because duplicated identifiers on a stage break the GUI.
-                if(identifierUsed && previousValue !== e.currentTarget.value) {
-                    clearTimeout(debounce);
+                // Wait for the validator and void firing too many events
+                // which will cause the validation to fail
+                debounce = setTimeout(
+                    function () {
 
-                    debounce = setTimeout(
-                        function () {
-                            maintainInUseValidator(identifierUsed, editorHtml, previousValue)
-                        }, 300);
-                } else {
-                    let formElement = getCurrentlySelectedFormElement();
-                    let newFormELe = formElement.clone()
+                        // Do not update stage if identifier is already in use
+                        // or not valid because duplicated identifiers on
+                        // a stage break the GUI.
+                        if(identifierUsed && previousValue !== e.currentTarget.value) {
+                            let message = (getFormEditorApp().getFormElementPropertyValidatorDefinition('FormElementIdentifierIsInUse')['errorMessage'] || 'Reset to {previousValue} coz it is already in use').replace('{previousValue}', previousValue)
+                            maintainValidator(!identifierUsed, message, editorHtml)
+                        } else if(!isValid(e.currentTarget.value)) {
+                            let message = getFormEditorApp().getFormElementPropertyValidatorDefinition('FormElementIdentifierWithOutCurlyBraces')['errorMessage'] || 'Not a valid identifier'
+                            maintainValidator(false, message, editorHtml)
+                        } else {
+                            let formElement = getCurrentlySelectedFormElement();
+                            let newFormELe = formElement.clone()
+                            newFormELe.set('identifier', e.currentTarget.value, true)
 
-                    newFormELe.set('identifier', e.currentTarget.value, true)
-
-                    // Wait for the validator and void firing too many events
-                    // which will cause the validation to fail
-                    clearTimeout(debounce);
-
-                    debounce = setTimeout(
-                        function () {
-                            updateStage(newFormELe, formElement, propertyPath, editorHtml)
-                        }, 300);
-
-                    previousValue = e.currentTarget.value;
-                }
+                            updateStage(newFormELe, formElement, propertyPath, editorHtml);
+                            previousValue = e.currentTarget.value;
+                        }
+                    }, 400);
             });
         }
 
@@ -186,7 +185,8 @@ define(['jquery',
             getViewModel().renderAbstractStageArea();
             getViewModel().renewStructure();
             getFormEditorApp().validateCurrentlySelectedFormElementProperty(propertyPath)
-            maintainIdentifierValidator(newElement.get(propertyPath), oldElement.get(propertyPath), editorHtml)
+            let message = getFormEditorApp().getFormElementPropertyValidatorDefinition('FormElementIdentifierWithOutCurlyBraces')['errorMessage'] || 'Not a valid identifier'
+            maintainValidator(isValid(newElement.get(propertyPath)), message, editorHtml)
         }
 
         /**
@@ -217,36 +217,13 @@ define(['jquery',
         function isValid(identifier) {
             let regex = /^[a-z0-9-_]+$/gi;
             let match = regex.exec(identifier);
-            return !!match;
+            return (!!match && identifier !== '');
         }
 
-        function maintainIdentifierValidator(identifier, oldIdentifier, editorHtml) {
-            if (!isValid(identifier)) {
+        function maintainValidator(state, message, editorHtml) {
+            if (!state) {
                 getTemplatePropertyDomElement('validationErrors', editorHtml)
-                    .text(getFormEditorApp().getFormElementPropertyValidatorDefinition('FormElementIdentifierWithOutCurlyBraces')['errorMessage'] || 'Not a valid identifier');
-                getViewModel().setElementValidationErrorClass(
-                    getTemplatePropertyDomElement('validationErrors', editorHtml)
-                );
-                getViewModel().setElementValidationErrorClass(
-                    $(getHelper().getDomElementDataIdentifierSelector('editorControlsWrapper'), $(editorHtml)),
-                    'hasError'
-                );
-            } else {
-                getTemplatePropertyDomElement('validationErrors', editorHtml).text('');
-                getViewModel().removeElementValidationErrorClass(
-                    getTemplatePropertyDomElement('validationErrors', editorHtml)
-                );
-                getViewModel().removeElementValidationErrorClass(
-                    $(getHelper().getDomElementDataIdentifierSelector('editorControlsWrapper'), $(editorHtml)),
-                    'hasError'
-                );
-            }
-        }
-
-        function maintainInUseValidator(identifierUsed, editorHtml, previousValue) {
-            if (identifierUsed) {
-                getTemplatePropertyDomElement('validationErrors', editorHtml)
-                    .text((getFormEditorApp().getFormElementPropertyValidatorDefinition('FormElementIdentifierIsInUse')['errorMessage'] || 'Reset to {previousValue} coz it is already in use').replace('{previousValue}', previousValue));
+                    .text(message);
                 getViewModel().setElementValidationErrorClass(
                     getTemplatePropertyDomElement('validationErrors', editorHtml)
                 );
