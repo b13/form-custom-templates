@@ -12,7 +12,7 @@ use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
 
 class EmailTemplateService
 {
-    public static function create(int $uid, FormRuntime $formRuntime, string $resultTable = '', int $type = 99): string
+    public static function create(int $uid, FormRuntime $formRuntime, string $resultTable = '', int $type = 101): string
     {
         $markerService = GeneralUtility::makeInstance(MarkerBasedTemplateService::class);
 

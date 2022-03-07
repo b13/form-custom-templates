@@ -18,7 +18,7 @@ plugin.tx_form {
     }
 }
 
-[request.getQueryParams()['type'] == 99]
+[request.getQueryParams()['type'] == 101]
     lib.contentElement {
         format = txt
         templateRootPaths {
@@ -64,7 +64,7 @@ plugin.tx_form {
     }
 
     plaintext < page
-    plaintext.typeNum = 99
+    plaintext.typeNum = 101
     plaintext.config.additionalHeaders.10.header = Content-type:text/plain
     plaintext.10.format = txt
 

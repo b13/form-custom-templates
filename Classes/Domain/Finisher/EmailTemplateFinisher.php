@@ -94,7 +94,7 @@ class EmailTemplateFinisher extends EmailFinisher
             [
                 'format' => 'Plaintext',
                 'contentType' => 'text/plain',
-                'content' => EmailTemplateService::create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'txt')->render(), 99)
+                'content' => EmailTemplateService::create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'txt')->render(), 101)
             ],
         ];
 
