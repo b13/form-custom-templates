@@ -6,9 +6,14 @@ namespace B13\FormCustomTemplates\Domain\Finisher;
 
 use B13\FormCustomTemplates\Service\EmailTemplateService;
 use Symfony\Component\Mime\Address;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Mail\MailMessage;
+use TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Form\Domain\Finishers\EmailFinisher;
 use TYPO3\CMS\Form\Domain\Finishers\Exception\FinisherException;
@@ -139,7 +144,12 @@ class EmailTemplateFinisher extends EmailFinisher
     protected function getStandaloneView(string $title, FormRuntime $formRuntime, string $format = 'txt'): StandaloneView
     {
         $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-        $standaloneView->setTemplatePathAndFilename('EXT:form_custom_templates/Resources/Private/Frontend/Partials/ResultTable.' . $format);
+
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
+        $typoScript = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        $templatePathAndFilename = $typoScript['plugin.']['tx_form_custom_templates.']['resultList.']['templatePath'];
+
+        $standaloneView->setTemplatePathAndFilename($templatePathAndFilename . '.' . $format);
         $standaloneView->assign('title', $title);
         $standaloneView->assign('finisherVariableProvider', $this->finisherContext->getFinisherVariableProvider());
 

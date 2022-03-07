@@ -73,3 +73,11 @@ plugin.tx_form {
     }
 
 [END]
+
+plugin.tx_form_custom_templates {
+    resultList {
+        # Path with filename, without suffix
+        # Provide *.txt and *.html templates
+        templatePath = EXT:form_custom_templates/Resources/Private/Frontend/Partials/ResultTable
+    }
+}
