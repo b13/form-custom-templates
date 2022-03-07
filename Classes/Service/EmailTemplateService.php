@@ -15,8 +15,6 @@ class EmailTemplateService
     public static function create(int $uid, FormRuntime $formRuntime, string $resultTable = '', int $type = 101): string
     {
         $markerService = GeneralUtility::makeInstance(MarkerBasedTemplateService::class);
-
-        // @todo change plaintext type
         $uri = self::getUri($uid, $type);
         $factory = GuzzleClientFactory::getClient();
 

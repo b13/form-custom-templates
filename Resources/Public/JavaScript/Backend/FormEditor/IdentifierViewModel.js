@@ -137,10 +137,12 @@ define(['jquery',
 
             let debounce;
             let previousValue = getCurrentlySelectedFormElement().get(propertyPath);
-
+            let saveButton = $('[data-identifier="saveButton"]');
             // Validate and update identifier on "keyup"
             getTemplatePropertyDomElement('propertyPath', editorHtml).on('keyup', function(e) {
                 let identifierUsed = getFormEditorApp().isFormElementIdentifierUsed(e.currentTarget.value);
+
+                getViewModel().disableButton(saveButton);
                 clearTimeout(debounce);
 
                 // Wait for the validator and void firing too many events
@@ -165,6 +167,8 @@ define(['jquery',
                             updateStage(newFormELe, formElement, propertyPath, editorHtml);
                             previousValue = e.currentTarget.value;
                         }
+
+                        getViewModel().enableButton(saveButton);
                     }, 400);
             });
         }
