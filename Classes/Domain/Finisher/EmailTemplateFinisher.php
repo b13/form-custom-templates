@@ -6,14 +6,11 @@ namespace B13\FormCustomTemplates\Domain\Finisher;
 
 use B13\FormCustomTemplates\Service\EmailTemplateService;
 use Symfony\Component\Mime\Address;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Mail\MailMessage;
-use TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser;
-use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Form\Domain\Finishers\EmailFinisher;
 use TYPO3\CMS\Form\Domain\Finishers\Exception\FinisherException;
@@ -45,14 +42,14 @@ class EmailTemplateFinisher extends EmailFinisher
         }
 
         $subject = $this->parseOption('subject');
-        $recipients = $this->getRecipients('recipients');
+        $recipients = $this->getRecipientsForTemplate('recipients');
         $senderAddress = $this->parseOption('senderAddress');
         $senderAddress = is_string($senderAddress) ? $senderAddress : '';
         $senderName = $this->parseOption('senderName');
         $senderName = is_string($senderName) ? $senderName : '';
-        $replyToRecipients = $this->getRecipients('replyToRecipients');
-        $carbonCopyRecipients = $this->getRecipients('carbonCopyRecipients');
-        $blindCarbonCopyRecipients = $this->getRecipients('blindCarbonCopyRecipients');
+        $replyToRecipients = $this->getRecipientsForTemplate('replyToRecipients');
+        $carbonCopyRecipients = $this->getRecipientsForTemplate('carbonCopyRecipients');
+        $blindCarbonCopyRecipients = $this->getRecipientsForTemplate('blindCarbonCopyRecipients');
         $attachUploads = $this->parseOption('attachUploads');
         $addHtmlPart = $this->parseOption('addHtmlPart') ? true : false;
         $title = $this->parseOption('title');
@@ -144,8 +141,10 @@ class EmailTemplateFinisher extends EmailFinisher
     protected function getStandaloneView(string $title, FormRuntime $formRuntime, string $format = 'txt'): StandaloneView
     {
         $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-
-        $configurationManager = GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
+        // @todo: use makeInstance once v10 support was dropped
+        //$configurationManager = GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
+        $configurationManager = GeneralUtility::makeInstance(ObjectManager::class)
+            ->get(ConfigurationManagerInterface::class);
         $typoScript = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         $templatePathAndFilename = $typoScript['plugin.']['tx_form_custom_templates.']['resultList.']['templatePath'];
 
@@ -158,5 +157,26 @@ class EmailTemplateFinisher extends EmailFinisher
             ->getViewHelperVariableContainer()
             ->addOrUpdate(RenderRenderableViewHelper::class, 'formRuntime', $formRuntime);
         return $standaloneView;
+    }
+
+    /**
+     * Get recipients
+     * Using this for compatibility between v10 and v11
+     * @todo: use getRecipients() once v10 support was dropped
+     * @param string $listOption List option name
+     * @return array
+     */
+    protected function getRecipientsForTemplate(string $listOption): array
+    {
+        $recipients = $this->parseOption($listOption) ?? [];
+        $addresses = [];
+        foreach ($recipients as $address => $name) {
+            if (!GeneralUtility::validEmail($address)) {
+                // Drop entries without valid address
+                continue;
+            }
+            $addresses[] = new Address($address, $name);
+        }
+        return $addresses;
     }
 }
