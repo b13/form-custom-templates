@@ -4,53 +4,32 @@ declare(strict_types=1);
 
 namespace B13\FormCustomTemplates\Service;
 
-use Psr\Http\Message\StreamInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class EmailTemplateService
 {
-    public static function create(int $uid, FormRuntime $formRuntime, string $resultTable = ''): array
+    public static function create(int $uid, FormRuntime $formRuntime, string $resultTable = '', int $type = 99): string
     {
         $markerService = GeneralUtility::makeInstance(MarkerBasedTemplateService::class);
 
-        $htmlTemplate = self::getHtml($uid);
-        $htmlContent = $markerService->substituteMarker($htmlTemplate->getContents(), '{formCustomTemplate.results}', $resultTable);
+        // @todo change plaintext type
+        $uri = self::getUri($uid, $type);
+        $factory = GuzzleClientFactory::getClient();
 
-        $plaintextTemplate = self::getPlaintext($uid);
-        $plaintextContent = $markerService->substituteMarker($plaintextTemplate->getContents(), '{formCustomTemplate.results}', $resultTable);
+        $template = $factory->request('GET', $uri)->getBody();
+        $templateContent = $markerService->substituteMarker($template->getContents(), '{formCustomTemplate.results}', $resultTable);
 
         // Replace fluid markers with given form values
         foreach ($formRuntime->getFormDefinition()->getElements() as $identifier => $element) {
             $value = $formRuntime->getElementValue($identifier);
-            $htmlContent = $markerService->substituteMarker($htmlContent, '{' . $identifier . '}', $value);
-            $plaintextContent = $markerService->substituteMarker($plaintextContent, '{' . $identifier . '}', $value);
+            $templateContent = $markerService->substituteMarker($templateContent, '{' . $identifier . '}', $value);
         }
 
-        return [
-            'html' => $htmlContent,
-            'plaintext' => $plaintextContent,
-        ];
-    }
-
-    protected static function getHtml(int $pageId): StreamInterface
-    {
-        $uri = self::getUri($pageId, 0);
-        $factory = GuzzleClientFactory::getClient();
-
-        return $factory->request('GET', $uri)->getBody();
-    }
-
-    protected static function getPlaintext(int $pageId): StreamInterface
-    {
-        $uri = self::getUri($pageId, 99);
-        $factory = GuzzleClientFactory::getClient();
-
-        return $factory->request('GET', $uri)->getBody();
+        return $templateContent;
     }
 
     public static function getOptions(): array

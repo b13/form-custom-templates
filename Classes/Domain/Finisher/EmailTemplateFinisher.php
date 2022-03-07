@@ -90,12 +90,11 @@ class EmailTemplateFinisher extends EmailFinisher
             $mail->bcc(...$blindCarbonCopyRecipients);
         }
 
-        $mailParts = EmailTemplateService::create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime)->render());
         $parts = [
             [
                 'format' => 'Plaintext',
                 'contentType' => 'text/plain',
-                'content' => $mailParts['plaintext']
+                'content' => EmailTemplateService::create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'txt')->render(), 99)
             ],
         ];
 
@@ -103,7 +102,7 @@ class EmailTemplateFinisher extends EmailFinisher
             $parts[] = [
                 'format' => 'Html',
                 'contentType' => 'text/html',
-                'content' => $mailParts['html']
+                'content' => EmailTemplateService::create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'html')->render(), 0)
             ];
         }
 
@@ -137,10 +136,10 @@ class EmailTemplateFinisher extends EmailFinisher
         $mail->send();
     }
 
-    protected function getStandaloneView(string $title, FormRuntime $formRuntime): StandaloneView
+    protected function getStandaloneView(string $title, FormRuntime $formRuntime, string $format = 'txt'): StandaloneView
     {
         $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-        $standaloneView->setTemplatePathAndFilename('EXT:form_custom_templates/Resources/Private/Frontend/Partials/ResultTable.txt');
+        $standaloneView->setTemplatePathAndFilename('EXT:form_custom_templates/Resources/Private/Frontend/Partials/ResultTable.' . $format);
         $standaloneView->assign('title', $title);
         $standaloneView->assign('finisherVariableProvider', $this->finisherContext->getFinisherVariableProvider());
 
