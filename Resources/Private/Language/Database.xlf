@@ -30,6 +30,9 @@
             <trans-unit id="form_custom_templates.validator.FormElementIdentifierIsInUse" resname="form_custom_templates.validator.FormElementIdentifierIsInUse">
                 <source>Reset to '{previousValue}' because this identifier is already in use.</source>
             </trans-unit>
+            <trans-unit id="form_custom_templates.buttonBar.showPagePlaintext" resname="form_custom_templates.buttonBar.showPagePlaintext">
+                <source>Preview plaintext</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

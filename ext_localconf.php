@@ -22,7 +22,7 @@ call_user_func(function () {
 
     // Add selectable templates to plugin settings override
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][FlexFormTools::class]['flexParsing'][DataStructureEmailOptionsHook::class] = DataStructureEmailOptionsHook::class;
-
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook'][] = 'B13\FormCustomTemplates\Hooks\PlaintextPreviewHook->previewButton';
     // Register icon
     $iconRegistry = GeneralUtility::makeInstance(
         IconRegistry::class

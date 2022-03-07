@@ -33,9 +33,15 @@
             </trans-unit>
             <trans-unit id="form_custom_templates.validator.formElementIdentifierWithOutCurlyBraces" resname="form_custom_templates.validator.formElementIdentifierWithOutCurlyBraces">
                 <source>Not a valid identifier. A valid identifier may contain only a-Z and 0-9 and must not be empty.</source>
+                <target>Kein gültiger Identifier. Ein gültiger Identifier darf nur a-Z and 0-9 enthalten und darf nicht leer sein.</target>
             </trans-unit>
             <trans-unit id="form_custom_templates.validator.FormElementIdentifierIsInUse" resname="form_custom_templates.validator.FormElementIdentifierIsInUse">
                 <source>Reset to "{previousValue}" because this identifier is already in use.</source>
+                <target>Auf "{previousValue}" zurückgesetzt, da der Identifiere bereits benutzt wird.</target>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.buttonBar.showPagePlaintext" resname="form_custom_templates.buttonBar.showPagePlaintext">
+                <source>Preview plaintext</source>
+                <target>Vorschau Plaintext</target>
             </trans-unit>
         </body>
     </file>
