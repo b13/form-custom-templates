@@ -43,6 +43,14 @@ By default, the page doktype 125 uses a template based on `SystemEmail.html`
 [END]
 ```
 
+### Custom result list template:
+
+Define file path (omit suffix). A Template in html and txt format is required.
+
+```
+plugin.tx_form_custom_templates.resultList.templatePath = EXT:form_custom_templates/Resources/Private/Frontend/Partials/ResultTable
+```
+
 ### Define default template
 
 ```
