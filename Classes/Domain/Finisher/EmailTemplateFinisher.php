@@ -35,7 +35,7 @@ class EmailTemplateFinisher extends EmailFinisher
         // Fallback to default in case doktype changed and the selected page
         // is no longer an email template
         $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($emailTemplateUid);
-        if ($page['doktype'] !== EmailTemplateService::getTypoScript()['doktype']) {
+        if ((int)$page['doktype'] !== (int)EmailTemplateService::getTypoScript()['doktype']) {
             parent::executeInternal();
 
             return;
