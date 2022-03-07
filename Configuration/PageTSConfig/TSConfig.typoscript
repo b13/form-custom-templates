@@ -1,26 +1,3 @@
-mod.web_layout.BackendLayouts {
-    default {
-        title = Email Template
-        icon = EXT:form_custom_templates/Resources/Public/Icons/BackendLayout/default.svg
-        config {
-            backend_layout {
-                colCount = 1
-                rowCount = 1
-                rows {
-                    1 {
-                        columns {
-                            1 {
-                                name = Content
-                                colPos = 0
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 # Most ctypes need special treatment to serve html/and plaintext
 # Keep only the working ones (text, form_result_list).
 # Other ctypes need to be handled by the integrator

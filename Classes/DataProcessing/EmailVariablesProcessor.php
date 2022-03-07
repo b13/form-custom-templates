@@ -2,6 +2,7 @@
 
 namespace B13\FormCustomTemplates\DataProcessing;
 
+use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Information\Typo3Information;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -24,6 +25,7 @@ class EmailVariablesProcessor implements DataProcessorInterface
             'systemConfiguration' => $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'],
             'information' => GeneralUtility::makeInstance(Typo3Information::class),
         ];
+        $processedData['normalizedParams'] = NormalizedParams::createFromServerParams($_SERVER);
 
         return $processedData;
     }
