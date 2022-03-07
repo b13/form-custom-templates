@@ -9,5 +9,6 @@ mod.wizards.newContentElement.wizardItems.forms {
             }
         }
     }
+
     show = *
 }

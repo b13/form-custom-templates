@@ -1,0 +1,5 @@
+# cat=general/enable; type=integer; label=LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:config.doktype
+doktype = 125
+
+# cat=general/enable; type=integer; label=LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:config.typeNum
+typeNum = 101

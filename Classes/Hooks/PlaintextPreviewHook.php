@@ -2,15 +2,16 @@
 
 namespace B13\FormCustomTemplates\Hooks;
 
+use B13\FormCustomTemplates\Service\EmailTemplateService;
 use TYPO3\CMS\Backend\Routing\PreviewUriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
-use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 Class PlaintextPreviewHook
 {
@@ -29,13 +30,15 @@ Class PlaintextPreviewHook
         }
 
         $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($pageId);
-        if((int)$page['doktype'] === 125) {
+
+        if((int)$page['doktype'] === (int)EmailTemplateService::getTypoScript()['doktype']) {
+            $plaintextTypeNum = (int)EmailTemplateService::getTypoScript()['typeNum'];
             $buttonBar = GeneralUtility::makeInstance(ButtonBar::class);
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
             $previewDataAttributes = PreviewUriBuilder::create($pageId)
                 ->withRootLine(BackendUtility::BEgetRootLine($pageId))
-                ->withAdditionalQueryParameters('type=101')
+                ->withAdditionalQueryParameters('type=' . $plaintextTypeNum)
                 ->buildDispatcherDataAttributes();
             $viewButton = $buttonBar->makeLinkButton()
                 // substituted with HTML data attributes

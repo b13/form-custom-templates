@@ -33,6 +33,12 @@
             <trans-unit id="form_custom_templates.buttonBar.showPagePlaintext" resname="form_custom_templates.buttonBar.showPagePlaintext">
                 <source>Preview plaintext</source>
             </trans-unit>
+            <trans-unit id="config.doktype" resname="config.doktype">
+                <source>Doktype for Email Templates</source>
+            </trans-unit>
+            <trans-unit id="config.typeNum" resname="config.typeNum">
+                <source>TypeNum for Email Templates as Plaintext</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

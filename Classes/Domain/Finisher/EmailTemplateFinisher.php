@@ -6,6 +6,7 @@ namespace B13\FormCustomTemplates\Domain\Finisher;
 
 use B13\FormCustomTemplates\Service\EmailTemplateService;
 use Symfony\Component\Mime\Address;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -26,6 +27,15 @@ class EmailTemplateFinisher extends EmailFinisher
         $emailTemplateUid = $this->options['emailTemplateUid'];
         // For v10 compatibility reasons we check for [Empty] value
         if (empty($emailTemplateUid) || $emailTemplateUid === '[Empty]') {
+            parent::executeInternal();
+
+            return;
+        }
+
+        // Fallback to default in case doktype changed and the selected page
+        // is no longer an email template
+        $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($emailTemplateUid);
+        if ($page['doktype'] !== EmailTemplateService::getTypoScript()['doktype']) {
             parent::executeInternal();
 
             return;
@@ -92,11 +102,12 @@ class EmailTemplateFinisher extends EmailFinisher
             $mail->bcc(...$blindCarbonCopyRecipients);
         }
 
+        $plaintextTypeNum = (int)EmailTemplateService::getTypoScript()['typeNum'];
         $parts = [
             [
                 'format' => 'Plaintext',
                 'contentType' => 'text/plain',
-                'content' => EmailTemplateService::create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'txt')->render(), 101)
+                'content' => EmailTemplateService::create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'txt')->render(), $plaintextTypeNum)
             ],
         ];
 
@@ -141,12 +152,7 @@ class EmailTemplateFinisher extends EmailFinisher
     protected function getStandaloneView(string $title, FormRuntime $formRuntime, string $format = 'txt'): StandaloneView
     {
         $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-        // @todo: use makeInstance once v10 support was dropped
-        //$configurationManager = GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
-        $configurationManager = GeneralUtility::makeInstance(ObjectManager::class)
-            ->get(ConfigurationManagerInterface::class);
-        $typoScript = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-        $templatePathAndFilename = $typoScript['plugin.']['tx_form_custom_templates.']['resultList.']['templatePath'];
+        $templatePathAndFilename = EmailTemplateService::getTypoScript()['resultList.']['templatePath'];
 
         $standaloneView->setTemplatePathAndFilename($templatePathAndFilename . '.' . $format);
         $standaloneView->assign('title', $title);

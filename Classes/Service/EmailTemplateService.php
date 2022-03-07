@@ -8,6 +8,8 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
 
 class EmailTemplateService
@@ -32,22 +34,25 @@ class EmailTemplateService
 
     public static function getOptions(): array
     {
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
-        $queryBuilder->select('*')
-            ->from('pages')
-            ->where(
-                $queryBuilder->expr()->eq('doktype', 125)
-            );
-
-        $emailTemplatePages = $queryBuilder->execute()->fetchAllAssociative();
-
-        $options = array_reduce($emailTemplatePages, static function($options, $item){
+        $options = array_reduce(self::getEmailTemplatePages() ?? [], static function($options, $item){
             $options[] = [$item['title'], $item['uid']];
 
             return $options;
         }, []);
 
         return $options;
+    }
+
+    public static function getEmailTemplatePages() {
+        $doktype = (int)self::getTypoScript()['doktype'];
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
+        $queryBuilder->select('*')
+            ->from('pages')
+            ->where(
+                $queryBuilder->expr()->eq('doktype', $queryBuilder->createNamedParameter($doktype, \PDO::PARAM_INT))
+            );
+
+        return $queryBuilder->execute()->fetchAllAssociative();
     }
 
     protected static function getUri(int $pageId, int $type = 0): string
@@ -58,5 +63,15 @@ class EmailTemplateService
         ];
 
         return $GLOBALS['TSFE']->cObj->typoLink_URL($typolinkConfiguration);
+    }
+
+    public static function getTypoScript(): array
+    {
+        // @todo: use makeInstance once v10 support was dropped
+        //$configurationManager = GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
+        $configurationManager = GeneralUtility::makeInstance(ObjectManager::class)
+            ->get(ConfigurationManagerInterface::class);
+        $typoScript = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        return $typoScript['plugin.']['tx_form_custom_templates.'] ?? [];
     }
 }

@@ -26,13 +26,13 @@ configuration.
 ```
 
 This will extend the `EmailToSender` and `EmailToReceiver` finisher with a template selector.
-The template selector will list all pages of doktype 125 (Email).
-By default, the page doktype 125 uses a template based on `SystemEmail.html`
+The template selector will list all pages of doktype Email (plugin.tx_form_custom_templates.typeNum default: 125).
+By default, the page doktype Email uses a template based on `SystemEmail.html`
 
 ### Custom html templates:
 
 ```
-[page["doktype"] == 125]
+[page["doktype"] == {$plugin.tx_form_custom_templates.doktype}]
     # Set the template
     page.10.templateName = SystemEmailTemplate
     
