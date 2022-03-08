@@ -4,5 +4,7 @@ parameters:
   paths:
     - %currentWorkingDirectory%/Classes
   checkMissingIterableValueType: false
+  # Do net error on unmatched ignored error
+  reportUnmatchedIgnoredErrors: false
 includes:
   - phpstan-baseline.neon
