@@ -15,11 +15,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class PlaintextPreviewHook
 {
     /**
-     * @param array $params
-     * @param $ref
+     * @param mixed $params
+     * @param object|null $ref
      * @return array
      */
-    public function previewButton($params, &$ref)
+    public function previewButton(mixed $params, ?object $ref)
     {
         $buttons = $params['buttons'];
         $pageId = GeneralUtility::_GET('edit') ? array_search('edit', GeneralUtility::_GET('edit')['pages'] ?? []) : GeneralUtility::_GET('id');

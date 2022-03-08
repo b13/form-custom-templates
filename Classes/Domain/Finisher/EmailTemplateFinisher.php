@@ -20,14 +20,13 @@ use TYPO3\CMS\Form\ViewHelpers\RenderRenderableViewHelper;
 
 class EmailTemplateFinisher extends EmailFinisher
 {
-    protected function executeInternal(): void
+    protected function executeInternal()
     {
         $emailTemplateUid = $this->options['emailTemplateUid'];
         // For v10 compatibility reasons we check for [Empty] value
         if (empty($emailTemplateUid) || $emailTemplateUid === '[Empty]') {
             parent::executeInternal();
 
-            return;
         }
 
         // Fallback to default in case doktype changed and the selected page
@@ -35,8 +34,6 @@ class EmailTemplateFinisher extends EmailFinisher
         $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($emailTemplateUid);
         if ((int)$page['doktype'] !== (int)EmailTemplateService::getTypoScript()['doktype']) {
             parent::executeInternal();
-
-            return;
         }
 
         $languageBackup = null;
@@ -145,6 +142,8 @@ class EmailTemplateFinisher extends EmailFinisher
         }
 
         $mail->send();
+
+        return null;
     }
 
     protected function getStandaloneView(string $title, FormRuntime $formRuntime, string $format = 'txt'): StandaloneView
