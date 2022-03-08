@@ -41,9 +41,9 @@ jobs:
       - name: phpstan
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s phpstan
 
-      - name: Unit Tests
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s unit
-
+#      - name: Unit Tests
+#        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s unit
+#
 #      - name: Functional Tests with mariadb
 #        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -d mariadb -s functional
 #
@@ -53,5 +53,5 @@ jobs:
 #      - name: Functional Tests with sqlite
 #        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -d sqlite -s functional
 #
-#      - name: Acceptance Tests
-#        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s acceptance
+      - name: Acceptance Tests
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s acceptance

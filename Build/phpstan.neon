@@ -4,3 +4,5 @@ parameters:
   paths:
     - %currentWorkingDirectory%/Classes
   checkMissingIterableValueType: false
+includes:
+  - phpstan-baseline.neon
