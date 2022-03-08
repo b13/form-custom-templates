@@ -34,7 +34,7 @@ class EmailTemplateService
 
     public static function getOptions(): array
     {
-        $options = array_reduce(self::getEmailTemplatePages() ?? [], static function($options, $item){
+        $options = array_reduce(self::getEmailTemplatePages() ?? [], static function ($options, $item) {
             $options[] = [$item['title'], $item['uid']];
 
             return $options;
@@ -43,7 +43,8 @@ class EmailTemplateService
         return $options;
     }
 
-    public static function getEmailTemplatePages() {
+    public static function getEmailTemplatePages()
+    {
         $doktype = (int)self::getTypoScript()['doktype'];
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
         $queryBuilder->select('*')

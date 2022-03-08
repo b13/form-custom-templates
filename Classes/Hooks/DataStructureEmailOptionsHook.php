@@ -17,15 +17,14 @@ class DataStructureEmailOptionsHook
      */
     public function parseDataStructureByIdentifierPostProcess(array $dataStructure, array $identifier): array
     {
-
-        if($identifier['ext-form-overrideFinishers'] === 'enabled') {
+        if ($identifier['ext-form-overrideFinishers'] === 'enabled') {
             $addToFinishers = ['EmailToSender', 'EmailToReceiver'];
             $options = EmailTemplateService::getOptions();
 
             // Search for finishers and add items
             foreach ($dataStructure['sheets'] as $sheetIdentifier => $sheet) {
                 foreach ($addToFinishers as $identifier) {
-                    if($dataStructure['sheets'][$sheetIdentifier]['ROOT']['el']['settings.finishers.' . $identifier . '.emailTemplateUid']) {
+                    if ($dataStructure['sheets'][$sheetIdentifier]['ROOT']['el']['settings.finishers.' . $identifier . '.emailTemplateUid']) {
                         $allOptions = array_merge($dataStructure['sheets'][$sheetIdentifier]['ROOT']['el']['settings.finishers.' . $identifier . '.emailTemplateUid']['TCEforms']['config']['items'], $options);
                         $dataStructure['sheets'][$sheetIdentifier]['ROOT']['el']['settings.finishers.' . $identifier . '.emailTemplateUid']['TCEforms']['config']['items'] = $allOptions;
                     }

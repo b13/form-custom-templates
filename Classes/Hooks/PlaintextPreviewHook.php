@@ -11,9 +11,8 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
-Class PlaintextPreviewHook
+class PlaintextPreviewHook
 {
     /**
      * @param array $params
@@ -25,13 +24,13 @@ Class PlaintextPreviewHook
         $buttons = $params['buttons'];
         $pageId = GeneralUtility::_GET('edit') ? array_search('edit', GeneralUtility::_GET('edit')['pages'] ?? []) : GeneralUtility::_GET('id');
 
-        if(!$pageId) {
+        if (!$pageId) {
             return $buttons;
         }
 
         $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($pageId);
 
-        if((int)$page['doktype'] === (int)EmailTemplateService::getTypoScript()['doktype']) {
+        if ((int)$page['doktype'] === (int)EmailTemplateService::getTypoScript()['doktype']) {
             $plaintextTypeNum = (int)EmailTemplateService::getTypoScript()['typeNum'];
             $buttonBar = GeneralUtility::makeInstance(ButtonBar::class);
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);

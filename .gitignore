@@ -1,1 +1,12 @@
+/.Build
+/Build/testing-docker/.env
+/.idea
+/public
+/var
+composer.lock
+Thumbs.db
 .DS_Store
+.editorconfig
+.php-cs-fixer.cache
+/vendor
+/Tests/Acceptance/Support/_generated/

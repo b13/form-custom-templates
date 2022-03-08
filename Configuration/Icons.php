@@ -1,4 +1,5 @@
 <?php
+
 return [
     'page-email' => [
         'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
