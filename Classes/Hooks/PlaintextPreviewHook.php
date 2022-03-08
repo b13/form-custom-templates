@@ -3,7 +3,6 @@
 namespace B13\FormCustomTemplates\Hooks;
 
 use B13\FormCustomTemplates\Service\EmailTemplateService;
-use TYPO3\CMS\Backend\Routing\PreviewUriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
@@ -15,11 +14,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class PlaintextPreviewHook
 {
     /**
-     * @param mixed $params
+     * @param array $params
      * @param object|null $ref
      * @return array
      */
-    public function previewButton(mixed $params, ?object $ref)
+    public function previewButton(array $params, ?object $ref)
     {
         $buttons = $params['buttons'];
         $pageId = GeneralUtility::_GET('edit') ? array_search('edit', GeneralUtility::_GET('edit')['pages'] ?? []) : GeneralUtility::_GET('id');
@@ -35,16 +34,12 @@ class PlaintextPreviewHook
             $buttonBar = GeneralUtility::makeInstance(ButtonBar::class);
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
-            $previewDataAttributes = PreviewUriBuilder::create($pageId)
-                ->withRootLine(BackendUtility::BEgetRootLine($pageId))
-                ->withAdditionalQueryParameters('type=' . $plaintextTypeNum)
-                ->buildDispatcherDataAttributes();
+            $previewDataAttributes = BackendUtility::getPreviewUrl($pageId, '', BackendUtility::BEgetRootLine($pageId), '', '', 'type=' . $plaintextTypeNum);
             $viewButton = $buttonBar->makeLinkButton()
-                // substituted with HTML data attributes
-                ->setDataAttributes($previewDataAttributes ?? [])
+                ->setOnClick('window.open(' . GeneralUtility::quoteJSvalue($previewDataAttributes) . ',\'newTYPO3frontendWindow\');)')
                 ->setTitle($this->getLanguageService()->sL('LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:form_custom_templates.buttonBar.showPagePlaintext'))
                 ->setShowLabelText(true)
-                ->setIcon($iconFactory->getIcon('actions-file-text', Icon::SIZE_SMALL))
+                ->setIcon($iconFactory->getIcon('actions-file-view', Icon::SIZE_SMALL))
                 ->setHref('#');
 
             $buttons[ButtonBar::BUTTON_POSITION_LEFT][3][] = $viewButton;
