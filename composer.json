@@ -16,7 +16,11 @@
     }
   },
   "require": {
-    "typo3/cms-form": "^10.4.0 || ^11.5.0"
+    "typo3/cms-form": "^10.4.0 || ^11.5.0",
+    "typo3/cms-core": "^10.4.0 || ^11.5.0",
+    "typo3/cms-frontend": "^10.4.0 || ^11.5.0",
+    "typo3/cms-install": "^10.4.0 || ^11.5.0",
+    "typo3/cms-filelist": "^10.4.0 || ^11.5.0"
   },
   "require-dev": {
     "codeception/codeception": "^4.1",

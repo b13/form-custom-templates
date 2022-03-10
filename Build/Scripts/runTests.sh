@@ -229,7 +229,7 @@ DOCKER_PHP_IMAGE=$(echo "php${PHP_VERSION}" | sed -e 's/\.//')
 shift $((OPTIND - 1))
 TEST_FILE=${1}
 if [ -n "${1}" ]; then
-    TEST_FILE="Web/typo3conf/ext/make/${1}"
+    TEST_FILE="Web/typo3conf/ext/form_custom_templates/${1}"
 fi
 
 if [ ${SCRIPT_VERBOSE} -eq 1 ]; then

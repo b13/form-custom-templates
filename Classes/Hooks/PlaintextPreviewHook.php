@@ -6,6 +6,7 @@ use B13\FormCustomTemplates\Service\EmailTemplateService;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -34,15 +35,19 @@ class PlaintextPreviewHook
             $buttonBar = GeneralUtility::makeInstance(ButtonBar::class);
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
-            $previewDataAttributes = BackendUtility::getPreviewUrl($pageId, '', BackendUtility::BEgetRootLine($pageId), '', '', 'type=' . $plaintextTypeNum);
-            $viewButton = $buttonBar->makeLinkButton()
-                ->setOnClick('window.open(' . GeneralUtility::quoteJSvalue($previewDataAttributes) . ',\'newTYPO3frontendWindow\');)')
-                ->setTitle($this->getLanguageService()->sL('LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:form_custom_templates.buttonBar.showPagePlaintext'))
-                ->setShowLabelText(true)
-                ->setIcon($iconFactory->getIcon('actions-file-view', Icon::SIZE_SMALL))
-                ->setHref('#');
+            try {
+                $previewDataAttributes = BackendUtility::getPreviewUrl($pageId, '', BackendUtility::BEgetRootLine($pageId) ?? null, '', '', 'type=' . $plaintextTypeNum);
+                $viewButton = $buttonBar->makeLinkButton()
+                    ->setOnClick('window.open(' . GeneralUtility::quoteJSvalue($previewDataAttributes) . ',\'newTYPO3frontendWindow\');)')
+                    ->setTitle($this->getLanguageService()->sL('LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:form_custom_templates.buttonBar.showPagePlaintext'))
+                    ->setShowLabelText(true)
+                    ->setIcon($iconFactory->getIcon('actions-file-view', Icon::SIZE_SMALL))
+                    ->setHref('#');
 
-            $buttons[ButtonBar::BUTTON_POSITION_LEFT][3][] = $viewButton;
+                $buttons[ButtonBar::BUTTON_POSITION_LEFT][3][] = $viewButton;
+            } catch (Exception $exception) {
+                // Do not add preview in case no site exists
+            }
         }
 
         return $buttons;
