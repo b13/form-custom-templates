@@ -43,13 +43,12 @@ class PluginFormCest
 
         $I->amGoingTo('See a list of expected email template pages in select of form plugin override');
         $actual = $I->grabMultiple('//label[contains(text(),"Select email template")]/following-sibling::div//select//option');
-        $expected = ["Default [[Empty]]","Contact template [2]","Shopping cart template [3]"];
+        $expected = ['Default [[Empty]]', 'Contact template [2]', 'Shopping cart template [3]'];
         $I->assertEquals($expected, $actual);
     }
 
     /**
      * @param BackendTester $I
-     * @return void
      * @throws \Exception
      */
     public function seePageTypeElements(BackendTester $I): void

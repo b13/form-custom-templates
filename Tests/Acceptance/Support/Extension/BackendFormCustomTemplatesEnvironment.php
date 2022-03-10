@@ -3,7 +3,6 @@
 declare(strict_types=1);
 namespace B13\FormCustomTemplates\Tests\Acceptance\Support\Extension;
 
-use Codeception\Event\SuiteEvent;
 use Symfony\Component\Mailer\Transport\NullTransport;
 use TYPO3\TestingFramework\Core\Acceptance\Extension\BackendEnvironment;
 

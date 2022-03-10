@@ -37,7 +37,8 @@ class FormFeaturesCest
         $I->click('[data-identifier="saveButton"]');
     }
 
-    public function seeTemplateSelectorInFinisher(BackendTester $I): void {
+    public function seeTemplateSelectorInFinisher(BackendTester $I): void
+    {
         $finisher = 'div[data-finisher-identifier="EmailToSender"]';
         $I->click('#t3-form-navigation-component-tree-root-container');
         $I->waitForElementVisible($finisher);
@@ -45,7 +46,7 @@ class FormFeaturesCest
         $I->wait(2);
 
         $actual = $I->grabMultiple('//label/*[contains(text(),"Select email template")]/parent::*/following-sibling::div//select//option');
-        $expected = ["Default","Contact template","Shopping cart template"];
+        $expected = ['Default', 'Contact template', 'Shopping cart template'];
         $I->assertEquals($expected, $actual);
 
         $I->amGoingTo('Prove the selected template was saved');
