@@ -36,7 +36,7 @@ class PlaintextPreviewHook
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
             try {
-                $previewDataAttributes = BackendUtility::getPreviewUrl($pageId, '', BackendUtility::BEgetRootLine($pageId) ?? null, '', '', 'type=' . $plaintextTypeNum);
+                $previewDataAttributes = BackendUtility::getPreviewUrl($pageId, '', BackendUtility::BEgetRootLine($pageId), '', '', 'type=' . $plaintextTypeNum);
                 $viewButton = $buttonBar->makeLinkButton()
                     ->setOnClick('window.open(' . GeneralUtility::quoteJSvalue($previewDataAttributes) . ',\'newTYPO3frontendWindow\');)')
                     ->setTitle($this->getLanguageService()->sL('LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:form_custom_templates.buttonBar.showPagePlaintext'))
