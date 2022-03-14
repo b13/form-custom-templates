@@ -65,10 +65,12 @@ class BackendFormCustomTemplatesEnvironment extends BackendEnvironment
             ],
         ],
         'pathsToLinkInTestInstance' => [
-           'typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/form_definitions' =>
-           'fileadmin/form_definitions',
            'typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/sites' =>
            'typo3conf/sites',
-         ]
+         ],
+        'pathsToProvideInTestInstance' => [
+            'typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/form_definitions' =>
+                'fileadmin/form_definitions',
+        ]
     ];
 }
