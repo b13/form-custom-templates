@@ -34,7 +34,6 @@ class FormFeaturesCest
         $I->switchToContentFrame();
         $I->click(self::$formName);
         $I->waitForText(self::$formName, 5, 'h1');
-        $I->click('[data-identifier="saveButton"]');
     }
 
     public function seeTemplateSelectorInFinisher(BackendTester $I): void
@@ -54,6 +53,9 @@ class FormFeaturesCest
         $I->click('[data-identifier="saveButton"]');
 
         $I->seeOptionIsSelected('//label/*[contains(text(),"Select email template")]/parent::*/following-sibling::div//select', 'Contact template');
+
+        // Save form to avoid alert!
+        $I->click('[data-identifier="saveButton"]');
     }
 
     /**
@@ -86,5 +88,8 @@ class FormFeaturesCest
         $I->waitForElementNotVisible(self::$inspectorValidators);
         $I->waitForText($newIdentifier, 5, $selectedItem);
         $I->assertEquals($newIdentifier, $I->grabTextFrom($selectedItem));
+
+        // Save form to avoid alert!
+        $I->click('[data-identifier="saveButton"]');
     }
 }
