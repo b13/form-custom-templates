@@ -1,0 +1,18 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:formvh="http://typo3.org/ns/TYPO3/CMS/Form/ViewHelpers" xmlns:b13="http://typo3.org/ns/B13/FormCustomTemplates/ViewHelpers" data-namespace-typo3-fluid="true">
+<div class="t3-form-control-group form-group">
+    <label data-random-id data-random-id-attribute="for" data-random-id-number="1"><span data-template-property="label"></span></label>
+    <div class="t3-form-controls" data-identifier="inspectorEditorControlsWrapper">
+        <f:form.select
+                data="{'template-property': 'propertyPath'}"
+                options="{b13:emailTemplate()}"
+                optionValueField="value"
+                optionLabelField="label"
+                prependOptionLabel="{f:translate(key: 'LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:form_custom_templates.select.default')}"
+                prependOptionValue=""
+                class="form-select form-control">
+        </f:form.select>
+    </div>
+    <span class="inspector-editor-hint" data-template-property="fieldExplanationText">Test</span>
+    <span data-template-property="validationErrors"></span>
+</div>
+</html>

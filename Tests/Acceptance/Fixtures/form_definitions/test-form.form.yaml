@@ -1,0 +1,49 @@
+
+renderingOptions:
+  submitButtonLabel: Submit
+type: Form
+identifier: test-form
+label: test-form
+prototypeName: standard
+finishers:
+  -
+    options:
+      subject: 'Email Subject'
+      recipients:
+        rothjochen@gmail.com: recepient@email.com
+      senderAddress: sender@email.com
+      senderName: ''
+      addHtmlPart: true
+      attachUploads: true
+      useFluidEmail: true
+      title: ''
+      emailTemplateUid: '2'
+    identifier: EmailToSender
+renderables:
+  -
+    renderingOptions:
+      previousButtonLabel: 'Previous step'
+      nextButtonLabel: 'Next step'
+    type: Page
+    identifier: newidentifier
+    label: Step
+    renderables:
+      -
+        defaultValue: ''
+        type: Text
+        identifier: firstname
+        label: Firstname
+        properties:
+          elementDescription: Description
+          fluidAdditionalAttributes:
+            placeholder: Placeholder
+      -
+        defaultValue: ''
+        type: Text
+        identifier: lastname
+        label: Lastname
+      -
+        defaultValue: ''
+        type: Textarea
+        identifier: textarea-111
+        label: Textarea

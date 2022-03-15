@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" datatype="plaintext" original="EXT:form_custom_templates/Resources/Private/Language/locallang.xlf" date="2022-02-16T17:00:00Z" product-name="form_custom_templates">
+    <file source-language="en" datatype="plaintext" original="EXT:form_custom_templates/Resources/Private/Language/Database.xlf" date="2022-02-16T17:00:00Z" product-name="form_custom_templates">
         <header/>
         <body>
             <trans-unit id="form_custom_templates.select.label" resname="form_custom_templates.select.label">
@@ -8,6 +8,36 @@
             </trans-unit>
             <trans-unit id="form_custom_templates.select.default" resname="form_custom_templates.select.default">
                 <source>Default</source>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.pageType" resname="form_custom_templates.pageType">
+                <source>Email template</source>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.cType" resname="form_custom_templates.cType">
+                <source>Form Result List</source>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.cType.description" resname="form_custom_templates.cType.description">
+                <source>This will display a a table/list of all form filled form fields.</source>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.select.fieldExplanationText" resname="form_custom_templates.select.fieldExplanationText">
+                <source>Default will be SystemEmail configured by EXT:form</source>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.identifier.fieldExplanationText" resname="form_custom_templates.identifier.fieldExplanationText">
+                <source>Set a unique identifier for later use as template marker.</source>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.validator.formElementIdentifierWithOutCurlyBraces" resname="form_custom_templates.validator.formElementIdentifierWithOutCurlyBraces">
+                <source>Not a valid identifier. A valid identifier may contain only a-Z and 0-9 and must not be empty.</source>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.validator.FormElementIdentifierIsInUse" resname="form_custom_templates.validator.FormElementIdentifierIsInUse">
+                <source>Reset to '{previousValue}' because this identifier is already in use.</source>
+            </trans-unit>
+            <trans-unit id="form_custom_templates.buttonBar.showPagePlaintext" resname="form_custom_templates.buttonBar.showPagePlaintext">
+                <source>Preview plaintext</source>
+            </trans-unit>
+            <trans-unit id="config.doktype" resname="config.doktype">
+                <source>Doktype for Email Templates</source>
+            </trans-unit>
+            <trans-unit id="config.typeNum" resname="config.typeNum">
+                <source>TypeNum for Email Templates as Plaintext</source>
             </trans-unit>
         </body>
     </file>

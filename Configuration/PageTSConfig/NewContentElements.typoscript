@@ -1,0 +1,14 @@
+mod.wizards.newContentElement.wizardItems.forms {
+    elements {
+        form_result_list {
+            iconIdentifier = page-email
+            title = LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:form_custom_templates.cType
+            description = LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:form_custom_templates.cType.description
+            tt_content_defValues {
+                CType = form_result_list
+            }
+        }
+    }
+
+    show = *
+}

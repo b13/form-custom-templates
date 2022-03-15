@@ -1,13 +1,28 @@
-# Definition of the additional dropdown for template selection
+# Field definition
 .email_template_field: &email_template_field
-  identifier: emailTemplate
-  templateName: Inspector-SingleSelectEditor
-  label: 'form_custom_templates.select.label'
-  propertyPath: options.emailTemplate
-  selectOptions:
-    0:
-      value: ''
-      label: 'form_custom_templates.select.default'
+  identifier: emailTemplateText
+  templateName: Inspector-SingleSelectTemplateEditor
+  fieldExplanationText: form_custom_templates.select.fieldExplanationText
+  label: form_custom_templates.select.label
+  propertyPath: options.emailTemplateUid
+
+# Identifier field definition
+.identifier_field: &identifier_field
+  formEditor:
+    editors:
+      205:
+        identifier: identifier
+        templateName: Inspector-IdentifierEditor
+        label: Change Identifier
+        propertyPath: identifier
+        fieldExplanationText: form_custom_templates.identifier.fieldExplanationText
+        enableFormelementSelectionButton: false
+        propertyValidatorsMode: AND
+        propertyValidators:
+          10: NotEmpty
+          20: FormElementIdentifierWithOutCurlyBraces
+          # This validator is special because it's only executed when the input field was changed!
+          30: FormElementIdentifierIsInUse
 
 # Definition of the additional dropdown for template selection
 .email_template_options: &email_template_options
@@ -19,14 +34,14 @@
   formEditor:
     predefinedDefaults:
       options:
-        emailTemplate: ''
+        emailTemplateUid: ''
   # displayed when overriding finisher settings
   FormEngine:
     elements:
-      emailTemplate:
+      emailTemplateUid:
         label: 'form_custom_templates.select.label'
         config:
-          type: select
+          type: text
           renderType: selectSingle
           minitems: 1
           maxitems: 1
@@ -50,7 +65,51 @@ TYPO3:
           formEditor:
             translationFiles:
               97: 'EXT:form_custom_templates/Resources/Private/Language/Database.xlf'
+            formEditorFluidConfiguration:
+              partialRootPaths:
+                97: 'EXT:form_custom_templates/Resources/Private/Backend/Partials/FormEditor/'
+            formEditorPartials:
+              Inspector-SingleSelectTemplateEditor: Inspector/SingleSelectTemplateEditor
+              Inspector-IdentifierEditor: Inspector/TextEditor
+            dynamicRequireJsModules:
+              additionalViewModelModules:
+                97: 'TYPO3/CMS/FormCustomTemplates/Backend/FormEditor/SelectTemplateViewModel'
+                997: 'TYPO3/CMS/FormCustomTemplates/Backend/FormEditor/IdentifierViewModel'
+            formElementPropertyValidatorsDefinition:
+              FormElementIdentifierWithOutCurlyBraces:
+                errorMessage: form_custom_templates.validator.formElementIdentifierWithOutCurlyBraces
+              FormElementIdentifierIsInUse:
+                errorMessage: form_custom_templates.validator.FormElementIdentifierIsInUse
+
           formElementsDefinition:
+            Text:
+              <<: *identifier_field
+            Textarea:
+              <<: *identifier_field
+            Email:
+              <<: *identifier_field
+            Telephone:
+              <<: *identifier_field
+            Url:
+              <<: *identifier_field
+            Number:
+              <<: *identifier_field
+            Date:
+              <<: *identifier_field
+            Checkbox:
+              <<: *identifier_field
+            SingleSelect:
+              <<: *identifier_field
+            RadioButton:
+              <<: *identifier_field
+            MultiCheckbox:
+              <<: *identifier_field
+            MultiSelect:
+              <<: *identifier_field
+            DatePicker:
+              <<: *identifier_field
+            Hidden:
+              <<: *identifier_field
             Form:
               formEditor:
                 propertyCollections:
@@ -59,11 +118,13 @@ TYPO3:
                     10:
                       identifier: EmailToSender
                       editors:
+                        1300: null
                         5000: # Position in the inspector, might override existing fields!
                           <<: *email_template_field
                     20:
                       identifier: EmailToReceiver
                       editors:
+                        1300: null
                         5000: # Position in the inspector, might override existing fields!
                           <<: *email_template_field
           finishersDefinition:

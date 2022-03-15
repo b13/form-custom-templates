@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <tt_content>
+        <uid>1</uid>
+        <pid>1</pid>
+        <header>MyForm</header>
+        <CType>form_formframework</CType>
+        <deleted>0</deleted>
+        <pi_flexform>
+            &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;yes&quot; ?&gt;
+            &lt;T3FlexForms&gt;
+            &lt;data&gt;
+            &lt;sheet index=&quot;sDEF&quot;&gt;
+            &lt;language index=&quot;lDEF&quot;&gt;
+            &lt;field index=&quot;settings.persistenceIdentifier&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;1:/form_definitions/test-form.form.yaml&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.overrideFinishers&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;1&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;/language&gt;
+            &lt;/sheet&gt;
+            &lt;sheet index=&quot;c469df91952d843713751189b45c8d95&quot;&gt;
+            &lt;language index=&quot;lDEF&quot;&gt;
+            &lt;field index=&quot;settings.finishers.EmailToSender.subject&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;rothjochen@gmail.com&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToSender.senderAddress&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;rothjochen@gmail.com&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToSender.senderName&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToSender.addHtmlPart&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;1&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToSender.translation.language&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;Default&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToSender.title&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToSender.emailTemplate&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToSender.emailTemplateText&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToSender.emailTemplateUid&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;223&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;/language&gt;
+            &lt;/sheet&gt;
+            &lt;sheet index=&quot;8b692b77c92742d208143d106079e198&quot;&gt;
+            &lt;language index=&quot;lDEF&quot;&gt;
+            &lt;field index=&quot;settings.finishers.EmailToReceiver.subject&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;rothjochen@gmail.com&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToReceiver.senderAddress&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;rothjochen@gmail.com&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToReceiver.senderName&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToReceiver.addHtmlPart&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;1&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToReceiver.translation.language&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;Default&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToReceiver.title&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;field index=&quot;settings.finishers.EmailToReceiver.emailTemplate&quot;&gt;
+            &lt;value index=&quot;vDEF&quot;&gt;&lt;/value&gt;
+            &lt;/field&gt;
+            &lt;/language&gt;
+            &lt;/sheet&gt;
+            &lt;/data&gt;
+            &lt;/T3FlexForms&gt;
+        </pi_flexform>
+    </tt_content>
+</dataset>
