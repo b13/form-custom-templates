@@ -27,6 +27,7 @@ class FormFeaturesCest
      */
     public function _before(BackendTester $I)
     {
+        $I->executeJS('window.onbeforeunload = undefined;');
         $I->useExistingSession('admin');
         $I->switchToMainFrame();
 
@@ -50,12 +51,10 @@ class FormFeaturesCest
 
         $I->amGoingTo('Prove the selected template was saved');
         $I->selectOption('//label/*[contains(text(),"Select email template")]/parent::*/following-sibling::div//select', 2);
-        $I->click('[data-identifier="saveButton"]');
 
+        // @todo: See if this caused the issue in Github Action, re-enable it
+        $I->click('[data-identifier="saveButton"]');
         $I->seeOptionIsSelected('//label/*[contains(text(),"Select email template")]/parent::*/following-sibling::div//select', 'Contact template');
-
-        // Save form to avoid alert!
-        $I->click('[data-identifier="saveButton"]');
     }
 
     /**
@@ -88,8 +87,5 @@ class FormFeaturesCest
         $I->waitForElementNotVisible(self::$inspectorValidators);
         $I->waitForText($newIdentifier, 5, $selectedItem);
         $I->assertEquals($newIdentifier, $I->grabTextFrom($selectedItem));
-
-        // Save form to avoid alert!
-        $I->click('[data-identifier="saveButton"]');
     }
 }

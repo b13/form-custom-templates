@@ -15,6 +15,7 @@ class PluginFormCest
      */
     public function _before(BackendTester $I)
     {
+        $I->executeJS('window.onbeforeunload = undefined;');
         $I->useExistingSession('admin');
         $I->switchToMainFrame();
 
@@ -45,9 +46,6 @@ class PluginFormCest
         $actual = $I->grabMultiple('//label[contains(text(),"Select email template")]/following-sibling::div//select//option');
         $expected = ['Default [[Empty]]', 'Contact template [2]', 'Shopping cart template [3]'];
         $I->assertEquals($expected, $actual);
-
-        // Save form to avoid alert!
-        $I->click('button[name="_savedok"]');
     }
 
     /**
