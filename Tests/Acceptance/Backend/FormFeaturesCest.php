@@ -27,6 +27,7 @@ class FormFeaturesCest
      */
     public function _before(BackendTester $I)
     {
+        // Suppress alert popup
         $I->executeJS('window.onbeforeunload = undefined;');
         $I->useExistingSession('admin');
         $I->switchToMainFrame();
@@ -52,12 +53,11 @@ class FormFeaturesCest
         $I->amGoingTo('Prove the selected template was saved');
         $I->selectOption('//label/*[contains(text(),"Select email template")]/parent::*/following-sibling::div//select', 2);
 
-        // @todo: See if this caused the issue in Github Action, re-enable it
         $I->click('[data-identifier="saveButton"]');
-        $I->wait(2);
+        $I->wait(1);
         $I->waitForElementVisible($finisher);
         $I->click($finisher . ' a[data-bs-toggle="collapse"]');
-        $I->wait(2);
+        $I->wait(1);
 
         $I->seeOptionIsSelected('//label/*[contains(text(),"Select email template")]/parent::*/following-sibling::div//select', 'Contact template');
     }

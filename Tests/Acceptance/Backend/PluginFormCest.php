@@ -15,6 +15,7 @@ class PluginFormCest
      */
     public function _before(BackendTester $I)
     {
+        // Suppress alert popup
         $I->executeJS('window.onbeforeunload = undefined;');
         $I->useExistingSession('admin');
         $I->switchToMainFrame();
