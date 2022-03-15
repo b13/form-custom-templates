@@ -54,6 +54,11 @@ class FormFeaturesCest
 
         // @todo: See if this caused the issue in Github Action, re-enable it
         $I->click('[data-identifier="saveButton"]');
+        $I->wait(2);
+        $I->waitForElementVisible($finisher);
+        $I->click($finisher . ' a[data-bs-toggle="collapse"]');
+        $I->wait(2);
+
         $I->seeOptionIsSelected('//label/*[contains(text(),"Select email template")]/parent::*/following-sibling::div//select', 'Contact template');
     }
 
