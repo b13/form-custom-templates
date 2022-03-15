@@ -10,10 +10,44 @@
   },
   "extra": {
     "typo3/cms": {
-      "extension-key": "form_custom_templates"
+      "extension-key": "form_custom_templates",
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": ".Build/Web"
     }
   },
   "require": {
-    "typo3/cms-form": "^10.4.0 || ^11.5.0"
+    "typo3/cms-form": "^10.4.0 || ^11.5.0",
+    "typo3/cms-core": "^10.4.0 || ^11.5.0",
+    "typo3/cms-frontend": "^10.4.0 || ^11.5.0",
+    "typo3/cms-install": "^10.4.0 || ^11.5.0",
+    "typo3/cms-filelist": "^10.4.0 || ^11.5.0"
+  },
+  "require-dev": {
+    "codeception/codeception": "^4.1",
+    "codeception/module-asserts": "^1.2",
+    "codeception/module-webdriver": "^1.1",
+    "roave/security-advisories": "dev-master",
+    "typo3/testing-framework": "^6.16.2",
+    "typo3/coding-standards": "^0.4.0",
+    "phpstan/phpstan": "^1.4.8"
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare",
+      "if [ ! -e .Build/Web/vendor ]; then cd .Build/Web  && ln -s ../vendor && cd -; fi"
+    ]
+  },
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin",
+    "allow-plugins": {
+      "typo3/class-alias-loader": true,
+      "typo3/cms-composer-installers": true
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "B13\\FormCustomTemplates\\Tests\\": "Tests/"
+    }
   }
 }

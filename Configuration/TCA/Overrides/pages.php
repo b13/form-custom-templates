@@ -3,8 +3,8 @@
 defined('TYPO3') or die();
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 (function ($extensionKey = 'form_custom_templates', $table='pages') {
@@ -30,9 +30,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
             'ctrl' => [
                 'typeicon_classes' => [
                     $emailDoktype => 'page-email',
-                    $emailDoktype . '-contentFromPid' => "page-email-contentFromPid",
-                    $emailDoktype . '-root' => "page-email-root",
-                    $emailDoktype . '-hideinmenu' => "page-email-hideinmenu",
+                    $emailDoktype . '-contentFromPid' => 'page-email-contentFromPid',
+                    $emailDoktype . '-root' => 'page-email-root',
+                    $emailDoktype . '-hideinmenu' => 'page-email-hideinmenu',
                 ],
             ],
             // add all page standard fields and tabs to your new page type

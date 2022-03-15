@@ -33,9 +33,6 @@ plugin.tx_form {
     }
 [END]
 
-# "{$foo.bar}"
-
-
 [page["doktype"] == {$plugin.tx_form_custom_templates.doktype}]
     page = PAGE
     page {

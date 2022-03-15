@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <pages>
+        <uid>1</uid>
+        <pid>0</pid>
+        <title>Root</title>
+        <doktype>1</doktype>
+        <deleted>0</deleted>
+        <is_siteroot>1</is_siteroot>
+        <perms_everybody>15</perms_everybody>
+    </pages>
+    <pages>
+        <uid>2</uid>
+        <pid>1</pid>
+        <sorting>128</sorting>
+        <title>Contact template</title>
+        <deleted>0</deleted>
+        <doktype>125</doktype>
+        <perms_everybody>15</perms_everybody>
+    </pages>
+    <pages>
+        <uid>3</uid>
+        <pid>1</pid>
+        <sorting>128</sorting>
+        <title>Shopping cart template</title>
+        <deleted>0</deleted>
+        <doktype>125</doktype>
+        <perms_everybody>15</perms_everybody>
+    </pages>
+    <pages>
+        <uid>4</uid>
+        <pid>1</pid>
+        <sorting>128</sorting>
+        <title>Not a email template</title>
+        <deleted>0</deleted>
+        <perms_everybody>15</perms_everybody>
+    </pages>
+</dataset>

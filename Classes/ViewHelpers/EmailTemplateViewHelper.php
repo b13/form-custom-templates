@@ -15,9 +15,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class EmailTemplateViewHelper extends AbstractViewHelper
 {
-    public function render()
+    public function render(): array
     {
-        $options = array_reduce(EmailTemplateService::getEmailTemplatePages() ?? [], static function($options, $item){
+        $options = array_reduce(EmailTemplateService::getEmailTemplatePages(), static function ($options, $item) {
             $index = $item['uid'];
             $options[$index] = $item['title'];
 
