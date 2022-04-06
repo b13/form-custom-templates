@@ -25,15 +25,14 @@ class EmailTemplateFinisher extends EmailFinisher
         $emailTemplateUid = $this->options['emailTemplateUid'];
         // For v10 compatibility reasons we check for [Empty] value
         if (empty($emailTemplateUid) || $emailTemplateUid === '[Empty]') {
-            parent::executeInternal();
-            return;
+            return parent::executeInternal();
         }
 
         // Fallback to default in case doktype changed and the selected page
         // is no longer an email template
         $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($emailTemplateUid);
         if ((int)$page['doktype'] !== (int)EmailTemplateService::getTypoScript()['doktype']) {
-            parent::executeInternal();
+            return parent::executeInternal();
         }
 
         $languageBackup = null;
