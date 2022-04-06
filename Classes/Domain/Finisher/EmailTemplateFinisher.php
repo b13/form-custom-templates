@@ -26,6 +26,7 @@ class EmailTemplateFinisher extends EmailFinisher
         // For v10 compatibility reasons we check for [Empty] value
         if (empty($emailTemplateUid) || $emailTemplateUid === '[Empty]') {
             parent::executeInternal();
+            return;
         }
 
         // Fallback to default in case doktype changed and the selected page
