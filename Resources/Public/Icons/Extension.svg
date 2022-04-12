@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 256 256" style="enable-background:new 0 0 256 256;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#37379B;}
+	.st1{fill:#FFFFFF;}
+	.st2{fill:#B15346;}
+	.st3{fill:#75B752;}
+	.st4{fill:#D6924A;}
+</style>
+<rect class="st0" width="256" height="256"/>
+<path class="st1" d="M219.7,55.8H36.3c-3.3,0-6.1,2.7-6.1,6c0,0,0,0,0,0.1v132.2c0,3.3,2.7,6.1,6,6.1c0,0,0,0,0.1,0h183.3
+	c3.3,0,6.1-2.6,6.1-6c0,0,0-0.1,0-0.1V61.9C225.8,58.6,223.1,55.9,219.7,55.8C219.8,55.8,219.8,55.8,219.7,55.8z M213.6,76.9H90.1
+	V66.3h123.5V76.9z"/>
+<circle class="st2" cx="47.7" cy="71.6" r="5.3"/>
+<ellipse transform="matrix(0.1602 -0.9871 0.9871 0.1602 -3.9974 138.7298)" class="st3" cx="79.5" cy="71.7" rx="5.3" ry="5.3"/>
+<circle class="st4" cx="63.6" cy="71.6" r="5.3"/>
+<rect x="42.4" y="86.8" class="st0" width="171.1" height="101.3"/>
+<g>
+	<polygon class="st1" points="171.4,106.4 84.6,106.4 128,145.1 	"/>
+	<g>
+		<polygon class="st1" points="172.3,162.7 172.3,112.2 144,137.4 		"/>
+		<path class="st1" d="M171.4,168.5l-31.1-27.7l-10.6,9.5c-0.5,0.4-1.1,0.6-1.6,0.6s-1.2-0.2-1.6-0.6l-10.6-9.5l-31.1,27.7H171.4z"
+			/>
+		<polygon class="st1" points="112,137.4 83.6,112.2 83.6,162.7 		"/>
+	</g>
+</g>
+</svg>
