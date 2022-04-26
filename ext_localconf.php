@@ -35,8 +35,8 @@ call_user_func(function () {
                 }
             }
         [GLOBAL]
-        
-        @import "EXT:form_custom_templates/Configuration/PageTSConfig/*"
+
+        @import "EXT:form_custom_templates/Configuration/PageTsConfig/main.tsconfig"
     '
     );
 
