@@ -10,17 +10,18 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 (function ($extensionKey = 'form_custom_templates', $table='pages') {
 
     // Add page type
-    $emailDoktype = (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('form_custom_templates', 'doktype');
+    $emailDoktype = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('form_custom_templates', 'doktype');
     ExtensionManagementUtility::addTcaSelectItem(
         $table,
         'doktype',
         [
             'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/Database:form_custom_templates.pageType',
             $emailDoktype,
-            'page-email'
+            'page-email',
+            'special'
         ],
-        '1',
-        'after'
+        '254',
+        'before'
     );
 
     ArrayUtility::mergeRecursiveWithOverrule(
