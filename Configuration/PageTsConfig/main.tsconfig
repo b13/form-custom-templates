@@ -10,5 +10,5 @@ mod.wizards.newContentElement.wizardItems.forms {
         }
     }
 
-    show = *
+    show := addToList(form_result_list)
 }

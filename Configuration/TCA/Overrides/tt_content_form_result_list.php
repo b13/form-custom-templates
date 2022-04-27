@@ -10,14 +10,14 @@ call_user_func(function () {
         [
             'LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:form_custom_templates.cType',
             'form_result_list',
-            'page-email',
+            'content-elements-mailform',
         ],
         'CType',
         'form_custom_templates',
     );
 
     // Set content overview icon
-    $GLOBALS['TCA']['tt_content']['ctrl']['typeicon_classes']['form_result_list'] = 'page-email';
+    $GLOBALS['TCA']['tt_content']['ctrl']['typeicon_classes']['form_result_list'] = 'content-elements-mailform';
 
     ArrayUtility::mergeRecursiveWithOverrule(
         $GLOBALS['TCA']['tt_content'],
