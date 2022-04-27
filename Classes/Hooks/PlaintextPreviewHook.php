@@ -30,7 +30,7 @@ class PlaintextPreviewHook
 
         $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($pageId);
 
-        if ((int)$page['doktype'] === (int)EmailTemplateService::getTypoScript()['doktype']) {
+        if ((int)$page['doktype'] === (int)(EmailTemplateService::getTypoScript()['doktype'] ?? 0)) {
             $plaintextTypeNum = (int)EmailTemplateService::getTypoScript()['typeNum'];
             $buttonBar = GeneralUtility::makeInstance(ButtonBar::class);
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
@@ -38,9 +38,14 @@ class PlaintextPreviewHook
             try {
                 $previewDataAttributes = BackendUtility::getPreviewUrl($pageId, '', BackendUtility::BEgetRootLine($pageId), '', '', 'type=' . $plaintextTypeNum);
                 $viewButton = $buttonBar->makeLinkButton()
-                    ->setOnClick('window.open(' . GeneralUtility::quoteJSvalue($previewDataAttributes) . ',\'newTYPO3frontendWindow\');)')
+                    // @todo: remove onClick after support for v10 was dropped
+                    ->setOnClick('window.open(' . GeneralUtility::quoteJSvalue($previewDataAttributes) . ',\'newTYPO3frontendWindow\');')
                     ->setTitle($this->getLanguageService()->sL('LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:form_custom_templates.buttonBar.showPagePlaintext'))
                     ->setShowLabelText(true)
+                    ->setDataAttributes(['dispatch-action' => 'TYPO3.WindowManager.localOpen', 'dispatch-args' => GeneralUtility::jsonEncodeForHtmlAttribute([
+                        $previewDataAttributes,
+                        true, // Focus new window
+                    ])])
                     ->setIcon($iconFactory->getIcon('actions-file-view', Icon::SIZE_SMALL))
                     ->setHref('#');
 
