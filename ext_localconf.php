@@ -49,8 +49,13 @@ call_user_func(function () {
     );
 
     $iconRegistry->registerIcon(
-        'page-email',
+        'apps-pagetree-page-email',
         SvgIconProvider::class,
-        ['source' => 'EXT:form_custom_templates/Resources/Public/Icons/page-email.svg']
+        ['source' => 'EXT:form_custom_templates/Resources/Public/Icons/apps-pagetree-page-email.svg']
+    );
+    $iconRegistry->registerIcon(
+        'apps-pagetree-page-email-hideinmenu',
+        SvgIconProvider::class,
+        ['source' => 'EXT:form_custom_templates/Resources/Public/Icons/apps-pagetree-page-email-hideinmenu.svg']
     );
 });
