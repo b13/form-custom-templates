@@ -59,6 +59,6 @@ class PluginFormCest
         $I->seeElement('#typo3-pagetree-toolbar div[title="Email template"]');
 
         $I->amGoingTo('See if icon was applied to page in page tree');
-        $I->waitForElement('#icon-page-email');
+        $I->waitForElement('#icon-apps-pagetree-page-email');
     }
 }
