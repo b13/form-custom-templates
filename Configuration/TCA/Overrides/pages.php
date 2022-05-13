@@ -30,10 +30,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
             // add icon for new page type:
             'ctrl' => [
                 'typeicon_classes' => [
-                    $emailDoktype => 'page-email',
-                    $emailDoktype . '-contentFromPid' => 'page-email-contentFromPid',
-                    $emailDoktype . '-root' => 'page-email-root',
-                    $emailDoktype . '-hideinmenu' => 'page-email-hideinmenu',
+                    $emailDoktype => 'apps-pagetree-page-email',
+                    $emailDoktype . '-hideinmenu' => 'apps-pagetree-page-email-hideinmenu',
                 ],
             ],
             // add all page standard fields and tabs to your new page type
