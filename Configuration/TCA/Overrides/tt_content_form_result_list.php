@@ -13,7 +13,7 @@ call_user_func(function () {
             'content-elements-mailform',
         ],
         'CType',
-        'form_custom_templates',
+        'form_custom_templates'
     );
 
     // Set content overview icon
