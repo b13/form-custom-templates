@@ -22,7 +22,7 @@ class EmailTemplateFinisher extends EmailFinisher
 {
     protected function executeInternal()
     {
-        $emailTemplateUid = $this->options['emailTemplateUid'];
+        $emailTemplateUid = $this->options['emailTemplateUid'] ?? null;
         // For v10 compatibility reasons we check for [Empty] value
         if (empty($emailTemplateUid) || $emailTemplateUid === '[Empty]') {
             return parent::executeInternal();
