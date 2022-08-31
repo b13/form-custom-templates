@@ -7,6 +7,7 @@ namespace B13\FormCustomTemplates\Service;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
+use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -18,6 +19,7 @@ class EmailTemplateService
     {
         $markerService = GeneralUtility::makeInstance(MarkerBasedTemplateService::class);
         $uri = self::getUri($uid, $type);
+
         $factory = GuzzleClientFactory::getClient();
 
         $template = $factory->request('GET', $uri)->getBody();
@@ -26,6 +28,11 @@ class EmailTemplateService
         // Replace fluid markers with given form values
         foreach ($formRuntime->getFormDefinition()->getElements() as $identifier => $element) {
             $value = $formRuntime->getElementValue($identifier);
+            if ($value === null) {
+                $value = '';
+            } elseif (is_array($value)) {
+                $value = $value[0];
+            }
             $templateContent = $markerService->substituteMarker($templateContent, '{' . $identifier . '}', $value);
         }
 
@@ -58,12 +65,9 @@ class EmailTemplateService
 
     protected static function getUri(int $pageId, int $type = 0): string
     {
-        $typolinkConfiguration = [
-            'parameter' => $pageId . ',' . $type,
-            'forceAbsoluteUrl' => 1,
-        ];
-
-        return $GLOBALS['TSFE']->cObj->typoLink_URL($typolinkConfiguration);
+        $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+        $site = $siteFinder->getSiteByPageId($pageId);
+        return (string)$site->getRouter()->generateUri($pageId, ['type' => $type]);
     }
 
     public static function getTypoScript(): array
