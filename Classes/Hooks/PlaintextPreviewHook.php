@@ -29,6 +29,9 @@ class PlaintextPreviewHook
         }
 
         $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($pageId);
+        if (empty($page)) {
+            return $buttons;
+        }
 
         if ((int)$page['doktype'] === (int)(EmailTemplateService::getTypoScript()['doktype'] ?? 0)) {
             $plaintextTypeNum = (int)EmailTemplateService::getTypoScript()['typeNum'];
