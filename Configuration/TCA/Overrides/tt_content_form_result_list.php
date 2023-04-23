@@ -25,7 +25,7 @@ call_user_func(function () {
             'types' => [
                 'form_result_list' => [
                     'showitem' => $GLOBALS['TCA']['tt_content']['types']['header']['showitem'],
-                ]
+                ],
             ],
         ]
     );

@@ -1,6 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Call to static method create\\(\\) on an unknown class TYPO3\\\\CMS\\\\Backend\\\\Routing\\\\PreviewUriBuilder\\.$#"
+			message: "#^Parameter \\$event of method B13\\\\FormCustomTemplates\\\\Backend\\\\EventListener\\\\ModifyButtonBarEventListener\\:\\:__invoke\\(\\) has invalid type TYPO3\\\\CMS\\\\Backend\\\\Template\\\\Components\\\\ModifyButtonBarEvent\\.$#"
 			count: 1
-			path: ../Classes/Hooks/PlaintextPreviewHook.php
+			path: ../Classes/Backend/EventListener/ModifyButtonBarEventListener.php

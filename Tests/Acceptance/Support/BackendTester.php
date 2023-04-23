@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace B13\FormCustomTemplates\Tests\Acceptance\Support;
 
 use B13\FormCustomTemplates\Tests\Acceptance\Support\_generated\BackendTesterActions;

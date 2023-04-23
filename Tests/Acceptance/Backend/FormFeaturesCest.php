@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace B13\FormCustomTemplates\Tests\Acceptance\Backend;
 
 use B13\FormCustomTemplates\Tests\Acceptance\Support\BackendTester;
@@ -75,6 +76,7 @@ class FormFeaturesCest
         $I->waitForElement(self::$stage);
         $I->click('//div[@class="t3-form-element-info"]//*[contains(text(),"Firstname")]');
         $I->waitForElement(self::$inspector);
+        $I->waitForElement('.t3-form-control-group');
         $I->see('Change Identifier', '.t3-form-control-group');
 
         $I->amGoingTo('See invalid identifier message');

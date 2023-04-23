@@ -1,9 +1,13 @@
 <?php
 
-namespace B13\FormCustomTemplates\Hooks;
+declare(strict_types=1);
+
+namespace B13\FormCustomTemplates\Backend\EventListener;
 
 use B13\FormCustomTemplates\Service\EmailTemplateService;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Template\Components\ModifyButtonBarEvent;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Exception;
@@ -12,31 +16,29 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class PlaintextPreviewHook
+final class ModifyButtonBarEventListener
 {
-    /**
-     * @todo: remove when v11 support was dropped
-     *
-     * @param array $params
-     * @param object|null $ref
-     * @return array
-     */
-    public function previewButton(array $params, ?object $ref)
+    private PageRepository $pageRepository;
+
+    public function __construct(PageRepository $pageRepository)
     {
-        $buttons = $params['buttons'];
-        $pageId = GeneralUtility::_GET('edit') ? array_search('edit', GeneralUtility::_GET('edit')['pages'] ?? []) : GeneralUtility::_GET('id');
+        $this->pageRepository = $pageRepository;
+    }
 
-        if (!$pageId) {
-            return $buttons;
+    public function __invoke(ModifyButtonBarEvent $event): void
+    {
+        // @todo: remove when v11 support was dropped
+        if (!class_exists(ModifyButtonBarEvent::class)) {
+            return;
         }
 
-        $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($pageId);
-        if (empty($page)) {
-            return $buttons;
-        }
+        $buttons = $event->getButtons();
+        $request = $this->getRequest();
+        $pageId = $request->getQueryParams()['id'] ?? 0;
+        $page = $this->pageRepository->getPage($pageId);
 
-        if ((int)$page['doktype'] === (int)(EmailTemplateService::getTypoScript()['doktype'] ?? 0)) {
-            $plaintextTypeNum = (int)EmailTemplateService::getTypoScript()['typeNum'];
+        if ((int)($page['doktype'] ?? 0) === (int)(EmailTemplateService::getTypoScript()['doktype'] ?? 0)) {
+            $plaintextTypeNum = (int)(EmailTemplateService::getTypoScript()['typeNum'] ?? 0);
             $buttonBar = GeneralUtility::makeInstance(ButtonBar::class);
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
@@ -58,13 +60,14 @@ class PlaintextPreviewHook
             }
         }
 
-        return $buttons;
+        $event->setButtons($buttons);
     }
 
-    /**
-     * Shorthand functionality for fetching the language service
-     * @return LanguageService
-     */
+    protected function getRequest(): ServerRequestInterface
+    {
+        return $GLOBALS['TYPO3_REQUEST'];
+    }
+
     protected function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];

@@ -10,7 +10,6 @@ use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
 
 class EmailTemplateService
@@ -20,9 +19,8 @@ class EmailTemplateService
         $markerService = GeneralUtility::makeInstance(MarkerBasedTemplateService::class);
         $uri = self::getUri($uid, $type);
 
-        $factory = GuzzleClientFactory::getClient();
-
-        $template = $factory->request('GET', $uri)->getBody();
+        $guzzleFactory = GeneralUtility::makeInstance(GuzzleClientFactory::class);
+        $template = $guzzleFactory->getClient()->request('GET', $uri)->getBody();
         $templateContent = $markerService->substituteMarker($template->getContents(), '{formCustomTemplate.results}', $resultTable);
 
         // Replace fluid markers with given form values
@@ -72,10 +70,7 @@ class EmailTemplateService
 
     public static function getTypoScript(): array
     {
-        // @todo: use makeInstance once v10 support was dropped
-        //$configurationManager = GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
-        $configurationManager = GeneralUtility::makeInstance(ObjectManager::class)
-            ->get(ConfigurationManagerInterface::class);
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
         $typoScript = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         return $typoScript['plugin.']['tx_form_custom_templates.'] ?? [];
     }
