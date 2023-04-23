@@ -1,0 +1,13 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  B13\FormCustomTemplates\:
+    resource: '../Classes/*'
+
+  B13\FormCustomTemplates\Backend\EventListener\ModifyButtonBarEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'tx_form_custom_templates/modifyButtonBarEventListener'

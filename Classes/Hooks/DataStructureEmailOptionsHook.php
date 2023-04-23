@@ -17,7 +17,7 @@ class DataStructureEmailOptionsHook
      */
     public function parseDataStructureByIdentifierPostProcess(array $dataStructure, array $identifier): array
     {
-        if ($identifier['ext-form-overrideFinishers'] ?? '' === 'enabled') {
+        if (($identifier['ext-form-overrideFinishers'] ?? '') === 'enabled') {
             $addToFinishers = ['EmailToSender', 'EmailToReceiver'];
             $options = EmailTemplateService::getOptions();
 

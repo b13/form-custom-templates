@@ -7,6 +7,7 @@ namespace B13\FormCustomTemplates\Domain\Finisher;
 use B13\FormCustomTemplates\Service\EmailTemplateService;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Mail\MailerInterface;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
@@ -25,14 +26,16 @@ class EmailTemplateFinisher extends EmailFinisher
         $emailTemplateUid = $this->options['emailTemplateUid'] ?? null;
         // For v10 compatibility reasons we check for [Empty] value
         if (empty($emailTemplateUid) || $emailTemplateUid === '[Empty]') {
-            return parent::executeInternal();
+            parent::executeInternal();
+            return null;
         }
 
         // Fallback to default in case doktype changed and the selected page
         // is no longer an email template
         $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($emailTemplateUid);
         if ((int)$page['doktype'] !== (int)EmailTemplateService::getTypoScript()['doktype']) {
-            return parent::executeInternal();
+            parent::executeInternal();
+            return null;
         }
 
         $languageBackup = null;
@@ -45,19 +48,18 @@ class EmailTemplateFinisher extends EmailFinisher
             $this->options['addHtmlPart'] = false;
         }
 
-        $subject = $this->parseOption('subject');
-        $recipients = $this->getRecipientsForTemplate('recipients');
+        $subject = (string)$this->parseOption('subject');
+        $recipients = $this->getRecipients('recipients');
         $senderAddress = $this->parseOption('senderAddress');
         $senderAddress = is_string($senderAddress) ? $senderAddress : '';
         $senderName = $this->parseOption('senderName');
         $senderName = is_string($senderName) ? $senderName : '';
-        $replyToRecipients = $this->getRecipientsForTemplate('replyToRecipients');
-        $carbonCopyRecipients = $this->getRecipientsForTemplate('carbonCopyRecipients');
-        $blindCarbonCopyRecipients = $this->getRecipientsForTemplate('blindCarbonCopyRecipients');
-        $attachUploads = $this->parseOption('attachUploads');
+        $replyToRecipients = $this->getRecipients('replyToRecipients');
+        $carbonCopyRecipients = $this->getRecipients('carbonCopyRecipients');
+        $blindCarbonCopyRecipients = $this->getRecipients('blindCarbonCopyRecipients');
         $addHtmlPart = $this->parseOption('addHtmlPart') ? true : false;
-        $title = $this->parseOption('title');
-        $title = is_string($title) && $title !== '' ? $title : $subject;
+        $attachUploads = $this->parseOption('attachUploads');
+        $title = (string)$this->parseOption('title') ?: $subject;
 
         if (empty($subject)) {
             throw new FinisherException('The option "subject" must be set for the EmailFinisher.', 1327060320);
@@ -101,7 +103,7 @@ class EmailTemplateFinisher extends EmailFinisher
             [
                 'format' => 'Plaintext',
                 'contentType' => 'text/plain',
-                'content' => EmailTemplateService::create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'txt')->render(), $plaintextTypeNum)
+                'content' => EmailTemplateService::create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'txt')->render(), $plaintextTypeNum),
             ],
         ];
 
@@ -109,7 +111,7 @@ class EmailTemplateFinisher extends EmailFinisher
             $parts[] = [
                 'format' => 'Html',
                 'contentType' => 'text/html',
-                'content' => EmailTemplateService::create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'html')->render(), 0)
+                'content' => EmailTemplateService::create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'html')->render(), 0),
             ];
         }
 
@@ -140,7 +142,11 @@ class EmailTemplateFinisher extends EmailFinisher
             }
         }
 
-        $mail->send();
+        if (class_exists(MailerInterface::class)) {
+            GeneralUtility::makeInstance(MailerInterface::class)->send($mail);
+        } else {
+            $mail->send();
+        }
 
         return null;
     }
@@ -159,26 +165,5 @@ class EmailTemplateFinisher extends EmailFinisher
             ->getViewHelperVariableContainer()
             ->addOrUpdate(RenderRenderableViewHelper::class, 'formRuntime', $formRuntime);
         return $standaloneView;
-    }
-
-    /**
-     * Get recipients
-     * Using this for compatibility between v10 and v11
-     * @todo: use getRecipients() once v10 support was dropped
-     * @param string $listOption List option name
-     * @return array
-     */
-    protected function getRecipientsForTemplate(string $listOption): array
-    {
-        $recipients = $this->parseOption($listOption) ?? [];
-        $addresses = [];
-        foreach ($recipients as $address => $name) {
-            if (!GeneralUtility::validEmail($address)) {
-                // Drop entries without valid address
-                continue;
-            }
-            $addresses[] = new Address($address, $name);
-        }
-        return $addresses;
     }
 }

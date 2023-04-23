@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace B13\FormCustomTemplates\Tests\Acceptance\Support\Extension;
 
 use Codeception\Event\SuiteEvent;
@@ -69,7 +70,7 @@ class BackendFormCustomTemplatesEnvironment extends BackendEnvironment
         'pathsToLinkInTestInstance' => [
            'typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/sites' =>
            'typo3conf/sites',
-        ]
+        ],
     ];
 
     public function bootstrapTypo3Environment(SuiteEvent $suiteEvent)
