@@ -12,7 +12,6 @@ Additional templates need to be configured!
 ```
 composer req b13/form-custom-templates
 ```
-:warning: Only available once this extension was released.
 
 ## Configuration
 
@@ -21,7 +20,7 @@ composer req b13/form-custom-templates
 Use `@import` or  `include_static_file` to add the basic
 configuration.
 
-```  
+```
 @import 'EXT:form_custom_templates/Configuration/TypoScript/setup.typoscript'
 ```
 
@@ -35,7 +34,7 @@ By default, the page doktype Email uses a template based on `SystemEmail.html`
 [page["doktype"] == {$plugin.tx_form_custom_templates.doktype}]
     # Set the template
     page.10.templateName = SystemEmailTemplate
-    
+
     # Use custom template paths
     page.10.templateRootPaths.20 = EXT:SITE_PACKAGE/Resources/Private/Frontend/Templates/
     page.10.partialRootPaths.20 = EXT:SITE_PACKAGE/Resources/Private/Frontend/Partials/
