@@ -37,7 +37,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
             'palettes' => [
                 'visibilityEmailTemplate' => [
                     'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
-                    'showitem' => 'hidden;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:pages.hidden_toggle_formlabel',
+                    'showitem' => 'hidden',
                 ]
             ],
             'types' => [
