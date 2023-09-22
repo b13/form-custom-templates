@@ -85,3 +85,18 @@ plugin.tx_form_custom_templates {
         templatePath = EXT:form_custom_templates/Resources/Private/Frontend/Partials/ResultTable
     }
 }
+
+plugin.tx_seo {
+    config {
+        xmlSitemap {
+            sitemaps {
+                pages {
+                    config {
+                        # Exclude the email template page type from showing up in the sitemap
+                        excludedDoktypes := addToList({$plugin.tx_form_custom_templates.doktype})
+                    }
+                }
+            }
+        }
+    }
+}
