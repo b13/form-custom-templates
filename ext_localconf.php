@@ -28,7 +28,7 @@ call_user_func(function () {
 
     ExtensionManagementUtility::addPageTSConfig(
         '
-        [page["doktype"] == ' . $doktype . ']
+        [traverse(page, "doktype") == ' . $doktype . ']
             TCEFORM.tt_content {
                 CType {
                     removeItems = list, shortcut, form_formframework, textmedia, image,header,textpic,bullets,uploads,table,menu_abstract,menu_categorized_content,menu_categorized_pages,menu_pages,menu_subpages,menu_recently_updated,menu_related_pages,menu_section,menu_section_pages,menu_sitemap,menu_sitemap_pages,felogin_login,div,html
