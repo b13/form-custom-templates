@@ -36,6 +36,9 @@ final class ModifyButtonBarEventListener
         $request = $this->getRequest();
         $pageId = $request->getQueryParams()['id'] ?? 0;
         $page = $this->pageRepository->getPage($pageId);
+        if (empty($page)) {
+            return;
+        }
 
         if ((int)($page['doktype'] ?? 0) === (int)(EmailTemplateService::getTypoScript()['doktype'] ?? 0)) {
             $plaintextTypeNum = (int)(EmailTemplateService::getTypoScript()['typeNum'] ?? 0);
