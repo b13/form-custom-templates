@@ -26,9 +26,4 @@ class EmailTemplateViewHelper extends AbstractViewHelper
 
         return $options;
     }
-
-    protected function getQueryBuilderForTable(string $table): QueryBuilder
-    {
-        return GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
-    }
 }
