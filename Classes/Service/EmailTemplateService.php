@@ -4,24 +4,42 @@ declare(strict_types=1);
 
 namespace B13\FormCustomTemplates\Service;
 
+use B13\FormCustomTemplates\Configuration;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
+use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
+use TYPO3\CMS\Frontend\Http\Application;
 
 class EmailTemplateService
 {
-    public static function create(int $uid, FormRuntime $formRuntime, string $resultTable = '', int $type = 101): string
-    {
-        $markerService = GeneralUtility::makeInstance(MarkerBasedTemplateService::class);
-        $uri = self::getUri($uid, $type);
+    private Application $application;
 
-        $guzzleFactory = GeneralUtility::makeInstance(GuzzleClientFactory::class);
-        $template = $guzzleFactory->getClient()->request('GET', $uri)->getBody();
-        $templateContent = $markerService->substituteMarker($template->getContents(), '{formCustomTemplate.results}', $resultTable);
+    public function __construct(
+        protected readonly SiteFinder $siteFinder,
+        protected readonly MarkerBasedTemplateService $markerBasedTemplateService,
+        protected readonly Configuration $configuration
+    )
+    {
+        $container = GeneralUtility::getContainer();
+        $this->application = $container->get(Application::class);
+    }
+
+    public function create(int $uid, FormRuntime $formRuntime, string $resultTable = '', int $type = 101): string
+    {
+        $subResponse = $this->stashEnvironment(
+            fn(): ResponseInterface => $this->sendSubRequest($uid, $type, $GLOBALS['TYPO3_REQUEST'])
+        );
+        $templateContent = $this->markerBasedTemplateService->substituteMarker(
+            (string)$subResponse->getBody(),
+            '{formCustomTemplate.results}',
+            $resultTable
+        );
 
         // Replace fluid markers with given form values
         foreach ($formRuntime->getFormDefinition()->getElements() as $identifier => $element) {
@@ -31,26 +49,56 @@ class EmailTemplateService
             } elseif (is_array($value)) {
                 $value = $value[0];
             }
-            $templateContent = $markerService->substituteMarker($templateContent, '{' . $identifier . '}', $value);
+            $templateContent = $this->markerBasedTemplateService->substituteMarker($templateContent, '{' . $identifier . '}', $value);
         }
 
         return $templateContent;
     }
 
-    public static function getOptions(): array
+    protected function stashEnvironment(callable $fetcher): ResponseInterface
     {
-        $options = array_reduce(self::getEmailTemplatePages(), static function ($options, $item) {
-            $options[] = [$item['title'], $item['uid']];
+        $parkedTsfe = $GLOBALS['TSFE'] ?? null;
+        $GLOBALS['TSFE'] = null;
 
+        $result = $fetcher();
+
+        $GLOBALS['TSFE'] = $parkedTsfe;
+
+        return $result;
+    }
+
+    protected function sendSubRequest(int $pageId, int $type, ServerRequestInterface $originalRequest): ResponseInterface
+    {
+        $request = $originalRequest->withQueryParams(['type' => $type])
+            ->withUri(
+                new Uri($this->getUri($pageId))
+            )
+            ->withMethod('GET');
+
+        $site = $request->getAttribute('site', null);
+        if (!$site instanceof Site) {
+            $site = $this->siteFinder->getSiteByPageId($pageId);
+            $request = $request->withAttribute('site', $site);
+        }
+
+        $request = $request->withAttribute('originalRequest', $originalRequest);
+
+        return $this->application->handle($request);
+    }
+
+    public function getOptions(): array
+    {
+        $options = array_reduce($this->getEmailTemplatePages(), static function ($options, $item) {
+            $options[] = [$item['title'], $item['uid']];
             return $options;
         }, []);
 
         return $options;
     }
 
-    public static function getEmailTemplatePages(): array
+    public function getEmailTemplatePages(): array
     {
-        $doktype = (int)self::getTypoScript()['doktype'];
+        $doktype = $this->configuration->getDokType();
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
         $queryBuilder->select('*')
             ->from('pages')
@@ -61,17 +109,9 @@ class EmailTemplateService
         return $queryBuilder->execute()->fetchAllAssociative();
     }
 
-    protected static function getUri(int $pageId, int $type = 0): string
+    protected function getUri(int $pageId): string
     {
-        $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
-        $site = $siteFinder->getSiteByPageId($pageId);
-        return (string)$site->getRouter()->generateUri($pageId, ['type' => $type]);
-    }
-
-    public static function getTypoScript(): array
-    {
-        $configurationManager = GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
-        $typoScript = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-        return $typoScript['plugin.']['tx_form_custom_templates.'] ?? [];
+        $site = $this->siteFinder->getSiteByPageId($pageId);
+        return (string)$site->getRouter()->generateUri($pageId);
     }
 }

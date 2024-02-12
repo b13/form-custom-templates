@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace B13\FormCustomTemplates\Domain\Finisher;
 
+use B13\FormCustomTemplates\Configuration;
 use B13\FormCustomTemplates\Service\EmailTemplateService;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
@@ -21,6 +22,11 @@ use TYPO3\CMS\Form\ViewHelpers\RenderRenderableViewHelper;
 
 class EmailTemplateFinisher extends EmailFinisher
 {
+    public function __construct(protected readonly EmailTemplateService $emailTemplateService, protected readonly Configuration $configuration)
+    {
+        parent::__construct();
+    }
+
     protected function executeInternal()
     {
         $emailTemplateUid = $this->options['emailTemplateUid'] ?? null;
@@ -33,13 +39,13 @@ class EmailTemplateFinisher extends EmailFinisher
         // Fallback to default in case doktype changed and the selected page
         // is no longer an email template
         $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($emailTemplateUid);
-        if ((int)$page['doktype'] !== (int)EmailTemplateService::getTypoScript()['doktype']) {
+        if ((int)$page['doktype'] !== $this->configuration->getDokType()) {
             parent::executeInternal();
             return null;
         }
 
         $languageBackup = null;
-        // Flexform overrides write strings instead of integers so
+        // Flexform overrides write strings instead of integers, so
         // we need to cast the string '0' to false.
         if (
             isset($this->options['addHtmlPart'])
@@ -98,12 +104,12 @@ class EmailTemplateFinisher extends EmailFinisher
             $mail->bcc(...$blindCarbonCopyRecipients);
         }
 
-        $plaintextTypeNum = (int)EmailTemplateService::getTypoScript()['typeNum'];
+        $plaintextTypeNum = $this->configuration->getTypeNum();
         $parts = [
             [
                 'format' => 'Plaintext',
                 'contentType' => 'text/plain',
-                'content' => EmailTemplateService::create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'txt')->render(), $plaintextTypeNum),
+                'content' => $this->emailTemplateService->create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'txt')->render(), $plaintextTypeNum),
             ],
         ];
 
@@ -111,7 +117,7 @@ class EmailTemplateFinisher extends EmailFinisher
             $parts[] = [
                 'format' => 'Html',
                 'contentType' => 'text/html',
-                'content' => EmailTemplateService::create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'html')->render(), 0),
+                'content' =>  $this->emailTemplateService->create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'html')->render(), 0),
             ];
         }
 
@@ -154,7 +160,7 @@ class EmailTemplateFinisher extends EmailFinisher
     protected function getStandaloneView(string $title, FormRuntime $formRuntime, string $format = 'txt'): StandaloneView
     {
         $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-        $templatePathAndFilename = EmailTemplateService::getTypoScript()['resultList.']['templatePath'];
+        $templatePathAndFilename = $this->configuration->getTemplatePath();
 
         $standaloneView->setTemplatePathAndFilename($templatePathAndFilename . '.' . $format);
         $standaloneView->assign('title', $title);

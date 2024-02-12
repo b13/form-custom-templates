@@ -17,7 +17,8 @@ class EmailTemplateViewHelper extends AbstractViewHelper
 {
     public function render(): array
     {
-        $options = array_reduce(EmailTemplateService::getEmailTemplatePages(), static function ($options, $item) {
+        $emailTemplateService = GeneralUtility::makeInstance(EmailTemplateService::class);
+        $options = array_reduce($emailTemplateService->getEmailTemplatePages(), static function ($options, $item) {
             $index = $item['uid'];
             $options[$index] = $item['title'];
 

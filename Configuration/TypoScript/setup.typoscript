@@ -46,7 +46,7 @@ plugin.tx_form {
         }
         10 = FLUIDTEMPLATE
         10 {
-            templateName = SystemEmail
+            templateName = Default
             variables {
                 content < styles.content.get
                 content.select.where = colPos=0

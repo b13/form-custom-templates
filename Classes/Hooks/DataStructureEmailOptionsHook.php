@@ -8,6 +8,10 @@ use B13\FormCustomTemplates\Service\EmailTemplateService;
 
 class DataStructureEmailOptionsHook
 {
+    public function __construct(Protected readonly EmailTemplateService $emailTemplateService)
+    {
+    }
+
     /**
      * Add emailTemplateUid options
      *
@@ -19,7 +23,7 @@ class DataStructureEmailOptionsHook
     {
         if (($identifier['ext-form-overrideFinishers'] ?? '') === 'enabled') {
             $addToFinishers = ['EmailToSender', 'EmailToReceiver'];
-            $options = EmailTemplateService::getOptions();
+            $options = $this->emailTemplateService->getOptions();
 
             // Search for finishers and add items
             foreach ($dataStructure['sheets'] as $sheetIdentifier => $sheet) {
