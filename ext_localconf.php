@@ -3,8 +3,6 @@
 use B13\FormCustomTemplates\Hooks\DataStructureEmailOptionsHook;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
-use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
-use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -43,19 +41,4 @@ call_user_func(function () {
     // Add selectable templates to plugin settings override
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][FlexFormTools::class]['flexParsing'][DataStructureEmailOptionsHook::class] = DataStructureEmailOptionsHook::class;
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook'][] = 'B13\FormCustomTemplates\Hooks\PlaintextPreviewHook->previewButton';
-    // Register icon
-    $iconRegistry = GeneralUtility::makeInstance(
-        IconRegistry::class
-    );
-
-    $iconRegistry->registerIcon(
-        'apps-pagetree-page-email',
-        SvgIconProvider::class,
-        ['source' => 'EXT:form_custom_templates/Resources/Public/Icons/apps-pagetree-page-email.svg']
-    );
-    $iconRegistry->registerIcon(
-        'apps-pagetree-page-email-hideinmenu',
-        SvgIconProvider::class,
-        ['source' => 'EXT:form_custom_templates/Resources/Public/Icons/apps-pagetree-page-email-hideinmenu.svg']
-    );
 });
