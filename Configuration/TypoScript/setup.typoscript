@@ -33,7 +33,8 @@ plugin.tx_form {
     }
 [END]
 
-[page["doktype"] == {$plugin.tx_form_custom_templates.doktype}]
+[traverse(page, "doktype") == {$plugin.tx_form_custom_templates.doktype}]
+    page >
     page = PAGE
     page {
         typeNum = 0
