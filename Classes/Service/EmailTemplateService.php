@@ -24,8 +24,7 @@ class EmailTemplateService
         protected readonly SiteFinder $siteFinder,
         protected readonly MarkerBasedTemplateService $markerBasedTemplateService,
         protected readonly Configuration $configuration
-    )
-    {
+    ) {
         $container = GeneralUtility::getContainer();
         $this->application = $container->get(Application::class);
     }
@@ -33,7 +32,7 @@ class EmailTemplateService
     public function create(int $uid, FormRuntime $formRuntime, string $resultTable = '', int $type = 101): string
     {
         $subResponse = $this->stashEnvironment(
-            fn(): ResponseInterface => $this->sendSubRequest($uid, $type, $GLOBALS['TYPO3_REQUEST'])
+            fn (): ResponseInterface => $this->sendSubRequest($uid, $type, $GLOBALS['TYPO3_REQUEST'])
         );
         $templateContent = $this->markerBasedTemplateService->substituteMarker(
             (string)$subResponse->getBody(),

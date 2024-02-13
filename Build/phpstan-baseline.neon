@@ -4,3 +4,8 @@ parameters:
 			message: "#^Parameter \\$event of method B13\\\\FormCustomTemplates\\\\Backend\\\\EventListener\\\\ModifyButtonBarEventListener\\:\\:__invoke\\(\\) has invalid type TYPO3\\\\CMS\\\\Backend\\\\Template\\\\Components\\\\ModifyButtonBarEvent\\.$#"
 			count: 1
 			path: ../Classes/Backend/EventListener/ModifyButtonBarEventListener.php
+
+		-
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Core\\\\Context\\\\AspectInterface\\:\\:isLoggedIn\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/Middleware/EmailPagePreviewGuard.php
