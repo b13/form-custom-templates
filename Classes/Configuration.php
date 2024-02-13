@@ -26,7 +26,7 @@ class Configuration implements SingletonInterface
 
     public function getDokType(): int
     {
-        return (int)($this->typoScript['dokType'] ?? self::DEFAULT_DOKTYPE);
+        return (int)($this->typoScript['doktype'] ?? self::DEFAULT_DOKTYPE);
     }
 
     public function getTypeNum(): int
