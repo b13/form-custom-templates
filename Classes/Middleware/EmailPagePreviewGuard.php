@@ -19,8 +19,7 @@ class EmailPagePreviewGuard implements MiddlewareInterface
     public function __construct(
         protected readonly Context $context,
         protected readonly ExtensionConfiguration $extensionConfiguration
-    )
-    {
+    ) {
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

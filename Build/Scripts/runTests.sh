@@ -69,7 +69,7 @@ Options:
             - postgres: use postgres
             - sqlite: use sqlite
 
-    -p <7.2|7.3|7.4|8.0|8.1>
+    -p <7.2|7.3|7.4|8.0|8.1|8.2>
         Specifies the PHP minor version to be used
             - 7.4 (default): use PHP 7.4
 
@@ -163,7 +163,7 @@ while getopts ":s:d:p:e:t:xy:nhuv" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(7.2|7.3|7.4|8.0|8.1)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(7.2|7.3|7.4|8.0|8.1|8.2)$ ]]; then
                 INVALID_OPTIONS+=("${OPTARG}")
             fi
             ;;
