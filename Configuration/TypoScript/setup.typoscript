@@ -18,7 +18,7 @@ plugin.tx_form {
     }
 }
 
-[traverse(request.getQueryParams(), 'type') === {$plugin.tx_form_custom_templates.typeNum}]
+[traverse(request.getQueryParams(), 'type') == {$plugin.tx_form_custom_templates.typeNum}]
     lib.contentElement {
         format = txt
         templateRootPaths {
@@ -33,7 +33,8 @@ plugin.tx_form {
     }
 [END]
 
-[page["doktype"] == {$plugin.tx_form_custom_templates.doktype}]
+[traverse(page, "doktype") == {$plugin.tx_form_custom_templates.doktype}]
+    page >
     page = PAGE
     page {
         typeNum = 0
@@ -45,7 +46,7 @@ plugin.tx_form {
         }
         10 = FLUIDTEMPLATE
         10 {
-            templateName = SystemEmail
+            templateName = Default
             variables {
                 content < styles.content.get
                 content.select.where = colPos=0

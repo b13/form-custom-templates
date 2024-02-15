@@ -15,6 +15,13 @@ composer req b13/form-custom-templates
 
 ## Configuration
 
+### Doktype and typeNum
+
+In case the `doktype` (default: 125) or `typeNum` (default: 101) are already used in the 
+current TYPO3 instance both values can be changed in Settings -> Extension Configuration.
+The constants `plugin.tx_form_custom_templates.doktype` and `plugin.tx_form_custom_templates.typeNum`
+are set automatically depending on the set values in the Extension Configuration.
+
 ### Add TypoScript configuration
 
 Use `@import` or  `include_static_file` to add the basic
@@ -25,7 +32,7 @@ configuration.
 ```
 
 This will extend the `EmailToSender` and `EmailToReceiver` finisher with a template selector.
-The template selector will list all pages of doktype Email (plugin.tx_form_custom_templates.typeNum default: 125).
+The template selector will list all pages of doktype Email (plugin.tx_form_custom_templates.doktype default: 125).
 By default, the page doktype Email uses a template based on `SystemEmail.html`
 
 ### Custom html templates:

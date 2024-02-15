@@ -2,7 +2,7 @@
 
 namespace B13\FormCustomTemplates\Hooks;
 
-use B13\FormCustomTemplates\Service\EmailTemplateService;
+use B13\FormCustomTemplates\Configuration;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
@@ -14,6 +14,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class PlaintextPreviewHook
 {
+    public function __construct(private readonly Configuration $configuration)
+    {
+    }
+
     /**
      * @todo: remove when v11 support was dropped
      *
@@ -35,8 +39,8 @@ class PlaintextPreviewHook
             return $buttons;
         }
 
-        if ((int)$page['doktype'] === (int)(EmailTemplateService::getTypoScript()['doktype'] ?? 0)) {
-            $plaintextTypeNum = (int)EmailTemplateService::getTypoScript()['typeNum'];
+        if ((int)$page['doktype'] === $this->configuration->getDokType()) {
+            $plaintextTypeNum = $this->configuration->getTypeNum();
             $buttonBar = GeneralUtility::makeInstance(ButtonBar::class);
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 

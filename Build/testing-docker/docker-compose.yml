@@ -2,7 +2,7 @@ version: '2.3'
 services:
   chrome:
     # Image for Mac M1
-    # image: seleniarm/standalone-chromium:4.1.2-20220227
+    #image: seleniarm/standalone-chromium:4.1.2-20220227
     image: selenium/standalone-chrome:4.0.0-20211102
     tmpfs:
       - /dev/shm:rw,nosuid,nodev,noexec,relatime

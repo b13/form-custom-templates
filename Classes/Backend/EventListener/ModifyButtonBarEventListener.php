@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace B13\FormCustomTemplates\Backend\EventListener;
 
-use B13\FormCustomTemplates\Service\EmailTemplateService;
+use B13\FormCustomTemplates\Configuration;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\Components\ModifyButtonBarEvent;
@@ -18,11 +18,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class ModifyButtonBarEventListener
 {
-    private PageRepository $pageRepository;
-
-    public function __construct(PageRepository $pageRepository)
+    public function __construct(private readonly PageRepository $pageRepository, private readonly Configuration $configuration)
     {
-        $this->pageRepository = $pageRepository;
     }
 
     public function __invoke(ModifyButtonBarEvent $event): void
@@ -40,8 +37,8 @@ final class ModifyButtonBarEventListener
             return;
         }
 
-        if ((int)($page['doktype'] ?? 0) === (int)(EmailTemplateService::getTypoScript()['doktype'] ?? 0)) {
-            $plaintextTypeNum = (int)(EmailTemplateService::getTypoScript()['typeNum'] ?? 0);
+        if ((int)($page['doktype'] ?? 0) === $this->configuration->getDokType()) {
+            $plaintextTypeNum = $this->configuration->getTypeNum();
             $buttonBar = GeneralUtility::makeInstance(ButtonBar::class);
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
