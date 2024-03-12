@@ -50,10 +50,8 @@
           # items again, because it is a different format! Partey!
           items:
             0:
-              - 'form_custom_templates.select.default'
-              # The default value is required for v10, otherwise this will show up as "INVALID VALUE"
-              # can be set to "" (empty string) once we support v11 and up only.
-              - "[Empty]"
+              label: 'form_custom_templates.select.default'
+              value: ''
 TYPO3:
   CMS:
     Form:
