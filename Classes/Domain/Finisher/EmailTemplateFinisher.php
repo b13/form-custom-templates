@@ -22,18 +22,19 @@ use TYPO3\CMS\Form\ViewHelpers\RenderRenderableViewHelper;
 
 class EmailTemplateFinisher extends EmailFinisher
 {
-    public function __construct(protected readonly EmailTemplateService $emailTemplateService, protected readonly Configuration $configuration)
-    {
-        parent::__construct();
+    public function __construct(
+        protected readonly EmailTemplateService $emailTemplateService,
+        protected readonly Configuration $configuration
+    ) {
     }
 
-    protected function executeInternal()
+    protected function executeInternal(): void
     {
         $emailTemplateUid = $this->options['emailTemplateUid'] ?? null;
         // For v10 compatibility reasons we check for [Empty] value
         if (empty($emailTemplateUid) || $emailTemplateUid === '[Empty]') {
             parent::executeInternal();
-            return null;
+            return;
         }
 
         // Fallback to default in case doktype changed and the selected page
@@ -41,7 +42,7 @@ class EmailTemplateFinisher extends EmailFinisher
         $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($emailTemplateUid);
         if ((int)$page['doktype'] !== $this->configuration->getDokType()) {
             parent::executeInternal();
-            return null;
+            return;
         }
 
         $languageBackup = null;
@@ -117,7 +118,7 @@ class EmailTemplateFinisher extends EmailFinisher
             $parts[] = [
                 'format' => 'Html',
                 'contentType' => 'text/html',
-                'content' =>  $this->emailTemplateService->create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'html')->render(), 0),
+                'content' => $this->emailTemplateService->create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'html')->render(), 0),
             ];
         }
 
@@ -153,8 +154,6 @@ class EmailTemplateFinisher extends EmailFinisher
         } else {
             $mail->send();
         }
-
-        return null;
     }
 
     protected function getStandaloneView(string $title, FormRuntime $formRuntime, string $format = 'txt'): StandaloneView
