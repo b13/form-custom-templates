@@ -28,13 +28,13 @@ class EmailTemplateFinisher extends EmailFinisher
     ) {
     }
 
-    protected function executeInternal(): void
+    protected function executeInternal()
     {
         $emailTemplateUid = $this->options['emailTemplateUid'] ?? null;
         // For v10 compatibility reasons we check for [Empty] value
         if (empty($emailTemplateUid) || $emailTemplateUid === '[Empty]') {
             parent::executeInternal();
-            return;
+            return null;
         }
 
         // Fallback to default in case doktype changed and the selected page
@@ -42,7 +42,7 @@ class EmailTemplateFinisher extends EmailFinisher
         $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($emailTemplateUid);
         if ((int)$page['doktype'] !== $this->configuration->getDokType()) {
             parent::executeInternal();
-            return;
+            return null;
         }
 
         $languageBackup = null;
@@ -154,6 +154,8 @@ class EmailTemplateFinisher extends EmailFinisher
         } else {
             $mail->send();
         }
+
+        return null;
     }
 
     protected function getStandaloneView(string $title, FormRuntime $formRuntime, string $format = 'txt'): StandaloneView
