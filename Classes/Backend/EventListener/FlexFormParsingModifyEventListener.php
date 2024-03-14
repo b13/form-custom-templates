@@ -24,8 +24,10 @@ final class FlexFormParsingModifyEventListener
             foreach ($dataStructure['sheets'] as $sheetIdentifier => $sheet) {
                 foreach ($addToFinishers as $finisherIdentifier) {
                     if ($dataStructure['sheets'][$sheetIdentifier]['ROOT']['el']['settings.finishers.' . $finisherIdentifier . '.emailTemplateUid'] ?? false) {
-                        $allOptions = array_merge($dataStructure['sheets'][$sheetIdentifier]['ROOT']['el']['settings.finishers.' . $finisherIdentifier . '.emailTemplateUid']['TCEforms']['config']['items'],
-                            $options);
+                        $allOptions = array_merge(
+                            $dataStructure['sheets'][$sheetIdentifier]['ROOT']['el']['settings.finishers.' . $finisherIdentifier . '.emailTemplateUid']['TCEforms']['config']['items'],
+                            $options
+                        );
                         $dataStructure['sheets'][$sheetIdentifier]['ROOT']['el']['settings.finishers.' . $finisherIdentifier . '.emailTemplateUid']['TCEforms']['config']['items'] = $allOptions;
                     }
                 }

@@ -9,9 +9,8 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 class Configuration implements SingletonInterface
 {
-    const DEFAULT_DOKTYPE = 125;
-    const DEFAULT_PAGE_TYPE = 101;
-
+    public const DEFAULT_DOKTYPE = 125;
+    public const DEFAULT_PAGE_TYPE = 101;
     private array $typoScript = [];
 
     public function __construct(protected readonly ConfigurationManagerInterface $configurationManager)

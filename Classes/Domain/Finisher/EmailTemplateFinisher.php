@@ -25,8 +25,7 @@ class EmailTemplateFinisher extends EmailFinisher
     public function __construct(
         protected readonly EmailTemplateService $emailTemplateService,
         protected readonly Configuration $configuration
-    ) {
-    }
+    ) {}
 
     protected function executeInternal()
     {

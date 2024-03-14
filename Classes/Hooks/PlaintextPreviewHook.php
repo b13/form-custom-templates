@@ -14,9 +14,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class PlaintextPreviewHook
 {
-    public function __construct(private readonly Configuration $configuration)
-    {
-    }
+    public function __construct(private readonly Configuration $configuration) {}
 
     /**
      * @todo: remove when v11 support was dropped
