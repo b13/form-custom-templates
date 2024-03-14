@@ -8,7 +8,7 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-(function ($extensionKey = 'form_custom_templates', $table='pages') {
+(function ($extensionKey = 'form_custom_templates', $table = 'pages') {
     // Add page type
     $emailDoktype = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('form_custom_templates', 'doktype');
 
@@ -55,7 +55,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
                 'visibilityEmailTemplate' => [
                     'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
                     'showitem' => 'hidden',
-                ]
+                ],
             ],
             'types' => [
                 $emailDoktype => [

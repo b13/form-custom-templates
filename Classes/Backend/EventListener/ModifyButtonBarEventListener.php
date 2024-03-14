@@ -18,9 +18,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class ModifyButtonBarEventListener
 {
-    public function __construct(private readonly PageRepository $pageRepository, private readonly Configuration $configuration)
-    {
-    }
+    public function __construct(private readonly PageRepository $pageRepository, private readonly Configuration $configuration) {}
 
     public function __invoke(ModifyButtonBarEvent $event): void
     {

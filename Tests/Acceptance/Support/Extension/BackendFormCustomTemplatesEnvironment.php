@@ -25,42 +25,22 @@ class BackendFormCustomTemplatesEnvironment extends BackendEnvironment
             'beuser',
             'extbase',
             'fluid',
-            'filelist',
-            'extensionmanager',
-            'setup',
             'backend',
-            'belog',
-            'install',
-            'impexp',
             'frontend',
-            'recordlist',
-            'redirects',
-            'reports',
-            'sys_note',
-            'scheduler',
-            'tstemplate',
-            'lowlevel',
-            'dashboard',
-            'workspaces',
-            'info',
-            'fluid_styled_content',
-            'indexed_search',
-            'adminpanel',
+            'install',
             'form',
-            'felogin',
-            'seo',
-            'recycler',
         ],
         'testExtensionsToLoad' => [
             'typo3conf/ext/form_custom_templates',
         ],
+        // @todo: Migrate to csvDatabaseFixtures
         'xmlDatabaseFixtures' => [
-            'PACKAGE:typo3/testing-framework/Resources/Core/Acceptance/Fixtures/be_users.xml',
-            'PACKAGE:../Web/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/be_sessions.xml',
-            'PACKAGE:typo3/testing-framework/Resources/Core/Acceptance/Fixtures/be_groups.xml',
-            'PACKAGE:../Web/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/pages.xml',
-            'PACKAGE:../Web/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/sys_template.xml',
-            'PACKAGE:../Web/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/tt_content.xml',
+            'PACKAGE:../Web/typo3temp/var/tests/acceptance/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/be_users.xml',
+            'PACKAGE:../Web/typo3temp/var/tests/acceptance/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/be_sessions.xml',
+            'PACKAGE:../Web/typo3temp/var/tests/acceptance/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/be_groups.xml',
+            'PACKAGE:../Web/typo3temp/var/tests/acceptance/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/pages.xml',
+            'PACKAGE:../Web/typo3temp/var/tests/acceptance/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/sys_template.xml',
+            'PACKAGE:../Web/typo3temp/var/tests/acceptance/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/tt_content.xml',
         ],
         'configurationToUseInTestInstance' => [
             'MAIL' => [
@@ -78,8 +58,9 @@ class BackendFormCustomTemplatesEnvironment extends BackendEnvironment
         $bootstrap = parent::bootstrapTypo3Environment($suiteEvent);
         $testbase = new Testbase();
         $testbase->createDirectory(ORIGINAL_ROOT . 'typo3temp/var/tests/acceptance/fileadmin/form_definitions');
+
         // Copy form fixture into place
-        copy(ORIGINAL_ROOT . 'typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/form_definitions/test-form.form.yaml', ORIGINAL_ROOT . 'typo3temp/var/tests/acceptance/fileadmin/form_definitions/test-form.form.yaml');
+        copy(ORIGINAL_ROOT . '../../Tests/Acceptance/Fixtures/form_definitions/test-form.form.yaml', ORIGINAL_ROOT . 'typo3temp/var/tests/acceptance/fileadmin/form_definitions/test-form.form.yaml');
 
         return $bootstrap;
     }

@@ -24,10 +24,10 @@ setUpDockerComposeDotEnv() {
         # Your local user
         echo "HOST_USER=${USER}"
         echo "TEST_FILE=${TEST_FILE}"
+        echo "TYPO3_VERSION=${TYPO3_VERSION}"
         echo "PHP_XDEBUG_ON=${PHP_XDEBUG_ON}"
         echo "PHP_XDEBUG_PORT=${PHP_XDEBUG_PORT}"
         echo "DOCKER_PHP_IMAGE=${DOCKER_PHP_IMAGE}"
-        echo "TYPO3=${TYPO3}"
         echo "PHP_VERSION=${PHP_VERSION}"
         echo "EXTRA_TEST_OPTIONS=${EXTRA_TEST_OPTIONS}"
         echo "SCRIPT_VERBOSE=${SCRIPT_VERBOSE}"
@@ -140,12 +140,12 @@ fi
 TEST_SUITE="unit"
 DBMS="mariadb"
 PHP_VERSION="7.4"
+TYPO3_VERSION="11"
 PHP_XDEBUG_ON=0
 PHP_XDEBUG_PORT=9003
 EXTRA_TEST_OPTIONS=""
 SCRIPT_VERBOSE=0
 CGLCHECK_DRY_RUN=""
-TYPO3="10"
 
 # Option parsing
 # Reset in case getopts has been used previously in the shell
@@ -168,7 +168,10 @@ while getopts ":s:d:p:e:t:xy:nhuv" OPT; do
             fi
             ;;
         t)
-            TYPO3=${OPTARG}
+            TYPO3_VERSION=${OPTARG}
+            if ! [[ ${TYPO3_VERSION} =~ ^(11|12)$ ]]; then
+                INVALID_OPTIONS+=("p ${OPTARG}")
+            fi
             ;;
         e)
             EXTRA_TEST_OPTIONS=${OPTARG}

@@ -12,6 +12,12 @@ services:
       - name: event.listener
         identifier: 'tx_form_custom_templates/modifyButtonBarEventListener'
 
+  B13\FormCustomTemplates\Backend\EventListener\FlexFormParsingModifyEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'tx_form_custom_templates/modify-data-structure'
+        method: 'modifyDataStructure'
+
   B13\FormCustomTemplates\Hooks\PlaintextPreviewHook:
     public: true
 

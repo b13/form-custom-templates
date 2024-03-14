@@ -22,10 +22,10 @@ use TYPO3\CMS\Form\ViewHelpers\RenderRenderableViewHelper;
 
 class EmailTemplateFinisher extends EmailFinisher
 {
-    public function __construct(protected readonly EmailTemplateService $emailTemplateService, protected readonly Configuration $configuration)
-    {
-        parent::__construct();
-    }
+    public function __construct(
+        protected readonly EmailTemplateService $emailTemplateService,
+        protected readonly Configuration $configuration
+    ) {}
 
     protected function executeInternal()
     {
@@ -117,7 +117,7 @@ class EmailTemplateFinisher extends EmailFinisher
             $parts[] = [
                 'format' => 'Html',
                 'contentType' => 'text/html',
-                'content' =>  $this->emailTemplateService->create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'html')->render(), 0),
+                'content' => $this->emailTemplateService->create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'html')->render(), 0),
             ];
         }
 
