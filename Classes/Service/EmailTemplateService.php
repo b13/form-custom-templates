@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\Uri;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
@@ -87,8 +88,14 @@ class EmailTemplateService
 
     public function getOptions(): array
     {
-        $options = array_reduce($this->getEmailTemplatePages(), static function ($options, $item) {
-            $options[] = [$item['title'], $item['uid']];
+        $typo3Version = (new Typo3Version())->getMajorVersion();
+        $options = array_reduce($this->getEmailTemplatePages(), static function ($options, $item) use ($typo3Version) {
+            if($typo3Version > 11) {
+                $options[] = ['label' => $item['title'], 'value' => $item['uid']];
+            } else {
+                $options[] = [$item['title'], $item['uid']];
+            }
+
             return $options;
         }, []);
 
