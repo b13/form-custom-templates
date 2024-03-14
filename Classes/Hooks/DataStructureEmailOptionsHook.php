@@ -8,9 +8,7 @@ use B13\FormCustomTemplates\Service\EmailTemplateService;
 
 class DataStructureEmailOptionsHook
 {
-    public function __construct(protected readonly EmailTemplateService $emailTemplateService)
-    {
-    }
+    public function __construct(protected readonly EmailTemplateService $emailTemplateService) {}
 
     /**
      * Add emailTemplateUid options
