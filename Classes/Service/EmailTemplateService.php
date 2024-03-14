@@ -33,7 +33,7 @@ class EmailTemplateService
     public function create(int $uid, FormRuntime $formRuntime, string $resultTable = '', int $type = 101): string
     {
         $subResponse = $this->stashEnvironment(
-            fn (): ResponseInterface => $this->sendSubRequest($uid, $type, $GLOBALS['TYPO3_REQUEST'])
+            fn(): ResponseInterface => $this->sendSubRequest($uid, $type, $GLOBALS['TYPO3_REQUEST'])
         );
         $templateContent = $this->markerBasedTemplateService->substituteMarker(
             (string)$subResponse->getBody(),
@@ -90,7 +90,7 @@ class EmailTemplateService
     {
         $typo3Version = (new Typo3Version())->getMajorVersion();
         $options = array_reduce($this->getEmailTemplatePages(), static function ($options, $item) use ($typo3Version) {
-            if($typo3Version > 11) {
+            if ($typo3Version > 11) {
                 $options[] = ['label' => $item['title'], 'value' => $item['uid']];
             } else {
                 $options[] = [$item['title'], $item['uid']];
