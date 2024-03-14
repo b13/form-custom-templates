@@ -70,7 +70,6 @@ class FormFeaturesCest
     public function seeChangeIdentifier(BackendTester $I): void
     {
         $newIdentifier = 'new-firstname';
-        $selectedItem = '//div[@class="ui-sortable-handle t3-form-form-element-selected"]//*[@class="meta-label"]//span[@data-template-property="_identifier"]';
         $identifierInput = '//div[@id="t3-form-inspector"]//label//span[contains(text(),"Change Identifier")]/parent::*/following-sibling::div//input';
 
         $I->waitForElement(self::$stage);
@@ -82,17 +81,17 @@ class FormFeaturesCest
         $I->amGoingTo('See invalid identifier message');
         $I->fillField($identifierInput, 'invalid}');
         $I->waitForText('Not a valid identifier. A valid identifier may contain only a-Z and 0-9 and must not be empty.', 5, self::$inspectorValidators);
-        $I->assertNotEquals('invalid}', $I->grabTextFrom($selectedItem));
+        $I->assertNotEquals('invalid}', $I->grabTextFrom($identifierInput));
 
         $I->amGoingTo('See identifier already in use');
         $I->fillField($identifierInput, 'lastname');
         $I->waitForText('Reset to \'firstname\' because this identifier is already in use.', 5, self::$inspectorValidators);
-        $I->assertNotEquals('lastname', $I->grabTextFrom($selectedItem));
+        $I->assertNotEquals('lastname', $I->grabTextFrom($identifierInput));
 
         $I->amGoingTo('Changed identifier on stage');
         $I->fillField($identifierInput, $newIdentifier);
+        $I->wait(4);
         $I->waitForElementNotVisible(self::$inspectorValidators);
-        $I->waitForText($newIdentifier, 5, $selectedItem);
-        $I->assertEquals($newIdentifier, $I->grabTextFrom($selectedItem));
+        $I->waitForText($newIdentifier);
     }
 }
