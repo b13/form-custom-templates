@@ -18,7 +18,7 @@ plugin.tx_form {
     }
 }
 
-[traverse(request.getQueryParams(), 'type') == {$plugin.tx_form_custom_templates.typeNum}]
+[request && traverse(request.getQueryParams(), 'type') == {$plugin.tx_form_custom_templates.typeNum}]
     lib.contentElement {
         format = txt
         templateRootPaths {
