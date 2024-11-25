@@ -41,7 +41,7 @@
       emailTemplateUid:
         label: 'form_custom_templates.select.label'
         config:
-          type: text
+          type: select
           renderType: selectSingle
           minitems: 1
           maxitems: 1
