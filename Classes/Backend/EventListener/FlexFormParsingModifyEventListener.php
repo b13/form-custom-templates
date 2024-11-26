@@ -23,6 +23,10 @@ final class FlexFormParsingModifyEventListener
         $options = $this->emailTemplateService->getOptions();
         $dataStructure = $event->getDataStructure();
 
+        if ($options === []) {
+            return;
+        }
+
         // Search for finishers and add items
         foreach ($dataStructure['sheets'] as $sheetIdentifier => $sheet) {
             foreach ($addToFinishers as $finisherIdentifier) {
