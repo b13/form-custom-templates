@@ -5,7 +5,7 @@
 #
 
 # Function to write a .env file in Build/testing-docker
-# This is read by docker-compose and vars defined here are
+# This is read by "docker compose" and vars defined here are
 # used in Build/testing-docker/docker-compose.yml
 setUpDockerComposeDotEnv() {
     # Delete possibly existing local .env file if exists
@@ -14,7 +14,7 @@ setUpDockerComposeDotEnv() {
     {
         echo "COMPOSE_PROJECT_NAME=local"
         # To prevent access rights of files created by the testing, the docker image later
-        # runs with the same user that is currently executing the script. docker-compose can't
+        # runs with the same user that is currently executing the script. "docker compose" can't
         # use $UID directly itself since it is a shell variable and not an env variable, so
         # we have to set it explicitly here.
         echo "HOST_UID=`id -u`"
@@ -115,8 +115,8 @@ Examples:
 EOF
 
 # Test if docker-compose exists, else exit out with error
-if ! type "docker-compose" > /dev/null; then
-  echo "This script relies on docker and docker-compose. Please install" >&2
+if ! type "docker" > /dev/null; then
+  echo "This script relies on docker. Please install" >&2
   exit 1
 fi
 
@@ -233,9 +233,9 @@ fi
 case ${TEST_SUITE} in
     acceptance)
         setUpDockerComposeDotEnv
-        docker-compose run acceptance_backend_mariadb10
+        docker compose run acceptance_backend_mariadb10
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     cgl)
         # Active dry-run for cgl needs not "-n" but specific options
@@ -243,36 +243,36 @@ case ${TEST_SUITE} in
             CGLCHECK_DRY_RUN="--dry-run --diff"
         fi
         setUpDockerComposeDotEnv
-        docker-compose run cgl
+        docker compose run cgl
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     composerUpdate)
         setUpDockerComposeDotEnv
-        docker-compose run composer_update
+        docker compose run composer_update
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     composerValidate)
         setUpDockerComposeDotEnv
-        docker-compose run composer_validate
+        docker compose run composer_validate
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     functional)
         setUpDockerComposeDotEnv
         case ${DBMS} in
             mariadb)
-                docker-compose run functional_mariadb10
+                docker compose run functional_mariadb10
                 SUITE_EXIT_CODE=$?
                 ;;
             postgres)
-                docker-compose run functional_postgres10
+                docker compose run functional_postgres10
                 SUITE_EXIT_CODE=$?
                 ;;
             sqlite)
                 mkdir -p ${CORE_ROOT}/.Build/Web/typo3temp/var/tests/functional-sqlite-dbs/
-                docker-compose run functional_sqlite
+                docker compose run functional_sqlite
                 SUITE_EXIT_CODE=$?
                 ;;
             *)
@@ -281,25 +281,25 @@ case ${TEST_SUITE} in
                 echo "${HELP}" >&2
                 exit 1
         esac
-        docker-compose down
+        docker compose down
         ;;
     lint)
         setUpDockerComposeDotEnv
-        docker-compose run lint
+        docker compose run lint
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     phpstan)
         setUpDockerComposeDotEnv
-        docker-compose run phpstan
+        docker compose run phpstan
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     unit)
         setUpDockerComposeDotEnv
-        docker-compose run unit
+        docker compose run unit
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     update)
         # pull typo3/core-testing-*:latest versions of those ones that exist locally
