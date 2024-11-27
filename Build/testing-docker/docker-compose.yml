@@ -46,8 +46,6 @@ services:
           php -S web:8000 -t ${CORE_ROOT}/.Build/Web
         fi
       "
-    ports:
-      - "8000:8000"
 
   acceptance_backend_mariadb10:
     image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest

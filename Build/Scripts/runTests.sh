@@ -235,7 +235,7 @@ case ${TEST_SUITE} in
         setUpDockerComposeDotEnv
         docker compose run acceptance_backend_mariadb10
         SUITE_EXIT_CODE=$?
-        #docker compose down
+        docker compose down
         ;;
     cgl)
         # Active dry-run for cgl needs not "-n" but specific options
