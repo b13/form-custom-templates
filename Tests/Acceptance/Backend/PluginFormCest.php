@@ -45,9 +45,10 @@ class PluginFormCest
         $I->scrollTo('//label[contains(text(),"Select email template")]');
 
         $I->amGoingTo('See a list of expected email template pages in select of form plugin override');
-        $actual = $I->grabMultiple('//label[contains(text(),"Select email template")]/following-sibling::div//select//option');
-        $I->assertStringContainsString('Contact template', $actual[0]);
-        $I->assertStringContainsString('Shopping cart template', $actual[1]);
+        $actual = $I->grabTextFrom('//label[contains(text(),"Select email template")]/following-sibling::div//select');
+
+        $I->assertStringContainsString('Contact template', $actual);
+        $I->assertStringContainsString('Shopping cart template', $actual);
     }
 
     /**

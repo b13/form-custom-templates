@@ -29,6 +29,7 @@ class BackendFormCustomTemplatesEnvironment extends BackendEnvironment
             'frontend',
             'install',
             'form',
+            'recordlist',
         ],
         'testExtensionsToLoad' => [
             'typo3conf/ext/form_custom_templates',
