@@ -31,6 +31,7 @@ class FormFeaturesCest
         // Suppress alert popup
         $I->executeJS('window.onbeforeunload = undefined;');
         $I->useExistingSession('admin');
+        $I->wait(20);
         $I->switchToMainFrame();
 
         $I->click('Forms', self::$mainMenu);
@@ -45,7 +46,7 @@ class FormFeaturesCest
         $I->click('#t3-form-navigation-component-tree-root-container');
         $I->waitForElementVisible($finisher);
         $I->click($finisher . ' a[data-bs-toggle="collapse"]');
-        $I->wait(2);
+        $I->wait(10);
 
         $actual = $I->grabMultiple('//label/*[contains(text(),"Select email template")]/parent::*/following-sibling::div//select//option');
         $expected = ['Default', 'Contact template', 'Shopping cart template'];

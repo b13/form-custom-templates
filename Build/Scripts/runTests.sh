@@ -44,7 +44,7 @@ Successfully tested with docker version 18.06.1-ce and docker-compose 1.21.2.
 
 Usage: $0 [options] [file]
 
-No arguments: Run all unit tests with PHP 7.4
+No arguments: Run all unit tests with PHP 8.0
 
 Options:
     -s <...>
@@ -58,7 +58,7 @@ Options:
             - phpstan: phpstan analyze
             - unit (default): PHP unit tests
 
-    -t <10|11>
+    -t <11|12>
         Only with -s composerUpdate|acceptance|functional
         TYPO3 core major version the extension is embedded in for testing.
 
@@ -69,9 +69,9 @@ Options:
             - postgres: use postgres
             - sqlite: use sqlite
 
-    -p <7.2|7.3|7.4|8.0|8.1|8.2>
+    -p <8.0|8.1|8.|8.3>
         Specifies the PHP minor version to be used
-            - 7.4 (default): use PHP 7.4
+            - 8.0 (default): use PHP 8.0
 
     -e "<phpunit or codeception options>"
         Only with -s acceptance|functional|unit
@@ -107,11 +107,11 @@ Options:
         Show this help.
 
 Examples:
-    # Run unit tests using PHP 7.4
+    # Run unit tests using PHP 8.0
     ./Build/Scripts/runTests.sh
 
-    # Run unit tests using PHP 7.3
-    ./Build/Scripts/runTests.sh -p 7.3
+    # Run unit tests using PHP 8.1
+    ./Build/Scripts/runTests.sh -p 8.1
 EOF
 
 # Test if docker-compose exists, else exit out with error
@@ -139,7 +139,7 @@ fi
 # Option defaults
 TEST_SUITE="unit"
 DBMS="mariadb"
-PHP_VERSION="7.4"
+PHP_VERSION="8.0"
 TYPO3_VERSION="11"
 PHP_XDEBUG_ON=0
 PHP_XDEBUG_PORT=9003
@@ -163,7 +163,7 @@ while getopts ":s:d:p:e:t:xy:nhuv" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(7.2|7.3|7.4|8.0|8.1|8.2)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(8.0|8.1|8.2|8.3)$ ]]; then
                 INVALID_OPTIONS+=("${OPTARG}")
             fi
             ;;
@@ -215,7 +215,7 @@ if [ ${#INVALID_OPTIONS[@]} -ne 0 ]; then
     exit 1
 fi
 
-# Move "7.4" to "php74", the latter is the docker container name
+# Move "8.0" to "php80", the latter is the docker container name
 DOCKER_PHP_IMAGE=$(echo "php${PHP_VERSION}" | sed -e 's/\.//')
 
 # Set $1 to first mass argument, this is the optional test file or test directory to execute
@@ -235,7 +235,7 @@ case ${TEST_SUITE} in
         setUpDockerComposeDotEnv
         docker compose run acceptance_backend_mariadb10
         SUITE_EXIT_CODE=$?
-        docker compose down
+        #docker compose down
         ;;
     cgl)
         # Active dry-run for cgl needs not "-n" but specific options
