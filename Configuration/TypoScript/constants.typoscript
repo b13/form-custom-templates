@@ -1,0 +1,5 @@
+plugin.tx_form_custom_templates.view {
+    templateRootPath = EXT:form_custom_templates/Resources/Private/Frontend/Templates/
+    partialRootPath = EXT:form_custom_templates/Resources/Private/Frontend/Partials/
+    layoutRootPath = EXT:form_custom_templates/Resources/Private/Frontend/Layouts/
+}

@@ -23,12 +23,15 @@ plugin.tx_form {
         format = txt
         templateRootPaths {
             100 = EXT:form_custom_templates/Resources/Private/Frontend/Templates/
+            110 = {$plugin.tx_form_custom_templates.view.templateRootPath}
         }
         partialRootPaths {
             100 = EXT:form_custom_templates/Resources/Private/Frontend/Partials/
+            110 = {$plugin.tx_form_custom_templates.view.partialRootPath}
         }
         layoutRootPaths {
             100 = EXT:form_custom_templates/Resources/Private/Frontend/Layouts/
+            110 = {$plugin.tx_form_custom_templates.view.layoutRootPath}
         }
     }
 [END]
@@ -56,13 +59,16 @@ plugin.tx_form {
             }
             templateRootPaths {
                 10 = EXT:form_custom_templates/Resources/Private/Frontend/Templates/
+                20 = {$plugin.tx_form_custom_templates.view.templateRootPath}
             }
             partialRootPaths {
                 10 = EXT:form_custom_templates/Resources/Private/Frontend/Partials/
+                20 = {$plugin.tx_form_custom_templates.view.partialRootPath}
             }
             layoutRootPaths {
                 10 = EXT:core/Resources/Private/Layouts/
                 20 = EXT:form_custom_templates/Resources/Private/Frontend/Layouts/
+                30 = {$plugin.tx_form_custom_templates.view.layoutRootPath}
             }
         }
     }
