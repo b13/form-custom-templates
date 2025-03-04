@@ -8,10 +8,8 @@ use B13\FormCustomTemplates\Configuration;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
-use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
@@ -69,18 +67,14 @@ class EmailTemplateService
 
     protected function sendSubRequest(int $pageId, int $type, ServerRequestInterface $originalRequest): ResponseInterface
     {
+        $site = $this->siteFinder->getSiteByPageId($pageId);
         $request = $originalRequest->withQueryParams(['type' => $type])
             ->withUri(
-                new Uri($this->getUri($pageId))
+                $site->getRouter()->generateUri($pageId)
             )
             ->withMethod('GET');
 
-        $site = $request->getAttribute('site', null);
-        if (!$site instanceof Site) {
-            $site = $this->siteFinder->getSiteByPageId($pageId);
-            $request = $request->withAttribute('site', $site);
-        }
-
+        $request = $request->withAttribute('site', $site);
         $request = $request->withAttribute('originalRequest', $originalRequest);
 
         return $this->application->handle($request);
@@ -113,11 +107,5 @@ class EmailTemplateService
             );
 
         return $queryBuilder->execute()->fetchAllAssociative();
-    }
-
-    protected function getUri(int $pageId): string
-    {
-        $site = $this->siteFinder->getSiteByPageId($pageId);
-        return (string)$site->getRouter()->generateUri($pageId);
     }
 }
