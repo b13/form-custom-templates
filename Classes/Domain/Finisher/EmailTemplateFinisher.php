@@ -11,12 +11,14 @@ use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Mail\MailerInterface;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Form\Domain\Finishers\EmailFinisher;
 use TYPO3\CMS\Form\Domain\Finishers\Exception\FinisherException;
 use TYPO3\CMS\Form\Domain\Model\FormElements\FileUpload;
 use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
+use TYPO3\CMS\Form\Mvc\Persistence\FormPersistenceManager;
 use TYPO3\CMS\Form\Service\TranslationService;
 use TYPO3\CMS\Form\ViewHelpers\RenderRenderableViewHelper;
 
@@ -24,21 +26,45 @@ class EmailTemplateFinisher extends EmailFinisher
 {
     public function __construct(
         protected readonly EmailTemplateService $emailTemplateService,
-        protected readonly Configuration $configuration
+        protected readonly Configuration $configuration,
+        protected readonly FormPersistenceManager $formPersistenceManager
     ) {}
 
     protected function executeInternal()
     {
         $emailTemplateUid = $this->options['emailTemplateUid'] ?? null;
+
         // For v10 compatibility reasons we check for [Empty] value
         if (empty($emailTemplateUid) || $emailTemplateUid === '[Empty]') {
             parent::executeInternal();
             return null;
         }
 
+        // In case the override is explicitly set to "default" we need to
+        // check the default form definition for the email template uid
+        if ($emailTemplateUid === 'default') {
+            $defaultFormDefinition = $this->formPersistenceManager->load(
+                $this->finisherContext->getFormRuntime()->getFormDefinition()->getPersistenceIdentifier()
+            );
+            foreach ($defaultFormDefinition['finishers'] ?? [] as $finisher) {
+                if ($finisher['identifier'] !== 'EmailToReceiver') {
+                    continue;
+                }
+                if (isset($finisher['options']['emailTemplateUid'])) {
+                    $emailTemplateUid = $finisher['options']['emailTemplateUid'];
+                    break;
+                }
+            }
+        }
+
+        if (!MathUtility::canBeInterpretedAsInteger($emailTemplateUid)) {
+            parent::executeInternal();
+            return null;
+        }
+
         // Fallback to default in case doktype changed and the selected page
         // is no longer an email template
-        $page = GeneralUtility::makeInstance(PageRepository::class)->getPage($emailTemplateUid);
+        $page = GeneralUtility::makeInstance(PageRepository::class)->getPage((int)$emailTemplateUid);
         if ((int)$page['doktype'] !== $this->configuration->getDokType()) {
             parent::executeInternal();
             return null;

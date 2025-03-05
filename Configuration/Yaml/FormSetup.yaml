@@ -46,8 +46,6 @@
           minitems: 1
           maxitems: 1
           size: 1
-          # Yes! We have to define the available list of selectable
-          # items again, because it is a different format! Partey!
           items:
             0:
               label: 'form_custom_templates.select.default'

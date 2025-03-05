@@ -11,6 +11,10 @@
                 <source>Default</source>
                 <target>Standard</target>
             </trans-unit>
+			<trans-unit id="form_custom_templates.select.noTemplate" resname="form_custom_templates.select.noTemplate">
+				<source>No template</source>
+				<target>Kein Template</target>
+			</trans-unit>
             <trans-unit id="form_custom_templates.pageType" resname="form_custom_templates.pageType">
                 <source>Email template</source>
                 <target>E-Mail Template</target>
