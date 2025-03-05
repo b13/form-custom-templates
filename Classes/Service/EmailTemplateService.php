@@ -12,6 +12,7 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
 use TYPO3\CMS\Frontend\Http\Application;
 
@@ -83,29 +84,42 @@ class EmailTemplateService
     public function getOptions(): array
     {
         $typo3Version = (new Typo3Version())->getMajorVersion();
-        $options = array_reduce($this->getEmailTemplatePages(), static function ($options, $item) use ($typo3Version) {
+        $options = array_merge(
+            [
+                [
+                    'title' => LocalizationUtility::translate(
+                        'LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:form_custom_templates.select.default'
+                    ),
+                    'uid' => 'default'
+                ],
+            ],
+            $this->getEmailTemplatePages()
+        );
+        array_walk($options, static function (&$item) use ($typo3Version) {
             if ($typo3Version > 11) {
-                $options[] = ['label' => $item['title'], 'value' => $item['uid']];
+                $item = ['label' => $item['title'], 'value' => $item['uid']];
             } else {
-                $options[] = [$item['title'], $item['uid']];
+                $item = [$item['title'], $item['uid']];
             }
-
-            return $options;
         }, []);
-
         return $options;
     }
 
     public function getEmailTemplatePages(): array
     {
-        $doktype = $this->configuration->getDokType();
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
         $queryBuilder->select('*')
             ->from('pages')
             ->where(
-                $queryBuilder->expr()->eq('doktype', $queryBuilder->createNamedParameter($doktype, \PDO::PARAM_INT))
+                $queryBuilder->expr()->eq(
+                    'doktype',
+                    $queryBuilder->createNamedParameter(
+                        $this->configuration->getDokType(),
+                        \PDO::PARAM_INT
+                    )
+                )
             );
 
-        return $queryBuilder->execute()->fetchAllAssociative();
+        return $queryBuilder->executeQuery()->fetchAllAssociative();
     }
 }
