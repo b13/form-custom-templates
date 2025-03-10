@@ -9,32 +9,39 @@ on:
 jobs:
   tests:
     name: All tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        php: [ '8.1', '8.2']
-        TYPO3: [ '11', '12']
+        php: [ '8.2', '8.3']
+        TYPO3: [ '12', '13']
         include:
           - TYPO3: 12
-            PHP: 8.3
+            PHP: 8.1
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install testing system
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s composerUpdate
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s composerInstall
 
       - name: Composer validate
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerValidate
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s composerValidate
 
       - name: Lint PHP
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s lint
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s lint
 
       - name: CGL
-        run: Build/Scripts/runTests.sh -n -p ${{ matrix.php }} -s cgl
+        run: Build/Scripts/runTests.sh -n -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s cgl
 
       - name: phpstan
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s phpstan
 
       - name: Acceptance Tests
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s acceptance
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s acceptance -- --fail-fast
+
+      - name: Archive acceptance tests results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: acceptance-test-reports-${{ matrix.php }}-${{ matrix.TYPO3 }}
+          path: .Build/Web/typo3temp/var/tests/_output

@@ -1,0 +1,21 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Extbase\\\\Configuration\\\\ConfigurationManagerInterface\\:\\:setRequest\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/Configuration.php
+
+		-
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Extbase\\\\Configuration\\\\ConfigurationManagerInterface\\:\\:setRequest\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/Domain/Finisher/EmailTemplateFinisher.php
+
+		-
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Form\\\\Mvc\\\\Configuration\\\\ConfigurationManagerInterface\\:\\:getYamlConfiguration\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/Domain/Finisher/EmailTemplateFinisher.php
+
+		-
+			message: "#^Method TYPO3\\\\CMS\\\\Form\\\\Mvc\\\\Persistence\\\\FormPersistenceManager\\:\\:load\\(\\) invoked with 3 parameters, 1 required\\.$#"
+			count: 1
+			path: ../Classes/Domain/Finisher/EmailTemplateFinisher.php

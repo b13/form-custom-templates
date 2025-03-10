@@ -1,0 +1,6 @@
+"pages"
+,"uid","pid","is_siteroot","title","perms_everybody","doktype"
+,1,0,1,"Root",15,1
+,2,1,0,"Contact template",15,125
+,3,1,0,"Shopping cart template",15,125
+,4,1,0,"Not a email template",15,128

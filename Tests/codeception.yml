@@ -4,7 +4,7 @@ paths:
   data: .
   log: ../.Build/Web/typo3temp/var/tests/AcceptanceReports
   support: Acceptance/Support
-  output: ../.Build/Web/typo3temp/var/tests/acceptance
+  output: ../.Build/Web/typo3temp/var/tests/_output
 settings:
   colors: true
   memory_limit: 1024M
@@ -12,3 +12,47 @@ extensions:
   enabled:
     - Codeception\Extension\RunFailed
     - Codeception\Extension\Recorder
+modules:
+  enabled:
+    #    - Filesystem
+    - Asserts
+    - WebDriver
+  config:
+    WebDriver:
+      url: '%typo3TestingAcceptanceBaseUrl%'
+      browser: chrome
+      port: 9515
+      path: /
+      # @todo: adapt tests to not break with a defined window size (as in v12/v13)
+      window_size: 1600x800
+
+env:
+  ci:
+    modules:
+      config:
+        WebDriver:
+          host: chrome
+          port: 4444
+          path: /wd/hub
+          wait: 2
+          restart: true
+  headless:
+  # @todo: frontend tests are broken in headless mode, fix and re-enable
+  #modules:
+  #  config:
+  #    WebDriver:
+  #      capabilities:
+  #        goog:chromeOptions:
+  #          args: ["headless", "no-sandbox", "disable-gpu"]
+  local:
+    modules:
+      config:
+        WebDriver:
+          path: /wd/hub
+          url: 'http://0.0.0.0:8080/'
+          capabilities:
+            goog:chromeOptions:
+              args: ["no-sandbox", "disable-gpu"]
+params:
+  - parameters.yml
+  - env

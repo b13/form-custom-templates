@@ -29,19 +29,15 @@ class BackendFormCustomTemplatesEnvironment extends BackendEnvironment
             'frontend',
             'install',
             'form',
-            'recordlist',
         ],
         'testExtensionsToLoad' => [
-            'typo3conf/ext/form_custom_templates',
+            'b13/form-custom-templates',
         ],
-        // @todo: Migrate to csvDatabaseFixtures
-        'xmlDatabaseFixtures' => [
-            'PACKAGE:../Web/typo3temp/var/tests/acceptance/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/be_users.xml',
-            'PACKAGE:../Web/typo3temp/var/tests/acceptance/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/be_sessions.xml',
-            'PACKAGE:../Web/typo3temp/var/tests/acceptance/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/be_groups.xml',
-            'PACKAGE:../Web/typo3temp/var/tests/acceptance/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/pages.xml',
-            'PACKAGE:../Web/typo3temp/var/tests/acceptance/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/sys_template.xml',
-            'PACKAGE:../Web/typo3temp/var/tests/acceptance/typo3conf/ext/form_custom_templates/Tests/Acceptance/Fixtures/tt_content.xml',
+
+        'csvDatabaseFixtures' => [
+            __DIR__ . '/../../Fixtures/be_users.csv',
+            __DIR__ . '/../../Fixtures/pages.csv',
+            __DIR__ . '/../../Fixtures/tt_content.csv',
         ],
         'configurationToUseInTestInstance' => [
             'MAIL' => [
@@ -56,13 +52,11 @@ class BackendFormCustomTemplatesEnvironment extends BackendEnvironment
 
     public function bootstrapTypo3Environment(SuiteEvent $suiteEvent)
     {
-        $bootstrap = parent::bootstrapTypo3Environment($suiteEvent);
-        $testbase = new Testbase();
-        $testbase->createDirectory(ORIGINAL_ROOT . 'typo3temp/var/tests/acceptance/fileadmin/form_definitions');
-
+        parent::bootstrapTypo3Environment($suiteEvent);
+        // for local
+        // mkdir -p .Build/Web/fileadmin/form_definitions && cp Tests/Acceptance/Fixtures/form_definitions/test-form.form.yaml .Build/Web/fileadmin/form_definitions/
+        mkdir(ORIGINAL_ROOT . 'typo3temp/var/tests/acceptance/fileadmin/form_definitions');
         // Copy form fixture into place
         copy(ORIGINAL_ROOT . '../../Tests/Acceptance/Fixtures/form_definitions/test-form.form.yaml', ORIGINAL_ROOT . 'typo3temp/var/tests/acceptance/fileadmin/form_definitions/test-form.form.yaml');
-
-        return $bootstrap;
     }
 }

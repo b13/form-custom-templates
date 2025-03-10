@@ -1,8 +1,9 @@
 <?php
 
-use B13\FormCustomTemplates\Hooks\DataStructureEmailOptionsHook;
+declare(strict_types=1);
+
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -12,10 +13,6 @@ call_user_func(function () {
     $doktype = (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('form_custom_templates', 'doktype');
     $typeNum = (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('form_custom_templates', 'typeNum');
 
-    // Allow backend users to drag and drop the new page doktype:
-    ExtensionManagementUtility::addUserTSConfig(
-        'options.pageTree.doktypesToShowInNewPageDragArea := addToList(' . $doktype . ')'
-    );
 
     ExtensionManagementUtility::addTypoScriptConstants('
         plugin.tx_form_custom_templates {
@@ -24,8 +21,8 @@ call_user_func(function () {
         }
     ');
 
-    ExtensionManagementUtility::addPageTSConfig(
-        '
+    $userTs = 'options.pageTree.doktypesToShowInNewPageDragArea := addToList(' . $doktype . ')';
+    $pageTs = '
         [traverse(page, "doktype") == ' . $doktype . ']
             TCEFORM.tt_content {
                 CType {
@@ -33,12 +30,30 @@ call_user_func(function () {
                 }
             }
         [GLOBAL]
+    ';
 
-        @import "EXT:form_custom_templates/Configuration/PageTsConfig/main.tsconfig"
+    if ((GeneralUtility::makeInstance(Typo3Version::class))->getMajorVersion() < 13) {
+        // Allow backend users to drag and drop the new page doktype:
+        ExtensionManagementUtility::addUserTSConfig($userTs);
+        ExtensionManagementUtility::addPageTSConfig($pageTs);
+        ExtensionManagementUtility::addPageTSConfig(
+            '@import "EXT:form_custom_templates/Configuration/PageTsConfig/main.tsconfig"'
+        );
+    } else {
+        $GLOBALS['TYPO3_CONF_VARS']['BE']['defaultUserTSconfig'] .= chr(10) . $userTs;
+        $GLOBALS['TYPO3_CONF_VARS']['BE']['defaultPageTSconfig'] .= chr(10) . $pageTs;
+    }
+
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptSetup(
+        '
+            module.tx_form {
+                settings {
+                    yamlConfigurations {
+                        500 = EXT:form_custom_templates/Configuration/Yaml/FormSetup.yaml
+                    }
+                }
+            }
     '
     );
 
-    // Add selectable templates to plugin settings override
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][FlexFormTools::class]['flexParsing'][DataStructureEmailOptionsHook::class] = DataStructureEmailOptionsHook::class;
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook'][] = 'B13\FormCustomTemplates\Hooks\PlaintextPreviewHook->previewButton';
 });

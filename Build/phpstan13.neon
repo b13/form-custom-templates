@@ -1,0 +1,10 @@
+parameters:
+  level: 6
+
+  paths:
+    - %currentWorkingDirectory%/Classes
+  ignoreErrors:
+    -
+        identifier: missingType.iterableValue
+includes:
+  - phpstan-baseline13.neon

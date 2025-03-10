@@ -8,16 +8,19 @@ use B13\FormCustomTemplates\Configuration;
 use B13\FormCustomTemplates\Service\EmailTemplateService;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Mail\MailerInterface;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface as ExtbaseConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Form\Domain\Finishers\EmailFinisher;
 use TYPO3\CMS\Form\Domain\Finishers\Exception\FinisherException;
 use TYPO3\CMS\Form\Domain\Model\FormElements\FileUpload;
 use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
+use TYPO3\CMS\Form\Mvc\Configuration\ConfigurationManagerInterface as ExtFormConfigurationManagerInterface;
 use TYPO3\CMS\Form\Mvc\Persistence\FormPersistenceManager;
 use TYPO3\CMS\Form\Service\TranslationService;
 use TYPO3\CMS\Form\ViewHelpers\RenderRenderableViewHelper;
@@ -27,7 +30,9 @@ class EmailTemplateFinisher extends EmailFinisher
     public function __construct(
         protected readonly EmailTemplateService $emailTemplateService,
         protected readonly Configuration $configuration,
-        protected readonly FormPersistenceManager $formPersistenceManager
+        protected readonly FormPersistenceManager $formPersistenceManager,
+        protected ExtFormConfigurationManagerInterface $extFormConfigurationManager,
+        protected ExtbaseConfigurationManagerInterface $extbaseConfigurationManager
     ) {}
 
     protected function executeInternal()
@@ -43,9 +48,20 @@ class EmailTemplateFinisher extends EmailFinisher
         // In case the override is explicitly set to "default" we need to
         // check the default form definition for the email template uid
         if ($emailTemplateUid === 'default') {
-            $defaultFormDefinition = $this->formPersistenceManager->load(
-                $this->finisherContext->getFormRuntime()->getFormDefinition()->getPersistenceIdentifier()
-            );
+            if ((GeneralUtility::makeInstance(Typo3Version::class))->getMajorVersion() < 13) {
+                $defaultFormDefinition = $this->formPersistenceManager->load(
+                    $this->finisherContext->getFormRuntime()->getIdentifier(),
+                );
+            } else {
+                $this->extbaseConfigurationManager->setRequest($this->finisherContext->getRequest());
+                $typoScriptSettings = $this->extbaseConfigurationManager->getConfiguration(ExtbaseConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'form');
+                $formSettings = $this->extFormConfigurationManager->getYamlConfiguration($typoScriptSettings, true);
+                $defaultFormDefinition = $this->formPersistenceManager->load(
+                    $this->finisherContext->getFormRuntime()->getIdentifier(),
+                    $formSettings,
+                    []
+                );
+            }
             foreach ($defaultFormDefinition['finishers'] ?? [] as $finisher) {
                 if ($finisher['identifier'] !== 'EmailToReceiver') {
                     continue;

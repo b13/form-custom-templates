@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace B13\FormCustomTemplates\Service;
 
 use B13\FormCustomTemplates\Configuration;
+use Doctrine\DBAL\ParameterType;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -83,7 +83,6 @@ class EmailTemplateService
 
     public function getOptions(): array
     {
-        $typo3Version = (new Typo3Version())->getMajorVersion();
         $options = array_merge(
             [
                 [
@@ -95,12 +94,8 @@ class EmailTemplateService
             ],
             $this->getEmailTemplatePages()
         );
-        array_walk($options, static function (&$item) use ($typo3Version) {
-            if ($typo3Version > 11) {
-                $item = ['label' => $item['title'], 'value' => $item['uid']];
-            } else {
-                $item = [$item['title'], $item['uid']];
-            }
+        array_walk($options, static function (&$item) {
+            $item = ['label' => $item['title'], 'value' => $item['uid']];
         }, []);
         return $options;
     }
@@ -115,7 +110,7 @@ class EmailTemplateService
                     'doktype',
                     $queryBuilder->createNamedParameter(
                         $this->configuration->getDokType(),
-                        \PDO::PARAM_INT
+                        ParameterType::INTEGER
                     )
                 )
             );
