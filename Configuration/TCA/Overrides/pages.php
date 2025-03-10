@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 defined('TYPO3') or die();
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -12,33 +14,18 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
     // Add page type
     $emailDoktype = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('form_custom_templates', 'doktype');
 
-    if ((GeneralUtility::makeInstance(Typo3Version::class))->getMajorVersion() < 12) {
-        ExtensionManagementUtility::addTcaSelectItem(
-            $table,
-            'doktype',
-            [
-                'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/Database:form_custom_templates.pageType',
-                $emailDoktype,
-                'apps-pagetree-page-email',
-                'special',
-            ],
-            '254',
-            'before'
-        );
-    } else {
-        ExtensionManagementUtility::addTcaSelectItem(
-            $table,
-            'doktype',
-            [
-                'label' => 'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/Database:form_custom_templates.pageType',
-                'value' => $emailDoktype,
-                'icon' => 'apps-pagetree-page-email',
-                'group' => 'special',
-            ],
-            '254',
-            'before'
-        );
-    }
+    ExtensionManagementUtility::addTcaSelectItem(
+        $table,
+        'doktype',
+        [
+            'label' => 'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/Database:form_custom_templates.pageType',
+            'value' => $emailDoktype,
+            'icon' => 'apps-pagetree-page-email',
+            'group' => 'special',
+        ],
+        '254',
+        'before'
+    );
 
     ArrayUtility::mergeRecursiveWithOverrule(
         $GLOBALS['TCA'][$table],

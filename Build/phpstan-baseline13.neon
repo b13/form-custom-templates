@@ -1,0 +1,6 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method TYPO3\\\\CMS\\\\Form\\\\Mvc\\\\Persistence\\\\FormPersistenceManager\\:\\:load\\(\\) invoked with 1 parameter, 3 required\\.$#"
+			count: 1
+			path: ../Classes/Domain/Finisher/EmailTemplateFinisher.php

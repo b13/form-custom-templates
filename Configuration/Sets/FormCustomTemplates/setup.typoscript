@@ -1,0 +1,99 @@
+@import './TypoScript/Content/formResultList.typoscript'
+
+plugin.tx_form {
+    settings {
+        yamlConfigurations {
+            500 = EXT:form_custom_templates/Configuration/Yaml/FormSetup.yaml
+        }
+    }
+}
+
+[request && traverse(request.getQueryParams(), 'type') == {$plugin.tx_form_custom_templates.typeNum}]
+    lib.contentElement {
+        format = txt
+        templateRootPaths {
+            100 = EXT:form_custom_templates/Resources/Private/Frontend/Templates/
+            110 = {$plugin.tx_form_custom_templates.view.templateRootPath}
+        }
+        partialRootPaths {
+            100 = EXT:form_custom_templates/Resources/Private/Frontend/Partials/
+            110 = {$plugin.tx_form_custom_templates.view.partialRootPath}
+        }
+        layoutRootPaths {
+            100 = EXT:form_custom_templates/Resources/Private/Frontend/Layouts/
+            110 = {$plugin.tx_form_custom_templates.view.layoutRootPath}
+        }
+    }
+[END]
+
+[traverse(page, "doktype") == {$plugin.tx_form_custom_templates.doktype}]
+    page >
+    page = PAGE
+    page {
+        typeNum = 0
+        config {
+            disableAllHeaderCode = 1
+            additionalHeaders {
+                125.header = X-Robots-Tag: noindex
+            }
+        }
+        10 = FLUIDTEMPLATE
+        10 {
+            templateName = Default
+            variables {
+                content < styles.content.get
+                content.select.where = colPos=0
+            }
+            dataProcessing {
+                10 = B13\FormCustomTemplates\DataProcessing\EmailVariablesProcessor
+            }
+            templateRootPaths {
+                10 = EXT:form_custom_templates/Resources/Private/Frontend/Templates/
+                20 = {$plugin.tx_form_custom_templates.view.templateRootPath}
+            }
+            partialRootPaths {
+                10 = EXT:form_custom_templates/Resources/Private/Frontend/Partials/
+                20 = {$plugin.tx_form_custom_templates.view.partialRootPath}
+            }
+            layoutRootPaths {
+                10 = EXT:core/Resources/Private/Layouts/
+                20 = EXT:form_custom_templates/Resources/Private/Frontend/Layouts/
+                30 = {$plugin.tx_form_custom_templates.view.layoutRootPath}
+            }
+        }
+    }
+
+    plaintext < page
+    plaintext.typeNum = {$plugin.tx_form_custom_templates.typeNum}
+    plaintext.config.additionalHeaders.10.header = Content-type:text/plain
+    plaintext.10.format = txt
+
+    lib.parseFunc_RTE.tags.a.typolink {
+        forceAbsoluteUrl = 1
+    }
+[END]
+
+plugin.tx_form_custom_templates {
+    doktype = {$plugin.tx_form_custom_templates.doktype}
+    typeNum = {$plugin.tx_form_custom_templates.typeNum}
+    resultList {
+        # Path with filename, without suffix
+        # Provide *.txt and *.html templates
+        templatePath = {$plugin.tx_form_custom_templates.view.resultListTemplate}
+    }
+}
+
+plugin.tx_seo {
+    config {
+        xmlSitemap {
+            sitemaps {
+                pages {
+                    config {
+                        # Exclude the email template page type from showing up in the sitemap
+                        excludedDoktypes := addToList({$plugin.tx_form_custom_templates.doktype})
+                    }
+                }
+            }
+        }
+    }
+}

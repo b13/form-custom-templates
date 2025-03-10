@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace B13\FormCustomTemplates;
 
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 class Configuration implements SingletonInterface
@@ -18,8 +21,20 @@ class Configuration implements SingletonInterface
         $this->typoScript = $this->getTypoScript();
     }
 
+    protected function getServerRequest(): ?ServerRequestInterface
+    {
+        return $GLOBALS['TYPO3_REQUEST'] ?? null;
+    }
+
     protected function getTypoScript(): array
     {
+        if ((GeneralUtility::makeInstance(Typo3Version::class))->getVersion() >12) {
+            $request = $this->getServerRequest();
+            if ($request === null) {
+                return [];
+            }
+            $this->configurationManager->setRequest($request);
+        }
         $typoScript = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         return $typoScript['plugin.']['tx_form_custom_templates.'] ?? [];
     }

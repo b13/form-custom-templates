@@ -67,10 +67,10 @@ TYPO3:
             formEditorPartials:
               Inspector-SingleSelectTemplateEditor: Inspector/SingleSelectTemplateEditor
               Inspector-IdentifierEditor: Inspector/TextEditor
-            dynamicRequireJsModules:
+            dynamicJavaScriptModules:
               additionalViewModelModules:
-                97: 'TYPO3/CMS/FormCustomTemplates/Backend/FormEditor/SelectTemplateViewModel'
-                997: 'TYPO3/CMS/FormCustomTemplates/Backend/FormEditor/IdentifierViewModel'
+                97: '@b13/form-custom-templates/backend/form-editor/select-template-view-model.js'
+                997: '@b13/form-custom-templates/backend/form-editor/identifier-view-model.js'
             formElementPropertyValidatorsDefinition:
               FormElementIdentifierWithOutCurlyBraces:
                 errorMessage: form_custom_templates.validator.formElementIdentifierWithOutCurlyBraces

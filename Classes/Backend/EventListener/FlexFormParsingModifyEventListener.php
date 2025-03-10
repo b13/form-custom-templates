@@ -4,12 +4,52 @@ declare(strict_types=1);
 
 namespace B13\FormCustomTemplates\Backend\EventListener;
 
-use B13\FormCustomTemplates\Service\EmailTemplateService;
+use Doctrine\DBAL\ParameterType;
 use TYPO3\CMS\Core\Configuration\Event\AfterFlexFormDataStructureParsedEvent;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 final class FlexFormParsingModifyEventListener
 {
-    public function __construct(private readonly EmailTemplateService $emailTemplateService) {}
+    protected function getOptions(): array
+    {
+        $options = array_merge(
+            [
+                [
+                    'title' => LocalizationUtility::translate(
+                        'LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:form_custom_templates.select.default'
+                    ),
+                    'uid' => 'default'
+                ],
+            ],
+            $this->getEmailTemplatePages()
+        );
+        array_walk($options, static function (&$item) {
+            $item = ['label' => $item['title'], 'value' => $item['uid']];
+        }, []);
+        return $options;
+    }
+
+    protected function getEmailTemplatePages(): array
+    {
+        $doktype = (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('form_custom_templates', 'doktype');
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
+        $queryBuilder->select('*')
+            ->from('pages')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'doktype',
+                    $queryBuilder->createNamedParameter(
+                        $doktype,
+                        ParameterType::INTEGER
+                    )
+                )
+            );
+
+        return $queryBuilder->executeQuery()->fetchAllAssociative();
+    }
 
     public function modifyDataStructure(AfterFlexFormDataStructureParsedEvent $event): void
     {
@@ -20,7 +60,7 @@ final class FlexFormParsingModifyEventListener
         }
 
         $addToFinishers = ['EmailToSender', 'EmailToReceiver'];
-        $options = $this->emailTemplateService->getOptions();
+        $options = $this->getOptions();
         $dataStructure = $event->getDataStructure();
 
         if ($options === []) {

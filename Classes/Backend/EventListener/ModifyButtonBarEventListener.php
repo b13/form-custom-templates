@@ -6,6 +6,7 @@ namespace B13\FormCustomTemplates\Backend\EventListener;
 
 use B13\FormCustomTemplates\Configuration;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Routing\PreviewUriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\Components\ModifyButtonBarEvent;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -15,6 +16,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 final class ModifyButtonBarEventListener
 {
@@ -22,14 +24,9 @@ final class ModifyButtonBarEventListener
 
     public function __invoke(ModifyButtonBarEvent $event): void
     {
-        // @todo: remove when v11 support was dropped
-        if (!class_exists(ModifyButtonBarEvent::class)) {
-            return;
-        }
-
         $buttons = $event->getButtons();
         $request = $this->getRequest();
-        $pageId = $request->getQueryParams()['id'] ?? 0;
+        $pageId = (int)($request->getQueryParams()['id'] ?? 0);
         $page = $this->pageRepository->getPage($pageId);
         if (empty($page)) {
             return;
@@ -41,7 +38,8 @@ final class ModifyButtonBarEventListener
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
             try {
-                $previewDataAttributes = BackendUtility::getPreviewUrl($pageId, '', BackendUtility::BEgetRootLine($pageId), '', '', 'type=' . $plaintextTypeNum);
+                $previewUriBuilder = PreviewUriBuilder::create($pageId);
+                $previewDataAttributes = (string)$previewUriBuilder->withRootLine(BackendUtility::BEgetRootLine($pageId))->withAdditionalQueryParameters(['type' => $plaintextTypeNum])->buildUri();
                 $viewButton = $buttonBar->makeLinkButton()
                     ->setTitle($this->getLanguageService()->sL('LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:form_custom_templates.buttonBar.showPagePlaintext'))
                     ->setShowLabelText(true)

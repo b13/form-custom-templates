@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'apps-pagetree-page-email' => [
         'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
