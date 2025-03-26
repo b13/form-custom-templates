@@ -1,7 +1,7 @@
 {
   "name": "b13/form-custom-templates",
   "type": "typo3-cms-extension",
-  "description" : "Enable custom templates for emails sent using TYPO3\\'s form framework email finishers",
+  "description" : "Enable custom templates for emails sent using TYPO3's form framework email finishers",
   "license": "GPL-2.0-or-later",
   "autoload": {
     "psr-4": {
