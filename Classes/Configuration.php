@@ -28,7 +28,7 @@ class Configuration implements SingletonInterface
 
     protected function getTypoScript(): array
     {
-        if ((GeneralUtility::makeInstance(Typo3Version::class))->getVersion() >12) {
+        if ((GeneralUtility::makeInstance(Typo3Version::class))->getVersion() > 12) {
             $request = $this->getServerRequest();
             if ($request === null) {
                 return [];
