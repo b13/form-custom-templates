@@ -56,8 +56,9 @@ class EmailTemplateFinisher extends EmailFinisher
                 $this->extbaseConfigurationManager->setRequest($this->finisherContext->getRequest());
                 $typoScriptSettings = $this->extbaseConfigurationManager->getConfiguration(ExtbaseConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'form');
                 $formSettings = $this->extFormConfigurationManager->getYamlConfiguration($typoScriptSettings, true);
+
                 $defaultFormDefinition = $this->formPersistenceManager->load(
-                    $this->finisherContext->getFormRuntime()->getIdentifier(),
+                    $this->finisherContext->getFormRuntime()->getFormDefinition()->getPersistenceIdentifier(),
                     $formSettings,
                     []
                 );
