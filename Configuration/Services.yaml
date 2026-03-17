@@ -6,23 +6,3 @@ services:
 
   B13\FormCustomTemplates\:
     resource: '../Classes/*'
-
-  B13\FormCustomTemplates\Backend\EventListener\ModifyButtonBarEventListener:
-    tags:
-      - name: event.listener
-        identifier: 'tx_form_custom_templates/modifyButtonBarEventListener'
-
-  B13\FormCustomTemplates\Backend\EventListener\FlexFormParsingModifyEventListener:
-    tags:
-      - name: event.listener
-        identifier: 'tx_form_custom_templates/modify-data-structure'
-        method: 'modifyDataStructure'
-
-  B13\FormCustomTemplates\Hooks\PlaintextPreviewHook:
-    public: true
-
-  B13\FormCustomTemplates\Hooks\DataStructureEmailOptionsHook:
-    public: true
-
-  B13\FormCustomTemplates\Service\EmailTemplateService:
-    public: true

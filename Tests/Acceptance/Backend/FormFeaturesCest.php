@@ -38,11 +38,7 @@ class FormFeaturesCest
         $finisher = 'div[data-finisher-identifier="EmailToSender"]';
         $I->click('span[data-identifier="treeRootElement"]');
         $I->waitForElementVisible($finisher);
-        $typo3Version = (GeneralUtility::makeInstance(Typo3Version::class))->getMajorversion();
         $finisherClick = 'button[data-bs-toggle="collapse"]';
-        if ($typo3Version < 13) {
-            $finisherClick = 'a[data-bs-toggle="collapse"]';
-        }
         $I->click($finisher . ' ' . $finisherClick);
 
         $I->waitForText('Select email template');
@@ -70,11 +66,7 @@ class FormFeaturesCest
         $newIdentifier = 'new-firstname';
         $identifierInput = '//div[@data-identifier="inspector"]//label//span[contains(text(),"Change Identifier")]/parent::*/following-sibling::div//input';
         $inspector = 'div[data-identifier="inspector"]';
-        $typo3Version = (GeneralUtility::makeInstance(Typo3Version::class))->getMajorversion();
         $selectorPrefix = 'formeditor';
-        if ($typo3Version < 13) {
-            $selectorPrefix = 't3-form';
-        }
         $inspectorValidators = $inspector . ' .' . $selectorPrefix . '-validation-errors';
 
         $I->waitForElement(self::$stage);

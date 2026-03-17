@@ -27,15 +27,14 @@ class PluginFormCest
      * @param BackendTester $I
      * @throws \Exception
      */
-    public function seeOverrideTemplateOptions(BackendTester $I, PageTree $pageTree, PageTreeV13 $pageTreeV13): void
+    public function seeOverrideTemplateOptions(BackendTester $I, PageTree $pageTree): void
     {
-        $I->click('Page');
-        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 13) {
-            $I->waitForElement('#typo3-pagetree-tree .nodes .node');
-            $pageTree->openPath(['Root']);
+        if ((new Typo3Version())->getMajorVersion() < 14) {
+            $I->click('Page');
         } else {
-            $pageTreeV13->openPath(['Root']);
+            $I->click('Layout');
         }
+        $pageTree->openPath(['Root']);
         $I->wait(0.5);
         $I->switchToContentFrame();
 
@@ -60,15 +59,14 @@ class PluginFormCest
      * @param BackendTester $I
      * @throws \Exception
      */
-    public function seePageTypeElements(BackendTester $I, PageTree $pageTree, PageTreeV13 $pageTreeV13): void
+    public function seePageTypeElements(BackendTester $I, PageTree $pageTree): void
     {
-        $I->click('Page');
-        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 13) {
-            $I->waitForElement('#typo3-pagetree-tree .nodes .node');
-            $pageTree->openPath(['Root']);
+        if ((new Typo3Version())->getMajorVersion() < 14) {
+            $I->click('Page');
         } else {
-            $pageTreeV13->openPath(['Root']);
+            $I->click('Layout');
         }
+        $pageTree->openPath(['Root']);
         $I->amGoingTo('See if there is a drag icon in the pageTree\'s top bar');
         $I->waitForElement('#typo3-pagetree-toolbar');
         $I->seeElement('#typo3-pagetree-toolbar div[data-node-type="125"]');
