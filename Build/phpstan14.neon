@@ -7,4 +7,4 @@ parameters:
     -
         identifier: missingType.iterableValue
 includes:
-  - phpstan-baseline12.neon
+  - phpstan-baseline14.neon

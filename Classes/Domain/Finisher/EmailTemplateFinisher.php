@@ -6,6 +6,7 @@ namespace B13\FormCustomTemplates\Domain\Finisher;
 
 use B13\FormCustomTemplates\Configuration;
 use B13\FormCustomTemplates\Service\EmailTemplateService;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Information\Typo3Version;
@@ -13,9 +14,12 @@ use TYPO3\CMS\Core\Mail\MailerInterface;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
+use TYPO3\CMS\Core\View\ViewFactoryData;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface as ExtbaseConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Fluid\View\FluidViewAdapter;
 use TYPO3\CMS\Form\Domain\Finishers\EmailFinisher;
 use TYPO3\CMS\Form\Domain\Finishers\Exception\FinisherException;
 use TYPO3\CMS\Form\Domain\Model\FormElements\FileUpload;
@@ -32,35 +36,41 @@ class EmailTemplateFinisher extends EmailFinisher
         protected readonly Configuration $configuration,
         protected readonly FormPersistenceManager $formPersistenceManager,
         protected ExtFormConfigurationManagerInterface $extFormConfigurationManager,
-        protected ExtbaseConfigurationManagerInterface $extbaseConfigurationManager
-    ) {}
+        protected ExtbaseConfigurationManagerInterface $extbaseConfigurationManager,
+        protected readonly ViewFactoryInterface $viewFactory,
+        EventDispatcherInterface $eventDispatcher
+    ) {
+        if ((new Typo3Version())->getMajorVersion() > 13) {
+            parent::__construct($eventDispatcher);
+        }
+    }
 
-    protected function executeInternal()
+    protected function executeInternal(): void
     {
         $emailTemplateUid = $this->options['emailTemplateUid'] ?? null;
 
         // For v10 compatibility reasons we check for [Empty] value
         if (empty($emailTemplateUid) || $emailTemplateUid === '[Empty]') {
             parent::executeInternal();
-            return null;
         }
 
         // In case the override is explicitly set to "default" we need to
         // check the default form definition for the email template uid
         if ($emailTemplateUid === 'default') {
-            if ((GeneralUtility::makeInstance(Typo3Version::class))->getMajorVersion() < 13) {
-                $defaultFormDefinition = $this->formPersistenceManager->load(
-                    $this->finisherContext->getFormRuntime()->getIdentifier(),
-                );
-            } else {
-                $this->extbaseConfigurationManager->setRequest($this->finisherContext->getRequest());
-                $typoScriptSettings = $this->extbaseConfigurationManager->getConfiguration(ExtbaseConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'form');
-                $formSettings = $this->extFormConfigurationManager->getYamlConfiguration($typoScriptSettings, true);
-
+            $this->extbaseConfigurationManager->setRequest($this->finisherContext->getRequest());
+            $typoScriptSettings = $this->extbaseConfigurationManager->getConfiguration(ExtbaseConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'form');
+            $formSettings = $this->extFormConfigurationManager->getYamlConfiguration($typoScriptSettings, true);
+            if ((new Typo3Version())->getMajorVersion() < 14) {
                 $defaultFormDefinition = $this->formPersistenceManager->load(
                     $this->finisherContext->getFormRuntime()->getFormDefinition()->getPersistenceIdentifier(),
                     $formSettings,
                     []
+                );
+            } else {
+                $defaultFormDefinition = $this->formPersistenceManager->load(
+                    $this->finisherContext->getFormRuntime()->getFormDefinition()->getPersistenceIdentifier(),
+                    $formSettings,
+                    $this->finisherContext->getRequest()
                 );
             }
             foreach ($defaultFormDefinition['finishers'] ?? [] as $finisher) {
@@ -76,7 +86,7 @@ class EmailTemplateFinisher extends EmailFinisher
 
         if (!MathUtility::canBeInterpretedAsInteger($emailTemplateUid)) {
             parent::executeInternal();
-            return null;
+            return;
         }
 
         // Fallback to default in case doktype changed and the selected page
@@ -84,7 +94,7 @@ class EmailTemplateFinisher extends EmailFinisher
         $page = GeneralUtility::makeInstance(PageRepository::class)->getPage((int)$emailTemplateUid);
         if ((int)$page['doktype'] !== $this->configuration->getDokType()) {
             parent::executeInternal();
-            return null;
+            return;
         }
 
         $languageBackup = null;
@@ -152,7 +162,7 @@ class EmailTemplateFinisher extends EmailFinisher
             [
                 'format' => 'Plaintext',
                 'contentType' => 'text/plain',
-                'content' => $this->emailTemplateService->create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'txt')->render(), $plaintextTypeNum),
+                'content' => $this->emailTemplateService->create((int)$emailTemplateUid, $formRuntime, $this->getView($title, $formRuntime, 'txt')->render(), $plaintextTypeNum),
             ],
         ];
 
@@ -160,7 +170,7 @@ class EmailTemplateFinisher extends EmailFinisher
             $parts[] = [
                 'format' => 'Html',
                 'contentType' => 'text/html',
-                'content' => $this->emailTemplateService->create((int)$emailTemplateUid, $formRuntime, $this->getStandaloneView($title, $formRuntime, 'html')->render(), 0),
+                'content' => $this->emailTemplateService->create((int)$emailTemplateUid, $formRuntime, $this->getView($title, $formRuntime, 'html')->render(), 0),
             ];
         }
 
@@ -190,29 +200,26 @@ class EmailTemplateFinisher extends EmailFinisher
                 }
             }
         }
-
-        if (class_exists(MailerInterface::class)) {
-            GeneralUtility::makeInstance(MailerInterface::class)->send($mail);
-        } else {
-            $mail->send();
-        }
-
-        return null;
+        GeneralUtility::makeInstance(MailerInterface::class)->send($mail);
     }
 
-    protected function getStandaloneView(string $title, FormRuntime $formRuntime, string $format = 'txt'): StandaloneView
+    protected function getView(string $title, FormRuntime $formRuntime, string $format = 'txt'): ViewInterface
     {
-        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
+        $request = $formRuntime->getRequest();
         $templatePathAndFilename = $this->configuration->getTemplatePath();
+        $view = $this->viewFactory->create(new ViewFactoryData(
+            templatePathAndFilename: $templatePathAndFilename . '.' . $format,
+            request: $request
+        ));
+        if ($view instanceof FluidViewAdapter) {
+            $view->getRenderingContext()
+                ->getViewHelperVariableContainer()
+                ->addOrUpdate(RenderRenderableViewHelper::class, 'formRuntime', $formRuntime);
+        }
+        $view->assign('title', $title);
+        $view->assign('finisherVariableProvider', $this->finisherContext->getFinisherVariableProvider());
 
-        $standaloneView->setTemplatePathAndFilename($templatePathAndFilename . '.' . $format);
-        $standaloneView->assign('title', $title);
-        $standaloneView->assign('finisherVariableProvider', $this->finisherContext->getFinisherVariableProvider());
-
-        $standaloneView->assign('form', $formRuntime);
-        $standaloneView->getRenderingContext()
-            ->getViewHelperVariableContainer()
-            ->addOrUpdate(RenderRenderableViewHelper::class, 'formRuntime', $formRuntime);
-        return $standaloneView;
+        $view->assign('form', $formRuntime);
+        return $view;
     }
 }

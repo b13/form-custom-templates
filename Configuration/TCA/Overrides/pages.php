@@ -5,7 +5,6 @@ declare(strict_types=1);
 defined('TYPO3') or die();
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -13,6 +12,14 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 (function ($extensionKey = 'form_custom_templates', $table = 'pages') {
     // Add page type
     $emailDoktype = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('form_custom_templates', 'doktype');
+
+    $dokTypeRegistry = GeneralUtility::makeInstance(\TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry::class);
+    $dokTypeRegistry->add(
+        (int)$emailDoktype,
+        [
+            'allowedTables' => '*',
+        ],
+    );
 
     ExtensionManagementUtility::addTcaSelectItem(
         $table,

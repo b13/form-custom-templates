@@ -142,20 +142,17 @@ Options:
             - podman (default)
             - docker
 
-    -p <7.4|8.0|8.1|8.2|8.3|8.4>
+    -p <8.2|8.3|8.4|8.5>
         Specifies the PHP minor version to be used
-            - 7.4: use PHP 7.4
-            - 8.0: use PHP 8.0
-            - 8.1: use PHP 8.1
             - 8.2 (default): use PHP 8.2
             - 8.3: use PHP 8.3
             - 8.4: use PHP 8.4
+            - 8.5: use PHP 8.5
 
-    -t <11|12|13>
+    -t <13|14>
         Specifies the TYPO3 Core version to be used - Only with -s composerInstall|phpstan|acceptance
-          - 11: Use TYPO3 v11.5
-          - 12 (default): Use TYPO3 v12.4
           - 13: Use TYPO3 v13.x
+          - 14: (default) Use TYPO3 v14.x
 
     -a <mysqli|pdo_mysql>
         Only with -s functional|functionalDeprecated
@@ -291,7 +288,7 @@ DBMS_VERSION=""
 PHP_VERSION="8.2"
 PHP_XDEBUG_ON=0
 PHP_XDEBUG_PORT=9003
-TYPO3="12"
+TYPO3="14"
 ACCEPTANCE_HEADLESS=1
 PHPUNIT_RANDOM=""
 CGLCHECK_DRY_RUN=""
@@ -337,15 +334,16 @@ while getopts "a:b:s:d:i:t:p:xy:o:nhug" OPT; do
             ;;
         t)
             TYPO3=${OPTARG}
-            if ! [[ ${TYPO3} =~ ^(11|12|13)$ ]]; then
+            if ! [[ ${TYPO3} =~ ^(13|14)$ ]]; then
                 INVALID_OPTIONS+=("${OPTARG}")
             fi
             # @todo Remove USE_APACHE option when TF7 has been dropped (along with TYPO3 v11 support).
             [[ "${TYPO3}" -eq 13 ]] && USE_APACHE=1
+            [[ "${TYPO3}" -eq 14 ]] && USE_APACHE=1
           ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(7.4|8.0|8.1|8.2|8.3|8.4)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(8.2|8.3|8.4|8.5)$ ]]; then
                 INVALID_OPTIONS+=("${OPTARG}")
             fi
             ;;
@@ -401,18 +399,10 @@ fi
 
 # determine default container binary to use: 1. podman 2. docker
 if [[ -z "${CONTAINER_BIN}" ]]; then
-  if [[ "${TYPO3}" == "11" ]]; then
-    if type "docker" >/dev/null 2>&1; then
-        CONTAINER_BIN="docker"
-    elif type "podman" >/dev/null 2>&1; then
-        CONTAINER_BIN="podman"
-    fi
-  else
-    if type "podman" >/dev/null 2>&1; then
-        CONTAINER_BIN="podman"
-    elif type "docker" >/dev/null 2>&1; then
-        CONTAINER_BIN="docker"
-    fi
+  if type "podman" >/dev/null 2>&1; then
+      CONTAINER_BIN="podman"
+  elif type "docker" >/dev/null 2>&1; then
+      CONTAINER_BIN="docker"
   fi
 fi
 
@@ -597,7 +587,7 @@ case ${TEST_SUITE} in
             if [ ${TYPO3} -eq 13 ]; then
               composer require typo3/cms-core:^13.4 --dev -W --no-progress --no-interaction
             else
-              composer require typo3/cms-core:^12.4 --dev -W --no-progress --no-interaction
+              composer require typo3/cms-core:^14.1 --dev -W --no-progress --no-interaction
             fi
           "
           SUITE_EXIT_CODE=$?
@@ -611,10 +601,10 @@ case ${TEST_SUITE} in
           fi
           ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-validate-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "
             php -v | grep '^PHP';
-            if [ ${TYPO3} -eq 12 ]; then
-              composer require typo3/cms-core:^12.4 --dev -W --no-progress --no-interaction
-            else
+            if [ ${TYPO3} -eq 13 ]; then
               composer require typo3/cms-core:^13.4 --dev -W --no-progress --no-interaction
+            else
+              composer require typo3/cms-core:^14.1 --dev -W --no-progress --no-interaction
             fi
             composer validate
           "
@@ -672,11 +662,7 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         ;;
     phpstan)
-        if [ ${PHP_VERSION} == "7.4" ]; then
-          COMMAND=(php -dxdebug.mode=off .Build/bin/phpstan analyse -c Build/phpstan${TYPO3}-7.4.neon --no-progress --no-interaction --memory-limit 4G "$@")
-        else
-          COMMAND=(php -dxdebug.mode=off .Build/bin/phpstan analyse -c Build/phpstan${TYPO3}.neon --no-progress --no-interaction --memory-limit 4G "$@")
-        fi
+        COMMAND=(php -dxdebug.mode=off .Build/bin/phpstan analyse -c Build/phpstan${TYPO3}.neon --no-progress --no-interaction --memory-limit 4G "$@")
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name phpstan-${SUFFIX} ${IMAGE_PHP} "${COMMAND[@]}"
         SUITE_EXIT_CODE=$?
         ;;

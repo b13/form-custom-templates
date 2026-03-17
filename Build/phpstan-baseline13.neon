@@ -1,6 +1,21 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method TYPO3\\\\CMS\\\\Form\\\\Mvc\\\\Persistence\\\\FormPersistenceManager\\:\\:load\\(\\) invoked with 1 parameter, 3 required\\.$#"
+			message: "#^Call to method createLinkButton\\(\\) on an unknown class TYPO3\\\\CMS\\\\Backend\\\\Template\\\\Components\\\\ComponentFactory\\.$#"
+			count: 1
+			path: ../Classes/Backend/EventListener/ModifyButtonBarEventListener.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Backend\\\\Template\\\\Components\\\\ComponentFactory not found\\.$#"
+			count: 1
+			path: ../Classes/Backend/EventListener/ModifyButtonBarEventListener.php
+
+		-
+			message: "#^Call to an undefined static method TYPO3\\\\CMS\\\\Form\\\\Domain\\\\Finishers\\\\EmailFinisher\\:\\:__construct\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/Domain/Finisher/EmailTemplateFinisher.php
+
+		-
+			message: "#^Parameter \\#3 \\$typoScriptSettings of method TYPO3\\\\CMS\\\\Form\\\\Mvc\\\\Persistence\\\\FormPersistenceManager\\:\\:load\\(\\) expects array, TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\Request given\\.$#"
 			count: 1
 			path: ../Classes/Domain/Finisher/EmailTemplateFinisher.php

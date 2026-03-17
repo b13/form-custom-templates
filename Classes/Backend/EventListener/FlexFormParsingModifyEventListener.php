@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace B13\FormCustomTemplates\Backend\EventListener;
 
 use Doctrine\DBAL\ParameterType;
+use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Configuration\Event\AfterFlexFormDataStructureParsedEvent;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
+#[AsEventListener(identifier: 'tx_form_custom_templates/modify-data-structure')]
 final class FlexFormParsingModifyEventListener
 {
     protected function getOptions(): array
@@ -51,7 +53,7 @@ final class FlexFormParsingModifyEventListener
         return $queryBuilder->executeQuery()->fetchAllAssociative();
     }
 
-    public function modifyDataStructure(AfterFlexFormDataStructureParsedEvent $event): void
+    public function __invoke(AfterFlexFormDataStructureParsedEvent $event): void
     {
         $identifier = $event->getIdentifier();
 

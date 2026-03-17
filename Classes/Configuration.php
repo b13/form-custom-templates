@@ -5,18 +5,15 @@ declare(strict_types=1);
 namespace B13\FormCustomTemplates;
 
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
 
-class Configuration implements SingletonInterface
+class Configuration
 {
     public const DEFAULT_DOKTYPE = 125;
     public const DEFAULT_PAGE_TYPE = 101;
     private array $typoScript = [];
 
-    public function __construct(protected readonly ConfigurationManagerInterface $configurationManager)
+    public function __construct()
     {
         $this->typoScript = $this->getTypoScript();
     }
@@ -28,15 +25,17 @@ class Configuration implements SingletonInterface
 
     protected function getTypoScript(): array
     {
-        if ((GeneralUtility::makeInstance(Typo3Version::class))->getVersion() > 12) {
-            $request = $this->getServerRequest();
-            if ($request === null) {
-                return [];
-            }
-            $this->configurationManager->setRequest($request);
+        $request = $this->getServerRequest();
+        if ($request === null) {
+            return [];
         }
-        $typoScript = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-        return $typoScript['plugin.']['tx_form_custom_templates.'] ?? [];
+
+        /** @var FrontendTypoScript $typoScript */
+        $typoScript = $request->getAttribute('frontend.typoscript');
+        if ($typoScript !== null) {
+            $setup = $typoScript->getSetupArray();
+        }
+        return $setup['plugin.']['tx_form_custom_templates.'] ?? [];
     }
 
     public function getDokType(): int

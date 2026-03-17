@@ -12,8 +12,8 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\ErrorController;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Page\PageAccessFailureReasons;
+use TYPO3\CMS\Frontend\Page\PageInformation;
 
 class EmailPagePreviewGuard implements MiddlewareInterface
 {
@@ -28,13 +28,14 @@ class EmailPagePreviewGuard implements MiddlewareInterface
             return $handler->handle($request);
         }
 
-        $frontendController = $request->getAttribute('frontend.controller');
-        if (!$frontendController instanceof TypoScriptFrontendController) {
+        /** @var ?PageInformation $pageInformation */
+        $pageInformation = $request->getAttribute('frontend.page.information');
+        if (!$pageInformation instanceof PageInformation) {
             return $handler->handle($request);
         }
 
         $dokType = (int)$this->extensionConfiguration->get('form_custom_templates', 'doktype');
-        if (($frontendController->page['doktype'] ?? 0) !== $dokType) {
+        if (($pageInformation->getPageRecord()['doktype'] ?? 0) !== $dokType) {
             return $handler->handle($request);
         }
 
