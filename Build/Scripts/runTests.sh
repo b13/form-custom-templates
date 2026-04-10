@@ -587,7 +587,7 @@ case ${TEST_SUITE} in
             if [ ${TYPO3} -eq 13 ]; then
               composer require typo3/cms-core:^13.4 --dev -W --no-progress --no-interaction
             else
-              composer require typo3/cms-core:^14.1 --dev -W --no-progress --no-interaction
+              composer require typo3/cms-core:14.3.x-dev --dev -W --no-progress --no-interaction
             fi
           "
           SUITE_EXIT_CODE=$?
@@ -662,12 +662,12 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         ;;
     phpstan)
-        COMMAND=(php -dxdebug.mode=off .Build/bin/phpstan analyse -c Build/phpstan${TYPO3}.neon --no-progress --no-interaction --memory-limit 4G "$@")
+        COMMAND=(php -dxdebug.mode=off .Build/bin/phpstan analyse -c Build/phpstan.neon --no-progress --no-interaction --memory-limit 4G "$@")
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name phpstan-${SUFFIX} ${IMAGE_PHP} "${COMMAND[@]}"
         SUITE_EXIT_CODE=$?
         ;;
     phpstanGenerateBaseline)
-        COMMAND=(php -dxdebug.mode=off .Build/bin/phpstan analyse -c Build/phpstan${TYPO3}.neon --no-progress --no-interaction --memory-limit 4G --generate-baseline=Build/phpstan-baseline-${TYPO3}.neon "$@")
+        COMMAND=(php -dxdebug.mode=off .Build/bin/phpstan analyse -c Build/phpstan.neon --no-progress --no-interaction --memory-limit 4G --generate-baseline=Build/phpstan-baseline.neon "$@")
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name phpstan-baseline-${SUFFIX} ${IMAGE_PHP} "${COMMAND[@]}"
         SUITE_EXIT_CODE=$?
         ;;

@@ -119,28 +119,27 @@ function _subscribeEvents() {
 		);
 
 		getHelper()
-			.getTemplatePropertyDomElement('label', editorHtml)
+			.getTemplatePropertyElement('label', editorHtml)
 			.append(editorConfiguration['label']);
 
 		selectElement = getHelper()
-			.getTemplatePropertyDomElement('propertyPath', editorHtml);
+			.getTemplatePropertyElement('propertyPath', editorHtml);
 
 		propertyData = getCurrentlySelectedFormElement().get(propertyPath);
 		getCurrentlySelectedFormElement().set(propertyPath, propertyData);
-		selectElement[0].value = propertyData
+		selectElement.value = propertyData;
 
-		getHelper().getTemplatePropertyDomElement('propertyPath', editorHtml).on('change', function(e) {
+		selectElement.addEventListener('change', function(e) {
 			getCurrentlySelectedFormElement().set(propertyPath, e.currentTarget.selectedOptions[0].value);
 		});
 
-		// _validateCollectionElement(propertyPath, editorHtml);
-		if (getUtility().isNonEmptyString(editorConfiguration['fieldExplanationText'])) {
+		if (getUtility().isNonEmptyString(editorConfiguration['description'])) {
 			getHelper()
-				.getTemplatePropertyDomElement('fieldExplanationText', editorHtml)
-				.text(editorConfiguration['fieldExplanationText']);
+				.getTemplatePropertyElement('description', editorHtml)
+				.textContent = editorConfiguration['description'];
 		} else {
 			getHelper()
-				.getTemplatePropertyDomElement('fieldExplanationText', editorHtml)
+				.getTemplatePropertyElement('description', editorHtml)
 				.remove();
 		}
 	}

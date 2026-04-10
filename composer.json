@@ -1,7 +1,7 @@
 {
   "name": "b13/form-custom-templates",
   "type": "typo3-cms-extension",
-  "description" : "Enable custom templates for emails sent using TYPO3's form framework email finishers",
+  "description" : "Form Custom Templates - Enable custom templates for emails sent using TYPO3's form framework email finishers",
   "license": "GPL-2.0-or-later",
   "autoload": {
     "psr-4": {
@@ -12,33 +12,35 @@
     "typo3/cms": {
       "extension-key": "form_custom_templates",
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
-      "web-dir": ".Build/Web"
+      "web-dir": ".Build/Web",
+      "version": "6.0.0",
+      "Package": {
+        "providesPackages": {}
+      }
     }
   },
   "require": {
-    "typo3/cms-form": "^13.4 || ^14.1 || ^14.2.x-dev",
-    "typo3/cms-frontend": "^13.4 || ^14.1 || ^14.2.x-dev",
-    "typo3/cms-install": "^13.4 || ^14.1 || ^14.2.x-dev"
+    "typo3/cms-form": "^14.2 || ^14.3.x-dev",
+    "typo3/cms-frontend": "^14.2 || ^14.3.x-dev",
+    "typo3/cms-install": "^14.2 || ^14.3.x-dev"
   },
   "require-dev": {
     "codeception/codeception": "^5.1",
     "codeception/module-asserts": "^3.0.0",
     "codeception/module-webdriver": "^4.0.1",
-    "typo3/testing-framework": "^9.1",
+    "typo3/testing-framework": "^9.4",
     "typo3/coding-standards": "^0.8",
     "phpstan/phpstan": "^1.10.62",
     "typo3/cms-composer-installers": "^5.0",
-    "typo3/cms-beuser": "*",
-    "typo3/cms-extensionmanager": "*",
-    "typo3/cms-setup": "*",
-    "typo3/cms-tstemplate": "*",
-    "typo3/cms-fluid-styled-content": "*"
-  },
-  "scripts": {
-    "post-autoload-dump": [
-      "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare",
-      "if [ ! -e .Build/Web/vendor ]; then cd .Build/Web  && ln -s ../vendor && cd -; fi"
-    ]
+    "typo3/cms-beuser": "14.2 || ^14.3.x-dev",
+    "typo3/cms-backend": "14.2 || ^14.3.x-dev",
+    "typo3/cms-extbase": "14.2 || ^14.3.x-dev",
+    "typo3/cms-fluid": "14.2 || ^14.3.x-dev",
+    "typo3/cms-extensionmanager": "14.2 || ^14.3.x-dev",
+    "typo3/cms-setup": "14.2 || ^14.3.x-dev",
+    "typo3/cms-tstemplate": "14.2 || ^14.3.x-dev",
+    "typo3/cms-fluid-styled-content": "14.2 || ^14.3.x-dev",
+    "typo3/cms-core": "14.3.x-dev"
   },
   "config": {
     "vendor-dir": ".Build/vendor",

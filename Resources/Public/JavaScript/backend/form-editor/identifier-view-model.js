@@ -66,8 +66,8 @@ function getViewModel() {
 	return getFormEditorApp().getViewModel();
 }
 
-function getTemplatePropertyDomElement(templatePropertyName, templateDomElement) {
-	return getHelper().getTemplatePropertyDomElement(templatePropertyName, templateDomElement);
+function getTemplatePropertyElement(templatePropertyName, templateDomElement) {
+	return getHelper().getTemplatePropertyElement(templatePropertyName, templateDomElement);
 }
 
 /**
@@ -117,26 +117,31 @@ function renderTextEditor(editorConfiguration, editorHtml, collectionElementIden
 
 	let formElement = getCurrentlySelectedFormElement();
 	let propertyData = formElement.get(propertyPath);
-	getTemplatePropertyDomElement('label', editorHtml).append(editorConfiguration['label']);
+	getTemplatePropertyElement('label', editorHtml).append(editorConfiguration['label']);
 
 	// Set initial form values
-	if (getUtility().isNonEmptyString(editorConfiguration['fieldExplanationText'])) {
-		getTemplatePropertyDomElement('fieldExplanationText', editorHtml).text(editorConfiguration['fieldExplanationText']);
+	if (getUtility().isNonEmptyString(editorConfiguration['description'])) {
+		getTemplatePropertyElement('description', editorHtml).textContent = editorConfiguration['description'];
 	} else {
-		getTemplatePropertyDomElement('fieldExplanationText', editorHtml).remove();
+		getTemplatePropertyElement('description', editorHtml).remove();
 	}
-	getTemplatePropertyDomElement('propertyPath', editorHtml).val(propertyData)
+	getTemplatePropertyElement('propertyPath', editorHtml).value = propertyData;
 
 	getFormEditorApp().validateCurrentlySelectedFormElementProperty(propertyPath)
+
 	let message = getFormEditorApp().getFormElementPropertyValidatorDefinition('FormElementIdentifierWithOutCurlyBraces')['errorMessage'] || 'Not a valid identifier'
+
 	maintainValidator(formElement.get(propertyPath), message, editorHtml)
 
 	let debounce;
 	let previousValue = getCurrentlySelectedFormElement().get(propertyPath);
 	let saveButton = $('[data-identifier="saveButton"]');
+	saveButton = document.querySelector(`button.formeditor-element-save-form-button`);
+
 	// Validate and update identifier on "keyup"
-	getTemplatePropertyDomElement('propertyPath', editorHtml).on('keyup', function(e) {
-		let identifierUsed = getFormEditorApp().isFormElementIdentifierUsed(e.currentTarget.value);
+	getTemplatePropertyElement('propertyPath', editorHtml).addEventListener('keyup', function(e) {
+
+		let identifierUsed = getFormEditorApp().isFormElementIdentifierUsed(e.target.value);
 
 		getViewModel().disableButton(saveButton);
 		clearTimeout(debounce);
@@ -149,44 +154,21 @@ function renderTextEditor(editorConfiguration, editorHtml, collectionElementIden
 				// Do not update stage if identifier is already in use
 				// or not valid because duplicated identifiers on
 				// a stage break the GUI.
-				if(identifierUsed && previousValue !== e.currentTarget.value) {
+				if(identifierUsed && previousValue !== e.target.value) {
 					let message = (getFormEditorApp().getFormElementPropertyValidatorDefinition('FormElementIdentifierIsInUse')['errorMessage'] || 'Reset to {previousValue} coz it is already in use').replace('{previousValue}', previousValue)
 					maintainValidator(!identifierUsed, message, editorHtml)
-				} else if(!isValid(e.currentTarget.value)) {
+				} else if(!isValid(e.target.value)) {
 					let message = getFormEditorApp().getFormElementPropertyValidatorDefinition('FormElementIdentifierWithOutCurlyBraces')['errorMessage'] || 'Not a valid identifier'
 					maintainValidator(false, message, editorHtml)
 				} else {
-					let formElement = getCurrentlySelectedFormElement();
-					let newFormELe = formElement.clone()
-					newFormELe.set('identifier', e.currentTarget.value, true)
-
-					updateStage(newFormELe, formElement, propertyPath, editorHtml);
-					previousValue = e.currentTarget.value;
+					let message = getFormEditorApp().getFormElementPropertyValidatorDefinition('FormElementIdentifierWithOutCurlyBraces')['errorMessage'] || 'Not a valid identifier'
+					maintainValidator(formElement.get(propertyPath), message, editorHtml)
+					previousValue = e.target.value;
 				}
 
 				getViewModel().enableButton(saveButton);
 			}, 400);
 	});
-}
-
-/**
- * Add new (cloned) element with changed identifier to
- * the stage and remove the old one.
- *
- * @param newElement
- * @param oldElement
- * @param propertyPath
- * @param editorHtml
- */
-function updateStage(newElement, oldElement, propertyPath, editorHtml) {
-	getFormEditorApp().addFormElement(newElement, oldElement)
-	getFormEditorApp().removeFormElement(oldElement)
-	getFormEditorApp().setCurrentlySelectedFormElement(newElement);
-	getViewModel().renderAbstractStageArea();
-	getViewModel().renewStructure();
-	getFormEditorApp().validateCurrentlySelectedFormElementProperty(propertyPath)
-	let message = getFormEditorApp().getFormElementPropertyValidatorDefinition('FormElementIdentifierWithOutCurlyBraces')['errorMessage'] || 'Not a valid identifier'
-	maintainValidator(isValid(newElement.get(propertyPath)), message, editorHtml)
 }
 
 /**
@@ -221,23 +203,31 @@ function isValid(identifier) {
 }
 
 function maintainValidator(state, message, editorHtml) {
+
+	const controlsWrapper = editorHtml.querySelector('[data-identifier="inspectorEditorControlsWrapper"]');
+
 	if (!state) {
-		getTemplatePropertyDomElement('validationErrors', editorHtml)
-			.text(message);
+
+		getTemplatePropertyElement('validationErrors', editorHtml).textContent = message;
+
 		getViewModel().setElementValidationErrorClass(
-			getTemplatePropertyDomElement('validationErrors', editorHtml)
+			getTemplatePropertyElement('validationErrors', editorHtml), 'hasError'
 		);
+
 		getViewModel().setElementValidationErrorClass(
-			$(getHelper().getDomElementDataIdentifierSelector('editorControlsWrapper'), $(editorHtml)),
+			controlsWrapper,
 			'hasError'
 		);
+
 	} else {
-		getTemplatePropertyDomElement('validationErrors', editorHtml).text('');
+
+		getTemplatePropertyElement('validationErrors', editorHtml).textContent = '';
+
 		getViewModel().removeElementValidationErrorClass(
-			getTemplatePropertyDomElement('validationErrors', editorHtml)
+			getTemplatePropertyElement('validationErrors', editorHtml), 'hasError'
 		);
 		getViewModel().removeElementValidationErrorClass(
-			$(getHelper().getDomElementDataIdentifierSelector('editorControlsWrapper'), $(editorHtml)),
+			controlsWrapper,
 			'hasError'
 		);
 	}
@@ -254,6 +244,5 @@ export function bootstrap(formEditorApp) {
 	_helperSetup();
 	_subscribeEvents();
 	_addPropertyValidators();
-	console.log('ff');
 }
 

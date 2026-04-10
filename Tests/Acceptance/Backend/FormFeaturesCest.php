@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace B13\FormCustomTemplates\Tests\Acceptance\Backend;
 
 use B13\FormCustomTemplates\Tests\Acceptance\Support\BackendTester;
-use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Test form extended fields
@@ -36,7 +34,6 @@ class FormFeaturesCest
     public function seeTemplateSelectorInFinisher(BackendTester $I): void
     {
         $finisher = 'div[data-finisher-identifier="EmailToSender"]';
-        $I->click('span[data-identifier="treeRootElement"]');
         $I->waitForElementVisible($finisher);
         $finisherClick = 'button[data-bs-toggle="collapse"]';
         $I->click($finisher . ' ' . $finisherClick);
@@ -63,11 +60,10 @@ class FormFeaturesCest
      */
     public function seeChangeIdentifier(BackendTester $I): void
     {
-        $newIdentifier = 'new-firstname';
         $identifierInput = '//div[@data-identifier="inspector"]//label//span[contains(text(),"Change Identifier")]/parent::*/following-sibling::div//input';
         $inspector = 'div[data-identifier="inspector"]';
         $selectorPrefix = 'formeditor';
-        $inspectorValidators = $inspector . ' .' . $selectorPrefix . '-validation-errors';
+        $inspectorValidators = $inspector . ' div.form-text.has-error';
 
         $I->waitForElement(self::$stage);
         $I->click('//div[@class="'. $selectorPrefix . '-element-info"]//*[contains(text(),"Firstname")]');
@@ -76,6 +72,7 @@ class FormFeaturesCest
 
         $I->amGoingTo('See invalid identifier message');
         $I->fillField($identifierInput, 'invalid}');
+
         $I->waitForText('Not a valid identifier. A valid identifier may contain only a-Z and 0-9 and must not be empty.', 5, $inspectorValidators);
         $I->assertNotEquals('invalid}', $I->grabTextFrom($identifierInput));
 
@@ -84,9 +81,8 @@ class FormFeaturesCest
         $I->waitForText('Reset to \'firstname\' because this identifier is already in use.', 5, $inspectorValidators);
         $I->assertNotEquals('lastname', $I->grabTextFrom($identifierInput));
 
-        $I->amGoingTo('Changed identifier on stage');
-        $I->fillField($identifierInput, $newIdentifier);
+        $I->amGoingTo('See no error');
+        $I->fillField($identifierInput, 'new-firstname');
         $I->waitForElementNotVisible($inspectorValidators);
-        $I->waitForText($newIdentifier);
     }
 }

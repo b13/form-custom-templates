@@ -22,14 +22,9 @@ current TYPO3 instance both values can be changed in Settings -> Extension Confi
 The constants `plugin.tx_form_custom_templates.doktype` and `plugin.tx_form_custom_templates.typeNum`
 are set automatically depending on the set values in the Extension Configuration.
 
-### Add TypoScript configuration
+### Add Site Set Configuration
 
-Use `@import` or  `include_static_file` to add the basic
-configuration.
-
-```
-@import 'EXT:form_custom_templates/Configuration/TypoScript/setup.typoscript'
-```
+add ``b13/form-custom-templates`` as dependency to your site set
 
 This will extend the `EmailToSender` and `EmailToReceiver` finisher with a template selector.
 The template selector will list all pages of doktype Email (plugin.tx_form_custom_templates.doktype default: 125).

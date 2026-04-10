@@ -31,9 +31,7 @@ class EmailTemplateService
 
     public function create(int $uid, FormRuntime $formRuntime, string $resultTable = '', int $type = 101): string
     {
-        $subResponse = $this->stashEnvironment(
-            fn(): ResponseInterface => $this->sendSubRequest($uid, $type, $GLOBALS['TYPO3_REQUEST'])
-        );
+        $subResponse = $this->sendSubRequest($uid, $type, $GLOBALS['TYPO3_REQUEST']);
         $templateContent = $this->markerBasedTemplateService->substituteMarker(
             (string)$subResponse->getBody(),
             '{formCustomTemplate.results}',
@@ -52,18 +50,6 @@ class EmailTemplateService
         }
 
         return $templateContent;
-    }
-
-    protected function stashEnvironment(callable $fetcher): ResponseInterface
-    {
-        $parkedTsfe = $GLOBALS['TSFE'] ?? null;
-        $GLOBALS['TSFE'] = null;
-
-        $result = $fetcher();
-
-        $GLOBALS['TSFE'] = $parkedTsfe;
-
-        return $result;
     }
 
     protected function sendSubRequest(int $pageId, int $type, ServerRequestInterface $originalRequest): ResponseInterface
