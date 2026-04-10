@@ -6,9 +6,7 @@ namespace B13\FormCustomTemplates\Tests\Acceptance\Backend;
 
 use B13\FormCustomTemplates\Tests\Acceptance\Support\BackendTester;
 use B13\FormCustomTemplates\Tests\Acceptance\Support\PageTree;
-use B13\FormCustomTemplates\Tests\Acceptance\Support\PageTreeV13;
-use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 /**
  * Test form extended fields
@@ -29,16 +27,12 @@ class PluginFormCest
      */
     public function seeOverrideTemplateOptions(BackendTester $I, PageTree $pageTree): void
     {
-        if ((new Typo3Version())->getMajorVersion() < 14) {
-            $I->click('Page');
-        } else {
-            $I->click('Layout');
-        }
+        $I->click('Layout');
         $pageTree->openPath(['Root']);
         $I->wait(0.5);
         $I->switchToContentFrame();
 
-        $I->click('MyForm');
+        $I->openRecordInContextPanelOrWithEditDocumentController(1);
         $I->waitForText('Plugin');
         $I->click('Plugin');
         $I->waitForText('Form definition');
@@ -61,11 +55,7 @@ class PluginFormCest
      */
     public function seePageTypeElements(BackendTester $I, PageTree $pageTree): void
     {
-        if ((new Typo3Version())->getMajorVersion() < 14) {
-            $I->click('Page');
-        } else {
-            $I->click('Layout');
-        }
+        $I->click('Layout');
         $pageTree->openPath(['Root']);
         $I->amGoingTo('See if there is a drag icon in the pageTree\'s top bar');
         $I->waitForElement('#typo3-pagetree-toolbar');

@@ -9,9 +9,9 @@ use B13\FormCustomTemplates\Service\EmailTemplateService;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Mail\MailerInterface;
 use TYPO3\CMS\Core\Mail\MailMessage;
+use TYPO3\CMS\Core\Mail\TemplatedEmailFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
@@ -26,7 +26,6 @@ use TYPO3\CMS\Form\Domain\Model\FormElements\FileUpload;
 use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
 use TYPO3\CMS\Form\Mvc\Configuration\ConfigurationManagerInterface as ExtFormConfigurationManagerInterface;
 use TYPO3\CMS\Form\Mvc\Persistence\FormPersistenceManager;
-use TYPO3\CMS\Form\Service\TranslationService;
 use TYPO3\CMS\Form\ViewHelpers\RenderRenderableViewHelper;
 
 class EmailTemplateFinisher extends EmailFinisher
@@ -38,11 +37,11 @@ class EmailTemplateFinisher extends EmailFinisher
         protected ExtFormConfigurationManagerInterface $extFormConfigurationManager,
         protected ExtbaseConfigurationManagerInterface $extbaseConfigurationManager,
         protected readonly ViewFactoryInterface $viewFactory,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        TemplatedEmailFactory $templatedEmailFactory,
+        MailerInterface $mailer
     ) {
-        if ((new Typo3Version())->getMajorVersion() > 13) {
-            parent::__construct($eventDispatcher);
-        }
+        parent::__construct($eventDispatcher, $templatedEmailFactory, $mailer);
     }
 
     protected function executeInternal(): void
@@ -60,19 +59,11 @@ class EmailTemplateFinisher extends EmailFinisher
             $this->extbaseConfigurationManager->setRequest($this->finisherContext->getRequest());
             $typoScriptSettings = $this->extbaseConfigurationManager->getConfiguration(ExtbaseConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'form');
             $formSettings = $this->extFormConfigurationManager->getYamlConfiguration($typoScriptSettings, true);
-            if ((new Typo3Version())->getMajorVersion() < 14) {
-                $defaultFormDefinition = $this->formPersistenceManager->load(
-                    $this->finisherContext->getFormRuntime()->getFormDefinition()->getPersistenceIdentifier(),
-                    $formSettings,
-                    []
-                );
-            } else {
-                $defaultFormDefinition = $this->formPersistenceManager->load(
-                    $this->finisherContext->getFormRuntime()->getFormDefinition()->getPersistenceIdentifier(),
-                    $formSettings,
-                    $this->finisherContext->getRequest()
-                );
-            }
+            $defaultFormDefinition = $this->formPersistenceManager->load(
+                $this->finisherContext->getFormRuntime()->getFormDefinition()->getPersistenceIdentifier(),
+                $formSettings,
+                $this->finisherContext->getRequest()
+            );
             foreach ($defaultFormDefinition['finishers'] ?? [] as $finisher) {
                 if ($finisher['identifier'] !== 'EmailToReceiver') {
                     continue;
@@ -97,7 +88,6 @@ class EmailTemplateFinisher extends EmailFinisher
             return;
         }
 
-        $languageBackup = null;
         // Flexform overrides write strings instead of integers, so
         // we need to cast the string '0' to false.
         if (
@@ -131,12 +121,6 @@ class EmailTemplateFinisher extends EmailFinisher
         }
 
         $formRuntime = $this->finisherContext->getFormRuntime();
-
-        $translationService = GeneralUtility::makeInstance(TranslationService::class);
-        if (is_string($this->options['translation']['language'] ?? null) && $this->options['translation']['language'] !== '') {
-            $languageBackup = $translationService->getLanguage();
-            $translationService->setLanguage($this->options['translation']['language']);
-        }
 
         $mail = GeneralUtility::makeInstance(MailMessage::class);
 
@@ -182,10 +166,6 @@ class EmailTemplateFinisher extends EmailFinisher
             }
         }
 
-        if (!empty($languageBackup)) {
-            $translationService->setLanguage($languageBackup);
-        }
-
         if ($attachUploads) {
             foreach ($formRuntime->getFormDefinition()->getRenderablesRecursively() as $element) {
                 if (!$element instanceof FileUpload) {
@@ -200,7 +180,7 @@ class EmailTemplateFinisher extends EmailFinisher
                 }
             }
         }
-        GeneralUtility::makeInstance(MailerInterface::class)->send($mail);
+        $this->mailer->send($mail);
     }
 
     protected function getView(string $title, FormRuntime $formRuntime, string $format = 'txt'): ViewInterface

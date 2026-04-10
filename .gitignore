@@ -4,6 +4,9 @@
 /public
 /var
 composer.lock
+.cache
+config
+composer.json.testing
 Thumbs.db
 .DS_Store
 .editorconfig

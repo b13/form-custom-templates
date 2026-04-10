@@ -14,18 +14,15 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Exception;
-use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconSize;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 #[AsEventListener(identifier: 'tx_form_custom_templates/modifyButtonBarEventListener')]
 final class ModifyButtonBarEventListener
 {
-    public function __construct(private readonly PageRepository $pageRepository, private readonly Configuration $configuration) {}
+    public function __construct(private readonly PageRepository $pageRepository, private readonly Configuration $configuration, private readonly ComponentFactory $componentFactory) {}
 
     public function __invoke(ModifyButtonBarEvent $event): void
     {
@@ -45,13 +42,7 @@ final class ModifyButtonBarEventListener
             try {
                 $previewUriBuilder = PreviewUriBuilder::create($pageId);
                 $previewDataAttributes = (string)$previewUriBuilder->withRootLine(BackendUtility::BEgetRootLine($pageId))->withAdditionalQueryParameters(['type' => $plaintextTypeNum])->buildUri();
-                if ((new Typo3Version()) -> getMajorVersion() < 14) {
-                    $viewButton = $buttonBar->makeLinkButton();
-                } else {
-                    // should be injected, when v13 support is dropped
-                    $componentFactory = GeneralUtility::makeInstance(ComponentFactory::class);
-                    $viewButton = $componentFactory->createLinkButton();
-                }
+                $viewButton = $this->componentFactory->createLinkButton();
                 $viewButton->setTitle($this->getLanguageService()->sL('LLL:EXT:form_custom_templates/Resources/Private/Language/Database.xlf:form_custom_templates.buttonBar.showPagePlaintext'))
                     ->setShowLabelText(true)
                     ->setDataAttributes(['dispatch-action' => 'TYPO3.WindowManager.localOpen', 'dispatch-args' => GeneralUtility::jsonEncodeForHtmlAttribute([

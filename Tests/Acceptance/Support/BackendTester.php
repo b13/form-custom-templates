@@ -33,4 +33,22 @@ class BackendTester extends \Codeception\Actor
         $I->waitForElement(Locator::firstElement('div.module'));
         $I->switchToIFrame();
     }
+
+    /**
+     * v14: Click a content element in the page module to open it in the context panel,
+     * then switch into the context panel iframe.
+     */
+    public function openRecordInContextPanelOrWithEditDocumentController(int $uid): void
+    {
+        $this->waitForElement('#element-tt_content-' . $uid . ' typo3-backend-contextual-record-edit-trigger');
+        $this->click('#element-tt_content-' . $uid . ' typo3-backend-contextual-record-edit-trigger');
+        $this->switchToMainFrame();
+        $this->waitForElement('iframe[name="modal_frame"]', 10);
+        $this->switchToIFrame('modal_frame');
+        $this->waitForElementNotVisible('#t3js-ui-block');
+        $this->click('a.t3js-contextual-fullscreen');
+        $this->switchToMainFrame();
+        $this->switchToContentFrame();
+        $this->waitForElement('#EditDocumentController');
+    }
 }

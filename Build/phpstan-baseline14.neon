@@ -1,6 +1,0 @@
-parameters:
-	ignoreErrors:
-		-
-			message: "#^Parameter \\#3 \\$request of method TYPO3\\\\CMS\\\\Form\\\\Mvc\\\\Persistence\\\\FormPersistenceManager\\:\\:load\\(\\) expects Psr\\\\Http\\\\Message\\\\ServerRequestInterface\\|null, array given\\.$#"
-			count: 1
-			path: ../Classes/Domain/Finisher/EmailTemplateFinisher.php

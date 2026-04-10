@@ -13,13 +13,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
     // Add page type
     $emailDoktype = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('form_custom_templates', 'doktype');
 
-    $dokTypeRegistry = GeneralUtility::makeInstance(\TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry::class);
-    $dokTypeRegistry->add(
-        (int)$emailDoktype,
-        [
-            'allowedTables' => '*',
-        ],
-    );
+    $GLOBALS['TCA']['pages']['types'][$emailDoktype]['allowedRecordTypes'] = ['*'];
 
     ExtensionManagementUtility::addTcaSelectItem(
         $table,
