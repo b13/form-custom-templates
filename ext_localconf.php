@@ -19,16 +19,4 @@ call_user_func(function () {
         }
     ');
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptSetup(
-        '
-            module.tx_form {
-                settings {
-                    yamlConfigurations {
-                        500 = EXT:form_custom_templates/Configuration/Yaml/FormSetup.yaml
-                    }
-                }
-            }
-    '
-    );
-
 });

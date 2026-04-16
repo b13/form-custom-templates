@@ -1,13 +1,5 @@
 @import './TypoScript/Content/formResultList.typoscript'
 
-plugin.tx_form {
-    settings {
-        yamlConfigurations {
-            500 = EXT:form_custom_templates/Configuration/Yaml/FormSetup.yaml
-        }
-    }
-}
-
 [request && traverse(request.getQueryParams(), 'type') == {$plugin.tx_form_custom_templates.typeNum}]
     lib.contentElement {
         format = txt
