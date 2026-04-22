@@ -51,6 +51,7 @@ class EmailTemplateFinisher extends EmailFinisher
         // For v10 compatibility reasons we check for [Empty] value
         if (empty($emailTemplateUid) || $emailTemplateUid === '[Empty]') {
             parent::executeInternal();
+            return;
         }
 
         // In case the override is explicitly set to "default" we need to
