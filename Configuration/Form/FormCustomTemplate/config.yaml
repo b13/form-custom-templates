@@ -5,7 +5,7 @@ priority: 100
 .email_template_field: &email_template_field
   identifier: emailTemplateText
   templateName: Inspector-SingleSelectTemplateEditor
-  fieldExplanationText: form_custom_templates.select.fieldExplanationText
+  description: form_custom_templates.select.fieldExplanationText
   label: form_custom_templates.select.label
   propertyPath: options.emailTemplateUid
 
@@ -18,7 +18,7 @@ priority: 100
         templateName: Inspector-IdentifierEditor
         label: Change Identifier
         propertyPath: identifier
-        fieldExplanationText: form_custom_templates.identifier.fieldExplanationText
+        description: form_custom_templates.identifier.fieldExplanationText
         enableFormelementSelectionButton: false
         propertyValidatorsMode: AND
         propertyValidators:
