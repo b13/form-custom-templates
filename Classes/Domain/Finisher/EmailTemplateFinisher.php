@@ -59,7 +59,7 @@ class EmailTemplateFinisher extends EmailFinisher
         if ($emailTemplateUid === 'default') {
             $this->extbaseConfigurationManager->setRequest($this->finisherContext->getRequest());
             $typoScriptSettings = $this->extbaseConfigurationManager->getConfiguration(ExtbaseConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'form');
-            $formSettings = $this->extFormConfigurationManager->getYamlConfiguration($typoScriptSettings, true);
+            $formSettings = $this->extFormConfigurationManager->getYamlConfiguration($typoScriptSettings, true, $this->finisherContext->getRequest());
             $defaultFormDefinition = $this->formPersistenceManager->load(
                 $this->finisherContext->getFormRuntime()->getFormDefinition()->getPersistenceIdentifier(),
                 $formSettings,
