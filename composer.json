@@ -13,7 +13,7 @@
       "extension-key": "form_custom_templates",
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "web-dir": ".Build/Web",
-      "version": "6.0.1",
+      "version": "6.0.3",
       "Package": {
         "providesPackages": {}
       }
