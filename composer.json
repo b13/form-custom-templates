@@ -20,9 +20,10 @@
     }
   },
   "require": {
-    "typo3/cms-form": "^14.2 || ^14.3.x-dev",
-    "typo3/cms-frontend": "^14.2 || ^14.3.x-dev",
-    "typo3/cms-install": "^14.2 || ^14.3.x-dev"
+    "typo3/cms-core": "^14.3",
+    "typo3/cms-form": "^14.3",
+    "typo3/cms-frontend": "^14.3",
+    "typo3/cms-install": "^14.3"
   },
   "require-dev": {
     "codeception/codeception": "^5.1",
@@ -32,15 +33,13 @@
     "typo3/coding-standards": "^0.8",
     "phpstan/phpstan": "^1.10.62",
     "typo3/cms-composer-installers": "^5.0",
-    "typo3/cms-beuser": "14.2 || ^14.3.x-dev",
-    "typo3/cms-backend": "14.2 || ^14.3.x-dev",
-    "typo3/cms-extbase": "14.2 || ^14.3.x-dev",
-    "typo3/cms-fluid": "14.2 || ^14.3.x-dev",
-    "typo3/cms-extensionmanager": "14.2 || ^14.3.x-dev",
-    "typo3/cms-setup": "14.2 || ^14.3.x-dev",
-    "typo3/cms-tstemplate": "14.2 || ^14.3.x-dev",
-    "typo3/cms-fluid-styled-content": "14.2 || ^14.3.x-dev",
-    "typo3/cms-core": "14.3.x-dev"
+    "typo3/cms-beuser": "^14.3",
+    "typo3/cms-backend": "^14.3",
+    "typo3/cms-extbase": "^14.3",
+    "typo3/cms-fluid": "^14.3",
+    "typo3/cms-extensionmanager": "^14.3",
+    "typo3/cms-tstemplate": "^14.3",
+    "typo3/cms-fluid-styled-content": "^14.3"
   },
   "config": {
     "vendor-dir": ".Build/vendor",
