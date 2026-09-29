@@ -149,9 +149,8 @@ Options:
             - 8.4: use PHP 8.4
             - 8.5: use PHP 8.5
 
-    -t <13|14>
+    -t <14>
         Specifies the TYPO3 Core version to be used - Only with -s composerInstall|phpstan|acceptance
-          - 13: Use TYPO3 v13.x
           - 14: (default) Use TYPO3 v14.x
 
     -a <mysqli|pdo_mysql>
@@ -334,11 +333,10 @@ while getopts "a:b:s:d:i:t:p:xy:o:nhug" OPT; do
             ;;
         t)
             TYPO3=${OPTARG}
-            if ! [[ ${TYPO3} =~ ^(13|14)$ ]]; then
+            if ! [[ ${TYPO3} =~ ^(14)$ ]]; then
                 INVALID_OPTIONS+=("${OPTARG}")
             fi
             # @todo Remove USE_APACHE option when TF7 has been dropped (along with TYPO3 v11 support).
-            [[ "${TYPO3}" -eq 13 ]] && USE_APACHE=1
             [[ "${TYPO3}" -eq 14 ]] && USE_APACHE=1
           ;;
         p)
@@ -584,11 +582,7 @@ case ${TEST_SUITE} in
           fi
           ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-install-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "
             php -v | grep '^PHP';
-            if [ ${TYPO3} -eq 13 ]; then
-              composer require typo3/cms-core:^13.4 --dev -W --no-progress --no-interaction
-            else
-              composer require typo3/cms-core:14.3.x-dev --dev -W --no-progress --no-interaction
-            fi
+            composer install --dev --no-progress --no-interaction
           "
           SUITE_EXIT_CODE=$?
           cp composer.json composer.json.testing
@@ -601,11 +595,7 @@ case ${TEST_SUITE} in
           fi
           ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-validate-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "
             php -v | grep '^PHP';
-            if [ ${TYPO3} -eq 13 ]; then
-              composer require typo3/cms-core:^13.4 --dev -W --no-progress --no-interaction
-            else
-              composer require typo3/cms-core:^14.1 --dev -W --no-progress --no-interaction
-            fi
+            composer install --dev --no-progress --no-interaction
             composer validate
           "
           SUITE_EXIT_CODE=$?
